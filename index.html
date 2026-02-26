@@ -14,6 +14,26 @@
 </head>
 <body>
 
+  <style>
+    .tool-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+        .tool-card-link:hover .tool-card {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 48px -18px rgba(18,75,120,0.25);
+            background: white;
+        }
+
+         .tool-item {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .tool-item.hidden {
+            display: none;
+        }
+  </style>
 <!-- STICKY NAVBAR (fixed) with left offcanvas on mobile -->
 <nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
   <div class="container-fluid px-lg-5">
@@ -93,18 +113,20 @@
   <div class="container-lg px-3">
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-5">
       <h2 class="fw-bold" style="color:#132b44;">🔥 20+ tools to simplify your work</h2>
-      <a href="#" class="text-decoration-none fw-medium">View all <i class="bi bi-arrow-right-short"></i></a>
+      <a href="tools.html" class="text-decoration-none fw-medium">View all <i class="bi bi-arrow-right-short"></i></a>
     </div>
 
     <div class="row g-4">
       <!-- tool 1 -->
-      <div class="col-md-6 col-lg-4">
-        <div class="tool-card p-4">
-          <div class="tool-icon"><i class="bi bi-file-pdf-fill"></i></div>
-          <h4 class="fw-bold">Merge PDF</h4>
-          <p class="text-secondary mb-3">Combine multiple PDFs into one document in seconds.</p>
-          <span class="badge bg-light text-dark rounded-pill px-3 py-2">popular</span>
-        </div>
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf" data-toolname="Merge PDF" data-description="Combine multiple PDFs into one document in seconds.">
+        <a href="tools_margepdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-file-pdf-fill"></i></div>
+            <h4 class="fw-bold">Merge PDF</h4>
+            <p class="text-secondary mb-3">Combine multiple PDFs into one document in seconds.</p>
+            <span class="badge bg-light text-dark rounded-pill px-3 py-2">popular</span>
+          </div>
+        </a>
       </div>
       <!-- tool 2 -->
       <div class="col-md-6 col-lg-4">
@@ -156,7 +178,7 @@
         <span class="badge bg-light border px-4 py-3"><i class="bi bi-images me-2"></i>Image resizer</span>
         <span class="badge bg-light border px-4 py-3"><i class="bi bi-signature"></i> eSign</span>
       </div>
-      <button class="gradient-btn btn mt-3 mt-sm-0"><i class="bi bi-grid-fill me-2"></i>Explore all tools</button>
+      <!-- <button class="gradient-btn btn mt-3 mt-sm-0"><i class="bi bi-grid-fill me-2"></i>Explore all tools</button> -->
     </div>
   </div>
 </section>
@@ -231,23 +253,7 @@
       });
     }
 
-    // tool cards: click just for fun (demo)
-    const cards = document.querySelectorAll('.tool-card');
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        card.style.transition = '0.1s';
-        card.style.boxShadow = '0 0 0 3px #aac9ff';
-        setTimeout(() => { card.style.boxShadow = ''; }, 150);
-        const toolName = card.querySelector('h4')?.innerText || 'tool';
-        const msg = document.createElement('div');
-        msg.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 px-4 py-3 bg-primary text-white rounded-5 shadow';
-        msg.style.zIndex = '9998';
-        msg.style.background = '#1f3f64 !important';
-        msg.innerHTML = `✨ ${toolName} would open — interactive demo.`;
-        document.body.appendChild(msg);
-        setTimeout(() => { msg.remove(); }, 1800);
-      });
-    });
+    
 
     // close offcanvas after clicking login/signup (from offcanvas)
     document.querySelectorAll('.offcanvas .btn-pill, .offcanvas .gradient-btn').forEach(btn => {

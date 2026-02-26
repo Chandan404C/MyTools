@@ -177,7 +177,7 @@
     <div class="row g-4" id="toolsGrid">
       <!-- tool 1 · Merge PDF (pdf) -->
       <div class="col-md-6 col-lg-4 tool-item" data-category="pdf" data-toolname="Merge PDF" data-description="Combine multiple PDFs into one document in seconds.">
-        <a href="tool-merge-pdf.html" class="tool-card-link">
+        <a href="tools_margepdf.html" class="tool-card-link">
           <div class="tool-card p-4">
             <div class="tool-icon"><i class="bi bi-file-pdf-fill"></i></div>
             <h4 class="fw-bold">Merge PDF</h4>
@@ -416,23 +416,7 @@
       searchInput.focus();
     });
 
-    // ===== TOOL CARDS (demo navigation with message) =====
-    const toolLinks = document.querySelectorAll('.tool-card-link');
-    toolLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault(); // keep demo, prevent actual navigation
-        const toolName = link.querySelector('h4')?.innerText || 'Tool';
-        const msg = document.createElement('div');
-        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
-        msg.style.zIndex = '9999';
-        msg.style.background = '#1f3f64';
-        msg.innerHTML = `<i class="bi bi-arrow-right-circle me-2"></i> Navigate to ${toolName} page (dedicated page demo)`;
-        document.body.appendChild(msg);
-        setTimeout(() => { msg.remove(); }, 1800);
-        
-        // In production: window.location.href = link.href;
-      });
-    });
+   
 
     // ===== OFF CANVAS LOGIN/SIGNUP =====
     document.querySelectorAll('.offcanvas .btn-pill, .offcanvas .gradient-btn').forEach(btn => {

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools · ToolHub</title>
+    <!-- Bootstrap 5 + Icons & cool font -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google font (Inter) for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- external CSS (as per your structure) -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* minimal additional style for tools page */
+        .tools-header {
+            background: linear-gradient(145deg, #eef4fe, #ffffff);
+            padding: 3rem 0 2rem 0;
+            border-radius: 0 0 3rem 3rem;
+        }
+        .category-badge {
+            background: rgba(90, 120, 180, 0.1);
+            color: #1f3a5f;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.1s;
+            border: 1px solid transparent;
+            display: inline-block;
+        }
+        .category-badge:hover {
+            background: white;
+            border-color: #7fa9d0;
+            box-shadow: 0 6px 12px rgba(0,40,70,0.08);
+        }
+        .category-badge.active {
+            background: #1f3a5f;
+            color: white;
+        }
+        /* make entire card clickable */
+        .tool-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+        .tool-card-link:hover .tool-card {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 48px -18px rgba(18,75,120,0.25);
+            background: white;
+        }
+        /* fade out effect for filtering */
+        .tool-item {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .tool-item.hidden {
+            display: none;
+        }
+        /* search bar styling */
+        .search-wrapper {
+            max-width: 500px;
+            margin: 1.5rem auto 0;
+        }
+        .search-box {
+            border-radius: 60px;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid rgba(79, 126, 179, 0.2);
+            background: white;
+            transition: all 0.15s;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .search-box:focus {
+            border-color: #4f7eb3;
+            box-shadow: 0 0 0 4px rgba(79, 126, 179, 0.2);
+            outline: none;
+        }
+        .clear-search {
+            cursor: pointer;
+            color: #6c757d;
+        }
+        .clear-search:hover {
+            color: #1f3a5f;
+        }
+        .search-status {
+            font-size: 0.95rem;
+            color: #4f7eb3;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY NAVBAR (fixed) with left offcanvas on mobile -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+  <div class="container-fluid px-lg-5">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+      <span class="fs-3 fw-bold" style="color:#132b44;">Tool<span style="color:#4e7eb3;">Hub</span></span>
+    </a>
+
+    <!-- Mobile toggler: opens left offcanvas -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- desktop menu (hidden on mobile) -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+        <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) from left -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+      <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>ToolHub
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom active" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+      <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+      <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ========== TOOLS PAGE CONTENT ========== -->
+<section class="tools-header">
+  <div class="container-lg px-3 text-center">
+    <span class="badge-soft d-inline-block mb-3"><i class="bi bi-grid-fill me-2"></i>All tools</span>
+    <h1 class="display-4 fw-bold mb-3" style="color:#132b44;">20+ tools to handle <span style="background: linear-gradient(130deg, #244f7a, #6c97d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">any document</span></h1>
+    <p class="lead fs-4 text-secondary mx-auto mb-4" style="max-width: 700px;">Choose a tool below – each opens a dedicated page with a simple, step-by-step interface.</p>
+    
+    <!-- SEARCH BAR (working) -->
+    <div class="search-wrapper position-relative">
+      <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color:#7f9fbf;"></i>
+      <input type="text" id="toolSearch" class="search-box ps-5" placeholder="Search tools by name or description...">
+      <span id="clearSearch" class="clear-search position-absolute top-50 end-0 translate-middle-y me-3 d-none"><i class="bi bi-x-circle-fill"></i></span>
+    </div>
+    <div id="searchStatus" class="search-status small fw-medium"></div>
+
+    <!-- category filters (fully interactive) -->
+    <div class="d-flex flex-wrap gap-2 justify-content-center mt-4" id="filterTabs">
+      <span class="category-badge active" data-filter="all">All tools</span>
+      <span class="category-badge" data-filter="pdf">PDF</span>
+      <span class="category-badge" data-filter="word">Word</span>
+      <span class="category-badge" data-filter="images">Images</span>
+      <span class="category-badge" data-filter="compression">Compression</span>
+      <span class="category-badge" data-filter="security">Security</span>
+    </div>
+  </div>
+</section>
+
+<!-- Tools grid with data-category attributes for filtering -->
+<section class="py-5 bg-white">
+  <div class="container-lg px-3">
+    <div class="row g-4" id="toolsGrid">
+      <!-- tool 1 · Merge PDF (pdf) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf" data-toolname="Merge PDF" data-description="Combine multiple PDFs into one document in seconds.">
+        <a href="tool-merge-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-file-pdf-fill"></i></div>
+            <h4 class="fw-bold">Merge PDF</h4>
+            <p class="text-secondary mb-3">Combine multiple PDFs into one document in seconds.</p>
+            <span class="badge bg-light text-dark rounded-pill px-3 py-2">popular</span>
+          </div>
+        </a>
+      </div>
+      <!-- tool 2 · Split PDF (pdf) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf" data-toolname="Split PDF" data-description="Extract pages or split by range. Keep the quality.">
+        <a href="tool-split-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-scissors"></i></div>
+            <h4 class="fw-bold">Split PDF</h4>
+            <p class="text-secondary mb-3">Extract pages or split by range. Keep the quality.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 3 · Compress PDF (compression,pdf) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="compression pdf" data-toolname="Compress PDF" data-description="Reduce file size while keeping the best quality.">
+        <a href="tool-compress-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-arrow-left-right"></i></div>
+            <h4 class="fw-bold">Compress PDF</h4>
+            <p class="text-secondary mb-3">Reduce file size while keeping the best quality.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 4 · PDF to Word (pdf,word) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf word" data-toolname="PDF to Word" data-description="Convert PDF to DOCX perfectly editable.">
+        <a href="tool-pdf-to-word.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-file-earmark-word-fill"></i></div>
+            <h4 class="fw-bold">PDF to Word</h4>
+            <p class="text-secondary mb-3">Convert PDF to DOCX perfectly editable.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 5 · Protect PDF (pdf,security) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf security" data-toolname="Protect PDF" data-description="Add a password to your PDF. Secure instantly.">
+        <a href="tool-protect-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-lock-fill"></i></div>
+            <h4 class="fw-bold">Protect PDF</h4>
+            <p class="text-secondary mb-3">Add a password to your PDF. Secure instantly.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 6 · Rotate PDF (pdf) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf" data-toolname="Rotate PDF" data-description="Permanently rotate single or all pages.">
+        <a href="tool-rotate-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-arrow-repeat"></i></div>
+            <h4 class="fw-bold">Rotate PDF</h4>
+            <p class="text-secondary mb-3">Permanently rotate single or all pages.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 7 · JPG to PDF (images,pdf) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="images pdf" data-toolname="JPG to PDF" data-description="Convert images to PDF, arrange them as you like.">
+        <a href="tool-jpg-to-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-file-zip-fill"></i></div>
+            <h4 class="fw-bold">JPG to PDF</h4>
+            <p class="text-secondary mb-3">Convert images to PDF, arrange them as you like.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 8 · Excel to PDF (word) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="word" data-toolname="Excel to PDF" data-description="Convert XLSX to PDF with perfect formatting.">
+        <a href="tool-excel-to-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-file-excel-fill"></i></div>
+            <h4 class="fw-bold">Excel to PDF</h4>
+            <p class="text-secondary mb-3">Convert XLSX to PDF with perfect formatting.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 9 · Image resizer (images) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="images" data-toolname="Image resizer" data-description="Resize single or multiple images in one click.">
+        <a href="tool-image-resizer.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-images"></i></div>
+            <h4 class="fw-bold">Image resizer</h4>
+            <p class="text-secondary mb-3">Resize single or multiple images in one click.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 10 · eSign (security) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="security" data-toolname="eSign" data-description="Sign documents digitally, fast and secure.">
+        <a href="tool-esign.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-signature"></i></div>
+            <h4 class="fw-bold">eSign</h4>
+            <p class="text-secondary mb-3">Sign documents digitally, fast and secure.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 11 · PDF to JPG (pdf,images) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf images" data-toolname="PDF to JPG" data-description="Extract images from each page.">
+        <a href="tool-pdf-to-jpg.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-camera"></i></div>
+            <h4 class="fw-bold">PDF to JPG</h4>
+            <p class="text-secondary mb-3">Extract images from each page.</p>
+          </div>
+        </a>
+      </div>
+      <!-- tool 12 · Unlock PDF (pdf,security) -->
+      <div class="col-md-6 col-lg-4 tool-item" data-category="pdf security" data-toolname="Unlock PDF" data-description="Remove password protection (if you own the file).">
+        <a href="tool-unlock-pdf.html" class="tool-card-link">
+          <div class="tool-card p-4">
+            <div class="tool-icon"><i class="bi bi-unlock-fill"></i></div>
+            <h4 class="fw-bold">Unlock PDF</h4>
+            <p class="text-secondary mb-3">Remove password protection (if you own the file).</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- note about dedicated pages (demo) -->
+    <div class="alert alert-light border rounded-5 p-4 mt-5 text-center" style="background: #f8fafd;">
+      <i class="bi bi-link-45deg fs-3 me-2" style="color:#3468a0;"></i>
+      <span class="fw-semibold">Each tool opens a dedicated page</span> — we've linked them to <code>tool-name.html</code> as placeholders. Click any card to see the navigation (demo).
+    </div>
+  </div>
+</section>
+
+
+<!-- simple footer unchanged -->
+<footer class="pt-5 pb-4 px-3">
+  <div class="container-lg">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <span class="fs-3 fw-bold text-white">ToolHub</span>
+        <p class="my-3 small opacity-75">Free & unlimited tools for PDF, images and office documents.</p>
+      </div>
+      <div class="col-md-2"><span class="fw-semibold text-white">Products</span><br><a href="#" class="footer-link">PDF merge</a><br><a href="#" class="footer-link">Split</a><br><a href="#" class="footer-link">Convert</a></div>
+      <div class="col-md-2"><span class="fw-semibold text-white">Company</span><br><a href="#" class="footer-link">About</a><br><a href="#" class="footer-link">Privacy</a><br><a href="#" class="footer-link">Contact</a></div>
+      <div class="col-md-4 text-md-end">
+        <i class="bi bi-twitter-x fs-4 me-3"></i>
+        <i class="bi bi-instagram fs-4 me-3"></i>
+        <i class="bi bi-github fs-4"></i>
+      </div>
+    </div>
+    <hr class="opacity-25 my-4">
+    <p class="text-center small opacity-50 mb-0">© ToolHub — like your favourite PDF suite, but cooler.</p>
+  </div>
+</footer>
+
+
+<script>
+  (function() {
+    // ===== FILTER TABS =====
+    const filterTabs = document.querySelectorAll('#filterTabs .category-badge');
+    const toolItems = document.querySelectorAll('.tool-item');
+    const searchInput = document.getElementById('toolSearch');
+    const clearBtn = document.getElementById('clearSearch');
+    const searchStatus = document.getElementById('searchStatus');
+
+    // Filter function (combines category + search)
+    function filterToolsAndSearch() {
+      const activeTab = document.querySelector('#filterTabs .category-badge.active');
+      const category = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+      const searchTerm = searchInput.value.trim().toLowerCase();
+
+      let visibleCount = 0;
+
+      toolItems.forEach(item => {
+        // Category match
+        let categoryMatch = false;
+        if (category === 'all') {
+          categoryMatch = true;
+        } else {
+          const itemCategories = item.dataset.category.split(' ');
+          categoryMatch = itemCategories.includes(category);
+        }
+
+        // Search match (by tool name or description)
+        let searchMatch = true;
+        if (searchTerm !== '') {
+          const toolName = item.dataset.toolname ? item.dataset.toolname.toLowerCase() : '';
+          const toolDesc = item.dataset.description ? item.dataset.description.toLowerCase() : '';
+          searchMatch = toolName.includes(searchTerm) || toolDesc.includes(searchTerm);
+        }
+
+        if (categoryMatch && searchMatch) {
+          item.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      // Update search status
+      if (searchTerm !== '') {
+        searchStatus.innerText = `🔍 Found ${visibleCount} tool${visibleCount !== 1 ? 's' : ''} for "${searchTerm}"`;
+      } else {
+        searchStatus.innerText = '';
+      }
+
+      // Show/hide clear button
+      if (searchTerm.length > 0) {
+        clearBtn.classList.remove('d-none');
+      } else {
+        clearBtn.classList.add('d-none');
+      }
+    }
+
+    // Tab click events
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        filterToolsAndSearch();
+        
+        // Optional toast
+        const filterValue = this.getAttribute('data-filter');
+        const msg = document.createElement('div');
+        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
+        msg.style.zIndex = '9999';
+        msg.style.background = '#1b4a6e';
+        msg.innerHTML = `<i class="bi bi-funnel me-2"></i> Filter: ${this.innerText} (${filterValue})`;
+        document.body.appendChild(msg);
+        setTimeout(() => { msg.remove(); }, 1200);
+      });
+    });
+
+    // Search input event
+    searchInput.addEventListener('input', filterToolsAndSearch);
+
+    // Clear search
+    clearBtn.addEventListener('click', function() {
+      searchInput.value = '';
+      filterToolsAndSearch();
+      searchInput.focus();
+    });
+
+    // ===== TOOL CARDS (demo navigation with message) =====
+    const toolLinks = document.querySelectorAll('.tool-card-link');
+    toolLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault(); // keep demo, prevent actual navigation
+        const toolName = link.querySelector('h4')?.innerText || 'Tool';
+        const msg = document.createElement('div');
+        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
+        msg.style.zIndex = '9999';
+        msg.style.background = '#1f3f64';
+        msg.innerHTML = `<i class="bi bi-arrow-right-circle me-2"></i> Navigate to ${toolName} page (dedicated page demo)`;
+        document.body.appendChild(msg);
+        setTimeout(() => { msg.remove(); }, 1800);
+        
+        // In production: window.location.href = link.href;
+      });
+    });
+
+    // ===== OFF CANVAS LOGIN/SIGNUP =====
+    document.querySelectorAll('.offcanvas .btn-pill, .offcanvas .gradient-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const msg = document.createElement('div');
+        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
+        msg.style.zIndex = '9999';
+        msg.style.background = '#1b4a6e';
+        msg.innerHTML = `<i class="bi bi-person-check me-2"></i> ${btn.innerText} (demo)`;
+        document.body.appendChild(msg);
+        setTimeout(() => { msg.remove(); }, 1800);
+        
+        const offcanvasElem = document.getElementById('offcanvasNavbar');
+        if (offcanvasElem.classList.contains('show')) {
+          let offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElem);
+          if (offcanvasInstance) offcanvasInstance.hide();
+        }
+      });
+    });
+
+    // CTA button if exists (from previous pages)
+    const ctaBtn = document.getElementById('normalCtaBtn');
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const toastDiv = document.createElement('div');
+        toastDiv.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
+        toastDiv.style.zIndex = '9999';
+        toastDiv.style.background = '#152b44';
+        toastDiv.innerHTML = '<i class="bi bi-check2-circle me-2"></i> Get started — demo';
+        document.body.appendChild(toastDiv);
+        setTimeout(() => { toastDiv.remove(); }, 2500);
+      });
+    }
+
+  })();
+</script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

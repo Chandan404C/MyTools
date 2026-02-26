@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About US</title>
+    <!-- Bootstrap 5 + Icons & cool font -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google font (Inter) for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+        <style>
+        /* minimal inline style just for about page unique touches, 
+           but mostly rely on your existing css (navbar-sticky, footer, etc) */
+        body { background: #f8fafd; }
+        .about-hero {
+            background: linear-gradient(145deg, #eef4fe, #ffffff);
+            border-radius: 0 0 3rem 3rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 20px 30px -10px rgba(30,60,120,0.1);
+            border: 1px solid rgba(130,170,240,0.2);
+            transition: transform 0.1s ease;
+        }
+        .stat-card:hover { transform: scale(1.02); }
+        .value-icon {
+            width: 64px;
+            height: 64px;
+            background: #e6f0fe;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #2a4e7a;
+        }
+    </style>
+    <!-- STICKY NAVBAR (fixed) with left offcanvas on mobile -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+  <div class="container-fluid px-lg-5">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+      <span class="fs-3 fw-bold" style="color:#132b44;">Tool<span style="color:#4e7eb3;">Hub</span></span>
+    </a>
+
+    <!-- Mobile toggler: opens left offcanvas -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- desktop menu (hidden on mobile) -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+        <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) from left -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+      <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>ToolHub
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+      <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+      <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ========== ABOUT PAGE CONTENT (simple, clean) ========== -->
+<section class="about-hero pt-5 pb-4">
+  <div class="container-lg px-3 pt-4 pb-2">
+    <div class="text-center mb-5">
+      <span class="badge-soft d-inline-block mb-3"><i class="bi bi-people-fill me-2"></i>Who we are</span>
+      <h1 class="display-4 fw-bold mb-3" style="color:#132b44;">Making document tools <span style="background: linear-gradient(130deg, #244f7a, #6c97d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">simple & free</span></h1>
+      <p class="lead fs-3 text-secondary mx-auto" style="max-width: 800px;">ToolHub was born from the frustration of overcomplicated PDF software. We believe powerful tools should be effortless, private, and accessible to everyone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- our story + image / mission -->
+<section class="py-5 bg-white">
+  <div class="container-lg px-3">
+    <div class="row align-items-center g-5">
+      <div class="col-md-6">
+        <h2 class="fw-bold mb-4" style="color:#132b44;">Our story</h2>
+        <p class="text-secondary fs-5">Founded in 2022, ToolHub started as a small side project by two developers who needed a quick way to merge PDFs without uploading sensitive files to unknown servers. We realised that most "free" tools are full of ads, limits, or privacy risks.</p>
+        <p class="text-secondary fs-5">So we built our own — with end‑to‑end encryption, automatic file deletion, and a clean interface. Today, millions of people use ToolHub to handle documents, images, and office files, all 100% free.</p>
+        <div class="d-flex gap-3 mt-4">
+          <span class="badge-soft"><i class="bi bi-shield-check me-1"></i>Privacy first</span>
+          <span class="badge-soft"><i class="bi bi-infinity me-1"></i>No limits</span>
+          <span class="badge-soft"><i class="bi bi-emoji-smile me-1"></i>4.8 stars</span>
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <!-- simple placeholder illustration (team vibe) -->
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280' viewBox='0 0 400 280'%3E%3Ccircle cx='200' cy='120' r='80' fill='%23e1effa'/%3E%3Ccircle cx='140' cy='100' r='30' fill='%23f9e7b3'/%3E%3Ccircle cx='260' cy='100' r='30' fill='%23b6e2f0'/%3E%3Crect x='120' y='170' width='160' height='50' fill='%23c5d1fa' rx='25'/%3E%3Ctext x='140' y='205' font-family='Inter' font-size='24' fill='%232d3f66' font-weight='bold'%3Eteam%3C/text%3E%3C/svg%3E" alt="team illustration" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- stats / numbers (fun facts) -->
+<section class="py-5" style="background: #eaf2fb;">
+  <div class="container-lg px-3">
+    <div class="row g-4 text-center">
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="value-icon mx-auto mb-3"><i class="bi bi-upload"></i></div>
+          <h3 class="fw-bold" style="color:#1f3a5f;">15M+</h3>
+          <p class="text-secondary">files processed monthly</p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="value-icon mx-auto mb-3"><i class="bi bi-globe"></i></div>
+          <h3 class="fw-bold" style="color:#1f3a5f;">190+</h3>
+          <p class="text-secondary">countries reached</p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="value-icon mx-auto mb-3"><i class="bi bi-cup-hot-fill"></i></div>
+          <h3 class="fw-bold" style="color:#1f3a5f;">20k+</h3>
+          <p class="text-secondary">cups of coffee (devs)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- our values (simple cards) -->
+<section class="py-5 bg-white">
+  <div class="container-lg px-3">
+    <h2 class="fw-bold text-center mb-5" style="color:#132b44;">What drives us</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-4 rounded-4 h-100" style="background: #f2f8ff;">
+          <i class="bi bi-lock-fill fs-1" style="color:#3468a0;"></i>
+          <h4 class="fw-bold mt-3">Privacy by design</h4>
+          <p class="text-secondary">We never sell or look at your files. Automatic deletion after one hour.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 rounded-4 h-100" style="background: #f2f8ff;">
+          <i class="bi bi-infinity fs-1" style="color:#3468a0;"></i>
+          <h4 class="fw-bold mt-3">Truly unlimited</h4>
+          <p class="text-secondary">No file size limits, no daily caps, no hidden payments. Free forever.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 rounded-4 h-100" style="background: #f2f8ff;">
+          <i class="bi bi-emoji-sunglasses-fill fs-1" style="color:#3468a0;"></i>
+          <h4 class="fw-bold mt-3">Human friendly</h4>
+          <p class="text-secondary">Every tool is built with love and tested by real humans, not bots.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- simple footer unchanged -->
+<footer class="pt-5 pb-4 px-3">
+  <div class="container-lg">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <span class="fs-3 fw-bold text-white">ToolHub</span>
+        <p class="my-3 small opacity-75">Free & unlimited tools for PDF, images and office documents.</p>
+      </div>
+      <div class="col-md-2"><span class="fw-semibold text-white">Products</span><br><a href="#" class="footer-link">PDF merge</a><br><a href="#" class="footer-link">Split</a><br><a href="#" class="footer-link">Convert</a></div>
+      <div class="col-md-2"><span class="fw-semibold text-white">Company</span><br><a href="#" class="footer-link">About</a><br><a href="#" class="footer-link">Privacy</a><br><a href="#" class="footer-link">Contact</a></div>
+      <div class="col-md-4 text-md-end">
+        <i class="bi bi-twitter-x fs-4 me-3"></i>
+        <i class="bi bi-instagram fs-4 me-3"></i>
+        <i class="bi bi-github fs-4"></i>
+      </div>
+    </div>
+    <hr class="opacity-25 my-4">
+    <p class="text-center small opacity-50 mb-0">© ToolHub — like your favourite PDF suite, but cooler.</p>
+  </div>
+</footer>
+
+
+<script>
+  (function() {
+    // new normal CTA button (replaces old dropzone/fake button)
+    const ctaBtn = document.getElementById('normalCtaBtn');
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const toastDiv = document.createElement('div');
+        toastDiv.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
+        toastDiv.style.zIndex = '9999';
+        toastDiv.style.background = '#152b44';
+        toastDiv.innerHTML = '<i class="bi bi-check2-circle me-2"></i> Get started — demo (ready to upload)';
+        document.body.appendChild(toastDiv);
+        setTimeout(() => { toastDiv.remove(); }, 2500);
+      });
+    }
+
+    // tool cards: click just for fun (demo)
+    const cards = document.querySelectorAll('.tool-card');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        card.style.transition = '0.1s';
+        card.style.boxShadow = '0 0 0 3px #aac9ff';
+        setTimeout(() => { card.style.boxShadow = ''; }, 150);
+        const toolName = card.querySelector('h4')?.innerText || 'tool';
+        const msg = document.createElement('div');
+        msg.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 px-4 py-3 bg-primary text-white rounded-5 shadow';
+        msg.style.zIndex = '9998';
+        msg.style.background = '#1f3f64 !important';
+        msg.innerHTML = `✨ ${toolName} would open — interactive demo.`;
+        document.body.appendChild(msg);
+        setTimeout(() => { msg.remove(); }, 1800);
+      });
+    });
+
+    // close offcanvas after clicking login/signup (from offcanvas)
+    document.querySelectorAll('.offcanvas .btn-pill, .offcanvas .gradient-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const msg = document.createElement('div');
+        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
+        msg.style.zIndex = '9999';
+        msg.style.background = '#1b4a6e';
+        msg.innerHTML = `<i class="bi bi-person-check me-2"></i> ${btn.innerText} (demo)`;
+        document.body.appendChild(msg);
+        setTimeout(() => { msg.remove(); }, 1800);
+        
+        const offcanvasElem = document.getElementById('offcanvasNavbar');
+        if (offcanvasElem.classList.contains('show')) {
+          let offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElem);
+          if (offcanvasInstance) offcanvasInstance.hide();
+        }
+      });
+    });
+
+  })();
+</script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

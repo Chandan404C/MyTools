@@ -17,10 +17,122 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- FileSaver.js to trigger download of zip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Mobile responsiveness fixes – only for tool area, header/footer unchanged -->
+    <style>
+        /* Tool-specific mobile improvements – header/footer completely untouched */
+        @media (max-width: 576px) {
+            /* improve main container padding */
+            .tool-main {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            /* make the split mode buttons stack vertically with gap */
+            .tool-main .btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            .tool-main .btn-group .btn {
+                width: 100%;
+                border-radius: 40px !important;
+                margin-left: 0 !important;
+            }
+            /* action buttons (split + clear) stack vertically */
+            .tool-main .d-flex.gap-3 {
+                flex-direction: column;
+                gap: 0.75rem !important;
+            }
+            .tool-main .d-flex.gap-3 .btn {
+                width: 100%;
+                margin: 0 !important;
+            }
+            /* file info card – better wrapping and centered on small */
+            .tool-main .file-info-card {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+                padding: 1rem 0.75rem;
+            }
+            .tool-main .file-info-card .flex-grow-1 {
+                width: 100%;
+                text-align: center;
+            }
+            .tool-main .file-info-card .btn-sm {
+                margin-top: 0.25rem;
+            }
+            /* download area – stack items vertically */
+            .tool-main .download-area .d-flex {
+                flex-direction: column;
+                text-align: center;
+            }
+            .tool-main .download-area .d-flex .flex-grow-1 {
+                width: 100%;
+            }
+            .tool-main .download-area .btn {
+                width: 100%;
+            }
+            /* reduce heading size a bit */
+            .tool-main h4 {
+                font-size: 1.2rem;
+            }
+            .tool-main .fs-1 {
+                font-size: 2.5rem !important;
+            }
+            /* make the dropzone padding more compact */
+            .tool-main .dropzone-split {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+        }
+
+        /* even smaller screens */
+        @media (max-width: 400px) {
+            .tool-main .file-info-card {
+                padding: 0.75rem 0.5rem;
+            }
+            .tool-main .file-info-card .btn-sm {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+            }
+            .tool-main h4 {
+                font-size: 1rem;
+            }
+        }
+
+        /* shared classes (already present but ensure) */
+        .file-info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .dropzone-split {
+            border: 2px dashed #a9c6e5;
+            border-radius: 32px;
+            background: #f5faff;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .dropzone-split:hover {
+            background: #e2effa;
+            border-color: #2b699d;
+        }
+        .download-area {
+            border-radius: 28px;
+            background: #e8f0fa;
+        }
+        .brand-icon-color { color: #4f7eb3; }
+        .brand-dark { color: #132b44; }
+        .accent-blue { color: #2b699d; }
+        .accent-red { color: #d05b5b; }
+    </style>
 </head>
 <body>
 
-<!-- STICKY NAVBAR (same as original) -->
+<!-- STICKY NAVBAR (exactly same as original – no changes) -->
 <nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
   <div class="container-fluid px-lg-5">
     <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -33,7 +145,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- desktop menu (hidden on mobile) -->
+    <!-- desktop menu -->
     <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
@@ -50,7 +162,7 @@
   </div>
 </nav>
 
-<!-- OFF CANVAS mobile menu (same) -->
+<!-- OFF CANVAS mobile menu (exactly same) -->
 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
@@ -71,32 +183,32 @@
   </div>
 </div>
 
-<!-- ========== MAIN CONTENT: PDF SPLIT TOOL ========== -->
-<main class="container my-5" style="font-family: 'Inter', sans-serif;">
+<!-- ========== MAIN CONTENT: PDF SPLIT TOOL (with tool-main class for targeted fixes) ========== -->
+<main class="container my-5 tool-main" style="font-family: 'Inter', sans-serif;">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-            <!-- Tool header (matches merge style but split wording) -->
+        <div class="col-lg-8 col-md-10 col-12"> <!-- added col-12 for extra small -->
+            <!-- Tool header -->
             <div class="d-flex align-items-center mb-4">
-                <i class="bi bi-symmetry-vertical fs-1 me-3" style="color:#4f7eb3;"></i>
+                <i class="bi bi-symmetry-vertical fs-1 me-3 brand-icon-color"></i>
                 <div>
-                    <h1 class="fw-bold" style="color:#132b44;">Split PDF</h1>
+                    <h1 class="fw-bold brand-dark">Split PDF</h1>
                     <p class="text-secondary">Extract pages or split by ranges. Download as individual PDFs or a ZIP bundle.</p>
                 </div>
             </div>
 
-            <!-- upload area / dropzone (reused) -->
+            <!-- upload area / dropzone -->
             <div class="card border-0 shadow-sm p-4 mb-4" style="background:#f8fbfe; border-radius:28px;">
-                <div id="dropZoneSplit" class="text-center py-5 px-3" style="border:2px dashed #a9c6e5; border-radius:32px; background:#f5faff; cursor:pointer; transition:0.2s;">
-                    <i class="bi bi-cloud-upload fs-1" style="color:#2b699d;"></i>
+                <div id="dropZoneSplit" class="dropzone-split text-center py-5 px-3">
+                    <i class="bi bi-cloud-upload fs-1 accent-blue"></i>
                     <h4 class="mt-3 fw-semibold">Drop your PDF here or click to browse</h4>
                     <p class="text-muted mb-0">Only PDF files accepted · single file for splitting</p>
                     <input type="file" id="pdfSplitInput" accept=".pdf,application/pdf" class="d-none">
                 </div>
 
-                <!-- selected file info & splitting options (initially hidden) -->
+                <!-- selected file info (initially hidden) -->
                 <div id="splitFileInfo" class="mt-4 d-none">
-                    <div class="bg-white p-3 rounded-4 d-flex align-items-center gap-3">
-                        <i class="bi bi-file-pdf fs-1" style="color:#d05b5b;"></i>
+                    <div class="file-info-card">
+                        <i class="bi bi-file-pdf fs-1 accent-red"></i>
                         <div class="flex-grow-1">
                             <span id="fileNameDisplay" class="fw-semibold">filename.pdf</span><br>
                             <span id="filePageCount" class="small text-secondary">loading pages...</span>
@@ -109,6 +221,7 @@
             <!-- split options card (visible after file loaded) -->
             <div id="splitOptionsCard" class="card border-0 shadow-sm p-4 mb-4 d-none" style="border-radius:28px;">
                 <h5 class="fw-bold mb-3"><i class="bi bi-sliders2 me-2"></i>Split mode</h5>
+                <!-- btn-group will stack vertically on mobile via CSS -->
                 <div class="btn-group w-100 mb-4" role="group">
                     <input type="radio" class="btn-check" name="splitMode" id="modeExtract" value="extract" autocomplete="off" checked>
                     <label class="btn btn-outline-primary rounded-pill px-4" for="modeExtract">Extract each page</label>
@@ -117,7 +230,7 @@
                     <label class="btn btn-outline-primary rounded-pill px-4" for="modeRanges">Custom ranges</label>
                 </div>
 
-                <!-- extract mode hint (always visible) -->
+                <!-- extract mode hint -->
                 <div id="extractHint" class="small text-secondary mb-3">Each page becomes a separate PDF (1,2,3...).</div>
 
                 <!-- custom ranges input (hidden by default) -->
@@ -134,6 +247,7 @@
                     <div class="form-text">Files will be named: prefix_1.pdf, prefix_2.pdf, ...</div>
                 </div>
 
+                <!-- action buttons (stack on mobile) -->
                 <div class="d-flex gap-3 mt-4">
                     <button class="btn btn-primary rounded-pill px-5 py-3 flex-grow-1 fw-semibold" id="splitBtn" disabled style="background:#2b699d; border:none;">
                         <i class="bi bi-symmetry-vertical me-2"></i>Split PDF
@@ -145,15 +259,15 @@
             <!-- progress / status area -->
             <div id="splitStatus" class="small fw-medium mb-3"></div>
 
-            <!-- download area (zip or single files) -->
-            <div id="splitDownloadArea" class="card border-0 shadow-sm p-4 d-none" style="border-radius:28px; background:#e8f0fa;">
+            <!-- download area (zip) -->
+            <div id="splitDownloadArea" class="card border-0 shadow-sm p-4 d-none download-area">
                 <div class="d-flex align-items-center gap-3">
-                    <i class="bi bi-file-zip fs-1" style="color:#2b699d;"></i>
+                    <i class="bi bi-file-zip fs-1 accent-blue"></i>
                     <div class="flex-grow-1">
-                        <span class="fw-bold" id="splitResultMsg">✅ Split complete!</span><br>
-                        <span class="small" id="splitCountMsg">5 files generated</span>
+                        <span class="fw-bold brand-dark" id="splitResultMsg">✅ Split complete!</span><br>
+                        <span class="small text-secondary" id="splitCountMsg">5 files generated</span>
                     </div>
-                    <a href="#" id="downloadSplitZipBtn" class="btn btn-success rounded-pill px-4 py-2"><i class="bi bi-download me-2"></i>Download ZIP</a>
+                    <a href="#" id="downloadSplitZipBtn" class="btn btn-success rounded-pill px-4 py-2" style="background:#2b699d; border:none;"><i class="bi bi-download me-2"></i>Download ZIP</a>
                 </div>
                 <div class="mt-3 small text-secondary">
                     <i class="bi bi-info-circle me-1"></i> All split PDFs are bundled in a single ZIP.
@@ -184,16 +298,15 @@
   </div>
 </footer>
 
-<!-- SPLIT TOOL SCRIPT (uses pdf-lib + jszip + filesaver) -->
+<!-- SPLIT TOOL SCRIPT (unchanged) -->
 <script>
 (function() {
-    // Wait for libraries
     if (typeof PDFLib === 'undefined' || typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
         console.warn('Libraries not fully loaded – retrying...');
         return;
     }
 
-    // ----- DOM elements -----
+    // DOM elements
     const dropZone = document.getElementById('dropZoneSplit');
     const fileInput = document.getElementById('pdfSplitInput');
     const splitFileInfo = document.getElementById('splitFileInfo');
@@ -208,8 +321,6 @@
     const splitResultMsg = document.getElementById('splitResultMsg');
     const splitCountMsg = document.getElementById('splitCountMsg');
     const downloadZipBtn = document.getElementById('downloadSplitZipBtn');
-
-    // mode toggles
     const modeExtract = document.getElementById('modeExtract');
     const modeRanges = document.getElementById('modeRanges');
     const extractHint = document.getElementById('extractHint');
@@ -217,13 +328,11 @@
     const pageRangesInput = document.getElementById('pageRanges');
     const splitPrefixInput = document.getElementById('splitPrefix');
 
-    // state
     let currentPdfFile = null;
-    let pdfDocCache = null;               // loaded PDFDocument from pdf-lib
+    let pdfDocCache = null;
     let totalPages = 0;
-    let splitGeneratedBlobs = [];          // array of {name, blob}
+    let splitGeneratedBlobs = [];
 
-    // helper: reset tool (clear file)
     function resetSplitInterface(keepFileInfo = false) {
         if (!keepFileInfo) {
             currentPdfFile = null;
@@ -239,25 +348,12 @@
         splitBtn.disabled = true;
     }
 
-    // Reset but keep file loaded? used when changing file
-    function resetAfterFileChange() {
-        splitDownloadArea.classList.add('d-none');
-        splitGeneratedBlobs = [];
-        splitStatus.innerText = '';
-        if (currentPdfFile && pdfDocCache) {
-            splitBtn.disabled = false;
-        } else {
-            splitBtn.disabled = true;
-        }
-    }
-
-    // parse ranges like "1-3,5,7-9" -> array of {start, end} inclusive, 1-indexed, validated against totalPages
     function parseRanges(rangeStr, maxPage) {
         if (!rangeStr.trim()) return null;
         const parts = rangeStr.split(',').map(s => s.trim());
         const ranges = [];
         for (let part of parts) {
-            if (/^\d+$/.test(part)) { // single page
+            if (/^\d+$/.test(part)) {
                 const p = parseInt(part, 10);
                 if (p < 1 || p > maxPage) return null;
                 ranges.push({start: p, end: p});
@@ -266,13 +362,12 @@
                 if (start < 1 || end > maxPage || start > end) return null;
                 ranges.push({start, end});
             } else {
-                return null; // invalid format
+                return null;
             }
         }
         return ranges;
     }
 
-    // Load PDF and extract info
     async function loadPdfFile(file) {
         try {
             splitStatus.innerText = '⏳ Loading PDF...';
@@ -297,7 +392,6 @@
         }
     }
 
-    // Handle file from drop/input
     function handleFileSelect(file) {
         if (file && file.type === 'application/pdf') {
             resetSplitInterface(false);
@@ -307,7 +401,6 @@
         }
     }
 
-    // Dropzone events
     dropZone.addEventListener('click', () => fileInput.click());
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -332,11 +425,8 @@
             fileInput.value = '';
         }
     });
-    changeFileBtn.addEventListener('click', () => {
-        fileInput.click();
-    });
+    changeFileBtn.addEventListener('click', () => fileInput.click());
 
-    // Mode toggle logic
     function toggleMode() {
         if (modeRanges.checked) {
             extractHint.classList.add('d-none');
@@ -348,22 +438,18 @@
     }
     modeExtract.addEventListener('change', toggleMode);
     modeRanges.addEventListener('change', toggleMode);
-    toggleMode(); // initial
+    toggleMode();
 
-    // Clear button
     clearSplitBtn.addEventListener('click', () => {
         resetSplitInterface(false);
         splitStatus.innerText = '';
     });
 
-    // SPLIT action
     splitBtn.addEventListener('click', async () => {
         if (!pdfDocCache || !currentPdfFile) {
             splitStatus.innerText = '⚠️ No PDF loaded.';
             return;
         }
-
-        // disable button during process
         splitBtn.disabled = true;
         splitStatus.innerText = '⏳ Splitting...';
         splitDownloadArea.classList.add('d-none');
@@ -372,16 +458,11 @@
             const { PDFDocument } = PDFLib;
             const sourceDoc = pdfDocCache;
             const total = totalPages;
-
             let rangesToExtract = [];
 
             if (modeExtract.checked) {
-                // each page individually
-                for (let i = 1; i <= total; i++) {
-                    rangesToExtract.push({ start: i, end: i });
-                }
+                for (let i = 1; i <= total; i++) rangesToExtract.push({ start: i, end: i });
             } else {
-                // custom ranges
                 const rawRanges = pageRangesInput.value.trim();
                 if (!rawRanges) {
                     splitStatus.innerText = '⚠️ Please enter page ranges.';
@@ -397,19 +478,15 @@
                 rangesToExtract = parsed;
             }
 
-            // generate prefix
             let prefix = splitPrefixInput.value.trim() || 'split';
-            // sanitize a bit
             prefix = prefix.replace(/[^a-z0-9_\-]/gi, '_');
 
-            // create ZIP and blobs array
             const zip = new JSZip();
             const blobs = [];
 
             for (let idx = 0; idx < rangesToExtract.length; idx++) {
                 const range = rangesToExtract[idx];
                 const newPdf = await PDFDocument.create();
-                // copy pages (indices are zero-based)
                 for (let p = range.start; p <= range.end; p++) {
                     const [copiedPage] = await newPdf.copyPages(sourceDoc, [p - 1]);
                     newPdf.addPage(copiedPage);
@@ -423,15 +500,10 @@
             }
 
             splitGeneratedBlobs = blobs;
-
-            // generate zip
             const zipBlob = await zip.generateAsync({ type: 'blob' });
-
-            // prepare download button
             downloadZipBtn.href = URL.createObjectURL(zipBlob);
             downloadZipBtn.download = `${prefix}_split.zip`;
 
-            // update UI
             splitCountMsg.innerText = `${blobs.length} file(s) generated.`;
             splitResultMsg.innerText = '✅ Split successful!';
             splitDownloadArea.classList.remove('d-none');
@@ -444,11 +516,6 @@
         }
     });
 
-    // if user changes file while old file info shown, reload
-    // but changeFileBtn triggers input, handleFileSelect already resets
-    // keep mode and prefix consistent
-
-    // initial reset
     resetSplitInterface(false);
 })();
 </script>

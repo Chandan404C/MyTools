@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress PDF · ToolHub</title>
+    <!-- Bootstrap 5 + Icons & cool font -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google font (Inter) for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- external CSS (as per your structure) -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- PDF-lib for client-side compression -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <!-- download.js for reliable download triggering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        /* tool specific styles – only for compressor, header/footer untouched */
+        .compressor-dropzone {
+            border: 2px dashed #a9c6e5;
+            border-radius: 32px;
+            background: #f5faff;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .compressor-dropzone:hover {
+            background: #e2effa;
+            border-color: #2b699d;
+        }
+        .file-info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .compress-btn {
+            background: #2b699d;
+            border: none;
+            border-radius: 40px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            color: white;
+        }
+        .compress-btn:hover { background: #1e4f7a; }
+        .compress-btn:disabled { opacity: 0.6; }
+        .quality-slider {
+            width: 100%;
+            accent-color: #2b699d;
+        }
+        .result-card {
+            background: #e8f0fa;
+            border-radius: 28px;
+        }
+        @media (max-width: 576px) {
+            .file-info-card {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+            .file-info-card .flex-grow-1 {
+                width: 100%;
+            }
+            .d-flex.gap-3 {
+                flex-direction: column;
+            }
+            .d-flex.gap-3 .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STICKY NAVBAR (with active state for Contact) – exactly same as original -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+  <div class="container-fluid px-lg-5">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+      <span class="fs-3 fw-bold" style="color:#132b44;">Tool<span style="color:#4e7eb3;">Hub</span></span>
+    </a>
+
+    <!-- Mobile toggler: opens left offcanvas -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- desktop menu (hidden on mobile) -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+        <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) from left -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+      <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>ToolHub
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom active" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+      <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+      <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== MAIN CONTENT: PDF COMPRESSOR TOOL (FIXED) ========== -->
+<main class="container my-5" style="font-family: 'Inter', sans-serif;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-12">
+            <!-- Tool header -->
+            <div class="d-flex align-items-center mb-4">
+                <i class="bi bi-file-earmark-zip fs-1 me-3" style="color:#4f7eb3;"></i>
+                <div>
+                    <h1 class="fw-bold" style="color:#132b44;">Compress PDF</h1>
+                    <p class="text-secondary">Reduce file size by adjusting image quality. Move the slider and compress.</p>
+                </div>
+            </div>
+
+            <!-- upload area -->
+            <div class="card border-0 shadow-sm p-4 mb-4" style="background:#f8fbfe; border-radius:28px;">
+                <div id="compressDropZone" class="compressor-dropzone text-center py-5 px-3">
+                    <i class="bi bi-cloud-upload fs-1" style="color:#2b699d;"></i>
+                    <h4 class="mt-3 fw-semibold">Drop your PDF here or click to browse</h4>
+                    <p class="text-muted mb-0">Only PDF files accepted</p>
+                    <input type="file" id="pdfCompressInput" accept=".pdf,application/pdf" class="d-none">
+                </div>
+
+                <!-- selected file info (initially hidden) -->
+                <div id="compressFileInfo" class="mt-4 d-none">
+                    <div class="file-info-card">
+                        <i class="bi bi-file-pdf fs-1" style="color:#d05b5b;"></i>
+                        <div class="flex-grow-1">
+                            <span id="compressFileName" class="fw-semibold">filename.pdf</span><br>
+                            <span id="compressFileSize" class="small text-secondary">size: --</span>
+                        </div>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill" id="changeCompressFileBtn"><i class="bi bi-arrow-repeat me-1"></i>Change</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- compression options card (visible after file loaded) -->
+            <div id="compressOptionsCard" class="card border-0 shadow-sm p-4 mb-4 d-none" style="border-radius:28px;">
+                <h5 class="fw-bold mb-3"><i class="bi bi-sliders2 me-2"></i>Compression level</h5>
+                
+                <!-- quality slider -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Image quality: <span id="qualityValue">75</span>%</label>
+                    <input type="range" class="quality-slider" id="compressQuality" min="10" max="90" value="75" step="1">
+                    <div class="d-flex justify-content-between small text-secondary">
+                        <span>Smaller file</span>
+                        <span>Better quality</span>
+                    </div>
+                </div>
+
+                <!-- size info -->
+                <div class="alert alert-light bg-white border rounded-4 p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-info-circle me-2"></i>Original size:</span>
+                        <span id="originalSizeDisplay" class="fw-semibold">---</span>
+                    </div>
+                </div>
+
+                <!-- note about compression -->
+                <p class="small text-secondary mb-3"><i class="bi bi-lightbulb me-1"></i> Compression works by re-encoding images with adjusted quality. Text remains sharp.</p>
+
+                <div class="d-flex gap-3 mt-2">
+                    <button class="btn compress-btn rounded-pill px-5 py-3 flex-grow-1 fw-semibold" id="compressBtn" disabled>
+                        <i class="bi bi-file-earmark-zip me-2"></i>Compress PDF
+                    </button>
+                    <button class="btn btn-outline-secondary rounded-pill px-4" id="clearCompressBtn"><i class="bi bi-x-lg"></i> Clear</button>
+                </div>
+            </div>
+
+            <!-- progress / status area -->
+            <div id="compressStatus" class="small fw-medium mb-3"></div>
+
+            <!-- download area (result) -->
+            <div id="compressDownloadArea" class="card border-0 shadow-sm p-4 d-none result-card">
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <i class="bi bi-check-circle-fill fs-1" style="color:#2b699d;"></i>
+                    <div class="flex-grow-1">
+                        <span class="fw-bold" style="color:#132b44;" id="compressResultMsg">✅ Compression complete!</span><br>
+                        <span class="small text-secondary" id="compressResultDetail">size reduced from 1.2 MB to 0.6 MB</span>
+                    </div>
+                    <a href="#" id="downloadCompressedBtn" class="btn btn-success rounded-pill px-4 py-2" style="background:#2b699d; border:none;"><i class="bi bi-download me-2"></i>Download PDF</a>
+                </div>
+                <div class="mt-3 small text-secondary">
+                    <i class="bi bi-info-circle me-1"></i> Your compressed file is ready.
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ========== FOOTER (unchanged) ========== -->
+<footer class="pt-5 pb-4 px-3">
+  <div class="container-lg">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <span class="fs-3 fw-bold text-white">ToolHub</span>
+        <p class="my-3 small opacity-75">Free & unlimited tools for PDF, images and office documents.</p>
+      </div>
+      <div class="col-md-2"><span class="fw-semibold text-white">Products</span><br><a href="#" class="footer-link">PDF merge</a><br><a href="#" class="footer-link">Split</a><br><a href="#" class="footer-link">Convert</a></div>
+      <div class="col-md-2"><span class="fw-semibold text-white">Company</span><br><a href="#" class="footer-link">About</a><br><a href="#" class="footer-link">Privacy</a><br><a href="#" class="footer-link">Contact</a></div>
+      <div class="col-md-4 text-md-end">
+        <i class="bi bi-twitter-x fs-4 me-3"></i>
+        <i class="bi bi-instagram fs-4 me-3"></i>
+        <i class="bi bi-github fs-4"></i>
+      </div>
+    </div>
+    <hr class="opacity-25 my-4">
+    <p class="text-center small opacity-50 mb-0">© ToolHub — like your favourite PDF suite, but cooler.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- FIXED COMPRESSOR SCRIPT – actually reduces PDF size by image recompression -->
+<script>
+(function () {
+
+    if (typeof PDFLib === "undefined") {
+        console.warn("PDF-lib not loaded");
+        return;
+    }
+
+    if (typeof pdfjsLib === "undefined") {
+        console.warn("PDF.js not loaded");
+        return;
+    }
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+
+    // DOM Elements
+    const dropZone = document.getElementById("compressDropZone");
+    const fileInput = document.getElementById("pdfCompressInput");
+    const fileInfoDiv = document.getElementById("compressFileInfo");
+    const fileNameSpan = document.getElementById("compressFileName");
+    const fileSizeSpan = document.getElementById("compressFileSize");
+    const changeFileBtn = document.getElementById("changeCompressFileBtn");
+    const optionsCard = document.getElementById("compressOptionsCard");
+    const compressBtn = document.getElementById("compressBtn");
+    const clearBtn = document.getElementById("clearCompressBtn");
+    const statusDiv = document.getElementById("compressStatus");
+    const downloadArea = document.getElementById("compressDownloadArea");
+    const downloadBtn = document.getElementById("downloadCompressedBtn");
+    const qualitySlider = document.getElementById("compressQuality");
+    const qualitySpan = document.getElementById("qualityValue");
+    const originalSizeDisplay = document.getElementById("originalSizeDisplay");
+    const compressResultMsg = document.getElementById("compressResultMsg");
+    const compressResultDetail = document.getElementById("compressResultDetail");
+
+    let currentFile = null;
+    let originalPdfBytes = null;
+    let originalSize = 0;
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return "0 B";
+        const k = 1024;
+        const sizes = ["B", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toFixed(2) + " " + sizes[i];
+    }
+
+    function resetCompressor() {
+        currentFile = null;
+        originalPdfBytes = null;
+        originalSize = 0;
+        fileInfoDiv.classList.add("d-none");
+        optionsCard.classList.add("d-none");
+        downloadArea.classList.add("d-none");
+        statusDiv.innerText = "";
+        fileInput.value = "";
+        compressBtn.disabled = true;
+    }
+
+    async function handleFile(file) {
+        if (!file || file.type !== "application/pdf") {
+            statusDiv.innerText = "⚠️ Please select a valid PDF file.";
+            return;
+        }
+
+        resetCompressor();
+        currentFile = file;
+        originalSize = file.size;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            originalPdfBytes = new Uint8Array(e.target.result);
+            fileNameSpan.innerText = file.name;
+            fileSizeSpan.innerText = "size: " + formatBytes(file.size);
+            originalSizeDisplay.innerText = formatBytes(file.size);
+            fileInfoDiv.classList.remove("d-none");
+            optionsCard.classList.remove("d-none");
+            compressBtn.disabled = false;
+            statusDiv.innerText = "✅ Loaded: " + file.name;
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.style.background = "#e2effa";
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.style.background = "#f5faff";
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.style.background = "#f5faff";
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length) {
+            handleFile(fileInput.files[0]);
+        }
+    });
+
+    changeFileBtn.addEventListener("click", () => fileInput.click());
+
+    qualitySlider.addEventListener("input", (e) => {
+        qualitySpan.innerText = e.target.value;
+    });
+
+    clearBtn.addEventListener("click", resetCompressor);
+
+    // REAL WORKING COMPRESSION
+    compressBtn.addEventListener("click", async () => {
+
+        if (!originalPdfBytes) {
+            statusDiv.innerText = "⚠️ No PDF loaded.";
+            return;
+        }
+
+        compressBtn.disabled = true;
+        statusDiv.innerText = "⏳ Compressing PDF...";
+        downloadArea.classList.add("d-none");
+
+        try {
+            const quality = parseInt(qualitySlider.value) / 100;
+
+            const loadingTask = pdfjsLib.getDocument({ data: originalPdfBytes });
+            const pdf = await loadingTask.promise;
+
+            const { PDFDocument } = PDFLib;
+            const newPdf = await PDFDocument.create();
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+
+                statusDiv.innerText = "⏳ Processing page " + i + " of " + pdf.numPages;
+
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 1.5 });
+
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+
+                const imgData = canvas.toDataURL("image/jpeg", quality);
+                const jpgImage = await newPdf.embedJpg(imgData);
+
+                const pageNew = newPdf.addPage([
+                    viewport.width,
+                    viewport.height
+                ]);
+
+                pageNew.drawImage(jpgImage, {
+                    x: 0,
+                    y: 0,
+                    width: viewport.width,
+                    height: viewport.height
+                });
+            }
+
+            const finalBytes = await newPdf.save({ compress: true });
+            const compressedBlob = new Blob([finalBytes], { type: "application/pdf" });
+            const newSize = compressedBlob.size;
+
+            const fileName = "compressed_" + currentFile.name;
+
+            downloadBtn.href = URL.createObjectURL(compressedBlob);
+            downloadBtn.download = fileName;
+
+            const reduction = ((originalSize - newSize) / originalSize * 100).toFixed(1);
+
+            compressResultMsg.innerText = "✅ Compression complete!";
+            compressResultDetail.innerText =
+                "size reduced from " +
+                formatBytes(originalSize) +
+                " to " +
+                formatBytes(newSize) +
+                " (" +
+                reduction +
+                "% smaller)";
+
+            downloadArea.classList.remove("d-none");
+            statusDiv.innerText = "";
+
+        } catch (err) {
+            console.error(err);
+            statusDiv.innerText = "❌ Compression failed.";
+        }
+
+        compressBtn.disabled = false;
+    });
+
+    resetCompressor();
+
+})();
+</script>
+
+</body>
+</html>

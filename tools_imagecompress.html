@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor · ToolHub</title>
+    <!-- Bootstrap 5 + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- external CSS (same style.css as original) -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .compressor-card {
+            background-color: #f8fafd;
+            border-radius: 2.5rem;
+            box-shadow: inset 0 2px 8px rgba(0,20,40,0.02), 0 20px 30px -10px rgba(20,60,120,0.12);
+        }
+        .file-drop-compress {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background-color: white;
+        }
+        .file-drop-compress:hover {
+            border-color: #4f7eb3 !important;
+            background-color: #eef4fd;
+        }
+        .preview-thumb-compress {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+            border: 2px solid white;
+        }
+        .image-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            align-items: center;
+        }
+        .stats-badge {
+            background: white;
+            border-radius: 40px;
+            padding: 0.4rem 1.4rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .error-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: #dc3545;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(220,53,69,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .error-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- STICKY NAVBAR (identical to original) -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+            <span class="fs-3 fw-bold" style="color:#132b44;">Tool<span style="color:#4e7eb3;">Hub</span></span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+            </ul>
+            <div class="d-flex gap-2">
+                <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+                <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" style="color:#132b44;">
+            <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>ToolHub
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+            <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+            <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="container py-5" style="max-width: 1200px;">
+    <!-- tool header -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-subtle text-primary fw-semibold px-4 py-2 rounded-pill mb-3"><i class="bi bi-file-zip-fill me-2"></i>Image compressor</span>
+        <h1 class="display-5 fw-bold" style="color:#132b44;">Compress JPG, PNG, WebP</h1>
+        <p class="text-secondary-emphasis">Reduce file size while keeping good quality. Smart compression in your browser.</p>
+    </div>
+
+    <!-- main card -->
+    <div class="compressor-card p-4 p-lg-5">
+        <!-- drop zone (multiple images) -->
+        <div class="file-drop-compress border border-2 border-dashed rounded-5 p-5 mb-4 text-center" style="border-color: #cdddec;" onclick="document.getElementById('compressInput').click()">
+            <i class="bi bi-images fs-1" style="color:#4f7eb3;"></i>
+            <h4 class="mt-3 fw-semibold">Drop images here or click to browse</h4>
+            <p class="text-secondary small">Supports JPG, PNG, WebP — PDF files will be automatically rejected</p>
+            <input type="file" id="compressInput" accept="image/jpeg,image/jpg,image/png,image/webp" multiple class="d-none">
+            <button class="gradient-btn btn px-5 py-2 rounded-pill mt-2"><i class="bi bi-cloud-arrow-up me-2"></i>Add images</button>
+        </div>
+
+        <!-- quality slider & settings -->
+        <div class="row g-4 align-items-center mb-4">
+            <div class="col-md-7">
+                <label class="fw-semibold mb-2"><i class="bi bi-sliders2 me-2" style="color:#4f7eb3;"></i>Compression level</label>
+                <input type="range" class="form-range" id="qualitySlider" min="10" max="95" value="75" step="1">
+                <div class="d-flex justify-content-between small text-secondary">
+                    <span>Smaller size</span>
+                    <span>Balanced</span>
+                    <span>Better quality</span>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="bg-white rounded-pill p-3 shadow-sm d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Quality:</span>
+                    <span class="badge bg-primary-subtle text-primary fs-6 px-4 py-2 rounded-pill" id="qualityValue">75%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- advanced options -->
+        <div class="mt-4 d-flex flex-wrap gap-4 align-items-center">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="resizeCheck">
+                <label class="form-check-label" for="resizeCheck">📐 Resize (max width/height)</label>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+                <input type="number" id="maxWidth" class="form-control form-control-sm rounded-pill" placeholder="width" value="1200" style="width: 100px;" disabled>
+                <span class="fw-light">x</span>
+                <input type="number" id="maxHeight" class="form-control form-control-sm rounded-pill" placeholder="height" value="1200" style="width: 100px;" disabled>
+                <span class="text-secondary small">px</span>
+            </div>
+            <div class="form-check ms-2">
+                <input class="form-check-input" type="checkbox" id="keepMetadata" checked>
+                <label class="form-check-label" for="keepMetadata">🔗 Keep metadata</label>
+            </div>
+        </div>
+
+        <!-- action buttons -->
+        <div class="d-flex flex-column flex-sm-row gap-3 mt-5 justify-content-center">
+            <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="compressBtn"><i class="bi bi-file-arrow-down me-2"></i>Compress images</button>
+            <button class="btn-pill btn px-5 py-3 rounded-pill bg-white border-0" style="color:#132b44;" id="clearCompressBtn"><i class="bi bi-eraser me-2"></i>Clear all</button>
+        </div>
+
+        <!-- privacy note -->
+        <p class="text-center text-secondary small mt-5 mb-0 opacity-75"><i class="bi bi-incognito me-2"></i>100% client‑side — images never leave your device.</p>
+    </div>
+
+    <!-- preview & download area -->
+    <div class="mt-5" id="compressedPreviewContainer" style="display: none;">
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="bi bi-check-circle-fill fs-2" style="color:#4f7eb3;"></i>
+            <h4 class="fw-semibold mb-0">Compressed images ready</h4>
+        </div>
+
+        <!-- grid for thumbnails -->
+        <div class="image-preview-grid" id="compressedGrid"></div>
+
+        <!-- bulk download -->
+        <div class="mt-5 text-center">
+            <a href="#" class="gradient-btn btn px-5 py-3 rounded-pill" id="downloadAllCompressed"><i class="bi bi-download me-2"></i>Download all as ZIP</a>
+        </div>
+    </div>
+
+    <!-- how‑it‑works steps -->
+    <div class="row mt-5 g-4">
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-1-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Pick one or more images</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-2-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Adjust quality & resize</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-3-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Download optimized images</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="pt-5 pb-4 px-3">
+    <div class="container-lg">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <span class="fs-3 fw-bold text-white">ToolHub</span>
+                <p class="my-3 small opacity-75">Free & unlimited tools for PDF, images and office documents.</p>
+            </div>
+            <div class="col-md-2">
+                <span class="fw-semibold text-white">Products</span><br>
+                <a href="#" class="footer-link">PDF merge</a><br>
+                <a href="#" class="footer-link">Split</a><br>
+                <a href="#" class="footer-link">Convert</a>
+            </div>
+            <div class="col-md-2">
+                <span class="fw-semibold text-white">Company</span><br>
+                <a href="#" class="footer-link">About</a><br>
+                <a href="#" class="footer-link">Privacy</a><br>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <i class="bi bi-twitter-x fs-4 me-3"></i>
+                <i class="bi bi-instagram fs-4 me-3"></i>
+                <i class="bi bi-github fs-4"></i>
+            </div>
+        </div>
+        <hr class="opacity-25 my-4">
+        <p class="text-center small opacity-50 mb-0">© ToolHub — like your favourite PDF suite, but cooler.</p>
+    </div>
+</footer>
+
+<!-- Error Toast -->
+<div id="errorToast" class="error-toast">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <span id="errorMessage">PDF files are not supported. Please select images only.</span>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+(function() {
+    // DOM elements
+    const fileInput = document.getElementById('compressInput');
+    const dropZone = document.querySelector('.file-drop-compress');
+    const qualitySlider = document.getElementById('qualitySlider');
+    const qualitySpan = document.getElementById('qualityValue');
+    const resizeCheck = document.getElementById('resizeCheck');
+    const maxWidthInput = document.getElementById('maxWidth');
+    const maxHeightInput = document.getElementById('maxHeight');
+    const compressBtn = document.getElementById('compressBtn');
+    const clearBtn = document.getElementById('clearCompressBtn');
+    const previewContainer = document.getElementById('compressedPreviewContainer');
+    const compressedGrid = document.getElementById('compressedGrid');
+    const downloadAllBtn = document.getElementById('downloadAllCompressed');
+    const errorToast = document.getElementById('errorToast');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // State
+    let originalFiles = [];
+    let compressedResults = [];
+
+    // Supported image types
+    const SUPPORTED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp'];
+
+    // Helper: Show error message
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorToast.classList.add('show');
+        setTimeout(() => {
+            errorToast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Helper: Check if file is image
+    function isImageFile(file) {
+        // Check by MIME type
+        if (SUPPORTED_TYPES.includes(file.type)) {
+            return true;
+        }
+        
+        // Check by extension (fallback for some browsers)
+        const fileName = file.name.toLowerCase();
+        return SUPPORTED_EXTENSIONS.some(ext => fileName.endsWith(ext));
+    }
+
+    // UI Controls
+    qualitySlider.addEventListener('input', e => {
+        qualitySpan.textContent = e.target.value + '%';
+    });
+
+    resizeCheck.addEventListener('change', function() {
+        maxWidthInput.disabled = !this.checked;
+        maxHeightInput.disabled = !this.checked;
+    });
+
+    // Drop zone click
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // Prevent accidental drag & drop of PDFs on window
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        window.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
+
+    // Handle file selection
+    fileInput.addEventListener('change', function(e) {
+        const files = Array.from(this.files);
+        
+        // Filter only image files
+        const imageFiles = files.filter(file => {
+            if (!isImageFile(file)) {
+                showError(`"${file.name}" is not a supported image. Only JPG, PNG, WebP allowed.`);
+                return false;
+            }
+            return true;
+        });
+
+        if (imageFiles.length > 0) {
+            originalFiles.push(...imageFiles);
+            updateLoadedCount();
+            
+            // Show success message for first batch
+            if (imageFiles.length < files.length) {
+                showError(`${imageFiles.length} image(s) added. ${files.length - imageFiles.length} file(s) skipped.`);
+            }
+        } else if (files.length > 0) {
+            showError('No valid images selected. Please choose JPG, PNG, or WebP files.');
+        }
+        
+        fileInput.value = ''; // Clear input
+    });
+
+    function updateLoadedCount() {
+        let badge = dropZone.querySelector('.selected-count-badge');
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'stats-badge mt-3 selected-count-badge';
+            dropZone.appendChild(badge);
+        }
+        badge.innerHTML = `<i class="bi bi-check-circle-fill text-success me-1"></i>${originalFiles.length} image(s) ready`;
+    }
+
+    // Clear all
+    clearBtn.addEventListener('click', e => {
+        e.preventDefault();
+        originalFiles = [];
+        compressedResults = [];
+        compressedGrid.innerHTML = '';
+        previewContainer.style.display = 'none';
+        const badge = dropZone.querySelector('.selected-count-badge');
+        if (badge) badge.remove();
+    });
+
+    // Compression function
+    async function compressImage(file, quality, maxW, maxH) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = e => {
+                const img = new Image();
+                
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Apply resize if needed
+                    if (maxW || maxH) {
+                        const ratioW = maxW ? maxW / width : 1;
+                        const ratioH = maxH ? maxH / height : 1;
+                        const ratio = Math.min(ratioW, ratioH);
+                        
+                        if (ratio < 1) {
+                            width = Math.round(width * ratio);
+                            height = Math.round(height * ratio);
+                        }
+                    }
+
+                    // Create canvas
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Handle transparency for PNGs
+                    if (file.type === 'image/png') {
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, width, height);
+                    }
+                    
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Determine output format
+                    let outputFormat = file.type;
+                    let extension = file.name.split('.').pop().toLowerCase();
+                    
+                    // Convert PNG to JPEG if quality is below 90 (better compression)
+                    if (file.type === 'image/png' && quality < 0.9) {
+                        outputFormat = 'image/jpeg';
+                        extension = 'jpg';
+                    }
+
+                    canvas.toBlob(blob => {
+                        if (!blob) {
+                            reject(new Error('Compression failed'));
+                            return;
+                        }
+
+                        resolve({
+                            blob: blob,
+                            fileName: file.name,
+                            format: extension,
+                            originalSize: file.size,
+                            compressedSize: blob.size,
+                            previewUrl: URL.createObjectURL(blob)
+                        });
+                    }, outputFormat, quality);
+                };
+
+                img.onerror = () => reject(new Error('Failed to load image'));
+                img.src = e.target.result;
+            };
+
+            reader.onerror = () => reject(new Error('Failed to read file'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Render compressed image card
+    function renderCompressedCard(result) {
+        const wrapper = document.createElement('div');
+        wrapper.style.width = '200px';
+
+        const img = document.createElement('img');
+        img.src = result.previewUrl;
+        img.className = 'preview-thumb-compress w-100';
+        img.style.height = '140px';
+        img.style.objectFit = 'cover';
+
+        const info = document.createElement('div');
+        info.className = 'bg-white rounded-4 p-2 mt-2 small shadow-sm';
+        
+        const savings = ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1);
+        const savingsClass = savings > 0 ? 'text-success' : 'text-danger';
+        
+        info.innerHTML = `
+            <strong>${result.fileName.substring(0, 15)}${result.fileName.length > 15 ? '...' : ''}</strong><br>
+            <span class="text-success">${(result.compressedSize/1024).toFixed(1)} KB</span>
+            <span class="text-secondary"> (was ${(result.originalSize/1024).toFixed(1)} KB)</span><br>
+            <span class="${savingsClass}">${savings > 0 ? '↓' : '↑'} ${Math.abs(savings)}%</span>
+        `;
+
+        const btn = document.createElement('a');
+        btn.href = '#';
+        btn.className = 'btn btn-sm gradient-btn mt-2 w-100';
+        btn.innerHTML = '<i class="bi bi-download"></i> Download';
+        btn.onclick = e => {
+            e.preventDefault();
+            const url = URL.createObjectURL(result.blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = result.fileName.replace(/\.[^/.]+$/, '') + '_compressed.' + result.format;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(info);
+        wrapper.appendChild(btn);
+        compressedGrid.appendChild(wrapper);
+    }
+
+    // Compress button click
+    compressBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        if (originalFiles.length === 0) {
+            showError('Please add some images first.');
+            return;
+        }
+
+        // Disable button during compression
+        compressBtn.disabled = true;
+        compressBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Compressing...';
+
+        compressedResults = [];
+        compressedGrid.innerHTML = '';
+        previewContainer.style.display = 'block';
+
+        const quality = parseInt(qualitySlider.value) / 100;
+        const resizeEnabled = resizeCheck.checked;
+        const maxW = resizeEnabled ? parseInt(maxWidthInput.value) || 1200 : null;
+        const maxH = resizeEnabled ? parseInt(maxHeightInput.value) || 1200 : null;
+
+        let successCount = 0;
+        
+        for (let file of originalFiles) {
+            try {
+                const result = await compressImage(file, quality, maxW, maxH);
+                compressedResults.push(result);
+                renderCompressedCard(result);
+                successCount++;
+            } catch (err) {
+                console.error('Compression failed:', err);
+                showError(`Failed to compress: ${file.name}`);
+            }
+        }
+
+        // Re-enable button
+        compressBtn.disabled = false;
+        compressBtn.innerHTML = '<i class="bi bi-file-arrow-down me-2"></i>Compress images';
+
+        if (successCount === 0) {
+            previewContainer.style.display = 'none';
+            showError('No images could be compressed.');
+        }
+    });
+
+    // Download all as ZIP
+    downloadAllBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        if (compressedResults.length === 0) {
+            showError('No compressed images to download.');
+            return;
+        }
+
+        // Disable button during ZIP creation
+        downloadAllBtn.disabled = true;
+        downloadAllBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating ZIP...';
+
+        try {
+            const zip = new JSZip();
+            
+            compressedResults.forEach(res => {
+                const name = res.fileName.replace(/\.[^/.]+$/, '') + '_compressed.' + res.format;
+                zip.file(name, res.blob);
+            });
+
+            const content = await zip.generateAsync({ 
+                type: 'blob',
+                compression: 'DEFLATE',
+                compressionOptions: { level: 6 }
+            });
+            
+            const url = URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "compressed_images.zip";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } catch (err) {
+            showError('Failed to create ZIP file.');
+        } finally {
+            downloadAllBtn.disabled = false;
+            downloadAllBtn.innerHTML = '<i class="bi bi-download me-2"></i>Download all as ZIP';
+        }
+    });
+
+    // Prevent drop of PDF files on dropzone
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#4f7eb3';
+        dropZone.style.backgroundColor = '#eef4fd';
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '#cdddec';
+        dropZone.style.backgroundColor = 'white';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#cdddec';
+        dropZone.style.backgroundColor = 'white';
+        
+        const files = Array.from(e.dataTransfer.files);
+        
+        // Filter images
+        const imageFiles = files.filter(file => {
+            if (!isImageFile(file)) {
+                showError(`"${file.name}" is not a supported image.`);
+                return false;
+            }
+            return true;
+        });
+
+        if (imageFiles.length > 0) {
+            originalFiles.push(...imageFiles);
+            updateLoadedCount();
+            
+            if (imageFiles.length < files.length) {
+                showError(`${imageFiles.length} image(s) added. ${files.length - imageFiles.length} file(s) skipped.`);
+            }
+        } else if (files.length > 0) {
+            showError('Please drop only image files (JPG, PNG, WebP).');
+        }
+    });
+
+})();
+</script>
+
+</body>
+</html>

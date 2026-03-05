@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Word · ToolHub</title>
+    <!-- Bootstrap 5 + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- external CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- FileSaver.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- DOCX Generator -->
+    <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+    <style>
+        /* tool specific styles */
+        .converter-dropzone {
+            border: 2px dashed #a9c6e5;
+            border-radius: 32px;
+            background: #f5faff;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .converter-dropzone:hover {
+            background: #e2effa;
+            border-color: #2b699d;
+        }
+        .file-info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .convert-btn {
+            background: #2b699d;
+            border: none;
+            border-radius: 40px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            color: white;
+        }
+        .convert-btn:hover { background: #1e4f7a; }
+        .convert-btn:disabled { opacity: 0.6; }
+        .result-card {
+            background: #e8f0fa;
+            border-radius: 28px;
+        }
+        .preview-box {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 1rem;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            border: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+
+<!-- STICKY NAVBAR -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+            <span class="fs-3 fw-bold" style="color:#132b44;">Tool<span style="color:#4e7eb3;">Hub</span></span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+            </ul>
+            <div class="d-flex gap-2">
+                <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+                <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" style="color:#132b44;">
+            <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>ToolHub
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom active" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+            <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+            <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- MAIN CONTENT: PDF TO WORD CONVERTER -->
+<main class="container my-5" style="font-family: 'Inter', sans-serif;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-12">
+            <!-- Tool header -->
+            <div class="d-flex align-items-center mb-4">
+                <i class="bi bi-file-earmark-word fs-1 me-3" style="color:#2b699d;"></i>
+                <div>
+                    <h1 class="fw-bold" style="color:#132b44;">PDF to Word</h1>
+                    <p class="text-secondary">Convert PDF to editable Word document</p>
+                </div>
+            </div>
+
+            <!-- Upload area -->
+            <div class="card border-0 shadow-sm p-4 mb-4" style="background:#f8fbfe; border-radius:28px;">
+                <div id="dropZone" class="converter-dropzone text-center py-5 px-3">
+                    <i class="bi bi-cloud-upload fs-1" style="color:#2b699d;"></i>
+                    <h4 class="mt-3 fw-semibold">Drop PDF here or click to browse</h4>
+                    <p class="text-muted mb-0">PDF files only</p>
+                    <input type="file" id="fileInput" accept=".pdf" class="d-none">
+                </div>
+
+                <!-- File info -->
+                <div id="fileInfo" class="mt-4 d-none">
+                    <div class="file-info-card">
+                        <i class="bi bi-file-pdf fs-1" style="color:#d05b5b;"></i>
+                        <div class="flex-grow-1">
+                            <span id="fileName" class="fw-semibold">filename.pdf</span><br>
+                            <span id="fileSize" class="small text-secondary"></span>
+                            <span id="pageCount" class="small text-secondary ms-2"></span>
+                        </div>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill" id="changeFileBtn">
+                            <i class="bi bi-arrow-repeat me-1"></i>Change
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options card -->
+            <div id="optionsCard" class="card border-0 shadow-sm p-4 mb-4 d-none" style="border-radius:28px;">
+                <h5 class="fw-bold mb-3">Conversion Options</h5>
+                
+                <!-- Preview -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Text Preview:</label>
+                    <div id="preview" class="preview-box text-muted">
+                        No preview available
+                    </div>
+                </div>
+
+                <!-- Convert button -->
+                <div class="d-flex gap-3">
+                    <button class="btn convert-btn flex-grow-1" id="convertBtn" disabled>
+                        <i class="bi bi-arrow-repeat me-2"></i>Convert to Word
+                    </button>
+                    <button class="btn btn-outline-secondary rounded-pill px-4" id="clearBtn">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div id="status" class="small fw-medium mb-3"></div>
+
+            <!-- Download area -->
+            <div id="downloadArea" class="card border-0 shadow-sm p-4 d-none result-card">
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <i class="bi bi-check-circle-fill fs-1" style="color:#2b699d;"></i>
+                    <div class="flex-grow-1">
+                        <span class="fw-bold" style="color:#132b44;" id="resultMsg">Conversion complete!</span><br>
+                        <span class="small text-secondary" id="resultDetail"></span>
+                    </div>
+                    <a href="#" id="downloadBtn" class="btn btn-success rounded-pill px-4 py-2" style="background:#2b699d; border:none;">
+                        <i class="bi bi-download me-2"></i>Download
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="pt-5 pb-4 px-3">
+    <div class="container-lg">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <span class="fs-3 fw-bold text-white">ToolHub</span>
+                <p class="my-3 small opacity-75">Free & unlimited tools for PDF, images and office documents.</p>
+            </div>
+            <div class="col-md-2">
+                <span class="fw-semibold text-white">Products</span><br>
+                <a href="#" class="footer-link">PDF merge</a><br>
+                <a href="#" class="footer-link">Split</a><br>
+                <a href="#" class="footer-link">Convert</a>
+            </div>
+            <div class="col-md-2">
+                <span class="fw-semibold text-white">Company</span><br>
+                <a href="#" class="footer-link">About</a><br>
+                <a href="#" class="footer-link">Privacy</a><br>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <i class="bi bi-twitter-x fs-4 me-3"></i>
+                <i class="bi bi-instagram fs-4 me-3"></i>
+                <i class="bi bi-github fs-4"></i>
+            </div>
+        </div>
+        <hr class="opacity-25 my-4">
+        <p class="text-center small opacity-50 mb-0">© ToolHub — like your favourite PDF suite, but cooler.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Converter Script -->
+<script>
+(function () {
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+    const fileInfo = document.getElementById("fileInfo");
+    const fileNameEl = document.getElementById("fileName");
+    const fileSizeEl = document.getElementById("fileSize");
+    const pageCountEl = document.getElementById("pageCount");
+    const changeFileBtn = document.getElementById("changeFileBtn");
+    const optionsCard = document.getElementById("optionsCard");
+    const previewBox = document.getElementById("preview");
+    const convertBtn = document.getElementById("convertBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const status = document.getElementById("status");
+    const downloadArea = document.getElementById("downloadArea");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const resultDetail = document.getElementById("resultDetail");
+
+    let pdfDoc = null;
+    let totalPages = 0;
+    let currentFile = null;
+    let generatedBlob = null;
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return "0 B";
+        const k = 1024;
+        const sizes = ["B", "KB", "MB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    }
+
+    function reset() {
+        pdfDoc = null;
+        totalPages = 0;
+        currentFile = null;
+        generatedBlob = null;
+
+        fileInput.value = "";
+        fileInfo.classList.add("d-none");
+        optionsCard.classList.add("d-none");
+        downloadArea.classList.add("d-none");
+        previewBox.innerHTML = "No preview available";
+        convertBtn.disabled = true;
+        status.innerText = "";
+    }
+
+    async function loadPDF(file) {
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            totalPages = pdfDoc.numPages;
+
+            fileNameEl.innerText = file.name;
+            fileSizeEl.innerText = formatBytes(file.size);
+            pageCountEl.innerText = `• ${totalPages} page(s)`;
+
+            fileInfo.classList.remove("d-none");
+            optionsCard.classList.remove("d-none");
+            convertBtn.disabled = false;
+
+            // Preview first page
+            const page = await pdfDoc.getPage(1);
+            const textContent = await page.getTextContent();
+            const text = textContent.items.map(i => i.str).join(" ");
+
+            previewBox.innerText = text
+                ? text.substring(0, 400) + (text.length > 400 ? "..." : "")
+                : "No text found on first page.";
+
+            status.innerText = "✅ PDF Ready";
+        } catch (err) {
+            console.error(err);
+            status.innerText = "❌ Failed to load PDF";
+            reset();
+        }
+    }
+
+    async function handleFile(file) {
+        if (!file || file.type !== "application/pdf") {
+            status.innerText = "⚠️ Please select a valid PDF file";
+            return;
+        }
+        reset();
+        currentFile = file;
+        await loadPDF(file);
+    }
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#2b699d";
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.style.borderColor = "#a9c6e5";
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#a9c6e5";
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length) {
+            handleFile(fileInput.files[0]);
+        }
+    });
+
+    changeFileBtn.addEventListener("click", () => fileInput.click());
+
+    clearBtn.addEventListener("click", reset);
+
+    convertBtn.addEventListener("click", async () => {
+
+    if (!pdfDoc) return;
+
+    status.innerText = "⏳ Converting...";
+    convertBtn.disabled = true;
+
+    try {
+
+        let children = [];
+
+        for (let i = 1; i <= totalPages; i++) {
+
+            status.innerText = `⏳ Processing page ${i}/${totalPages}...`;
+
+            const page = await pdfDoc.getPage(i);
+            const textContent = await page.getTextContent();
+
+            const pageText = textContent.items.map(item => item.str).join(" ");
+
+            children.push(
+                new window.docx.Paragraph({
+                    children: [
+                        new window.docx.TextRun({
+                            text: pageText,
+                            size: 24
+                        })
+                    ]
+                })
+            );
+
+            children.push(new window.docx.Paragraph({}));
+        }
+
+        const doc = new window.docx.Document({
+            sections: [
+                {
+                    properties: {},
+                    children: children
+                }
+            ]
+        });
+
+        const blob = await window.docx.Packer.toBlob(doc);
+
+        const fileName = currentFile.name.replace(".pdf", "") + ".docx";
+
+        downloadBtn.href = URL.createObjectURL(blob);
+        downloadBtn.download = fileName;
+        downloadArea.classList.remove("d-none");
+
+        status.innerText = "✅ Conversion Complete!";
+
+    } catch (err) {
+        console.error(err);
+        status.innerText = "❌ Conversion failed";
+    }
+
+    convertBtn.disabled = false;
+});
+
+    reset();
+
+})();
+</script>
+
+</body>
+</html>

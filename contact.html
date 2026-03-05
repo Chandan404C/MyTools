@@ -260,57 +260,84 @@
 
 <!-- demo JS for contact form toast -->
 <script>
-  (function() {
-    // demo function for form submission
-    window.demoSubmit = function() {
-      const msg = document.createElement('div');
-      msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
-      msg.style.zIndex = '9999';
-      msg.style.background = '#1b4a6e';
-      msg.innerHTML = '<i class="bi bi-check2-circle me-2"></i> Message sent (demo) – we\'ll get back to you soon!';
-      document.body.appendChild(msg);
-      setTimeout(() => { msg.remove(); }, 3000);
-      
-      // optionally reset form
-      const form = document.getElementById('contactForm');
-      if (form) form.reset();
+(function() {
+
+  // FORM SUBMIT FUNCTION
+  window.demoSubmit = function() {
+
+    const form = document.getElementById("contactForm");
+
+    const data = {
+      name: form.querySelector("input[placeholder='Your name']").value,
+      email: form.querySelector("input[placeholder='Email address']").value,
+      subject: form.querySelector("select").value,
+      message: form.querySelector("textarea").value
     };
 
-    // close offcanvas after clicking login/signup (from offcanvas)
-    document.querySelectorAll('.offcanvas .btn-pill, .offcanvas .gradient-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const msg = document.createElement('div');
-        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
-        msg.style.zIndex = '9999';
-        msg.style.background = '#1b4a6e';
-        msg.innerHTML = `<i class="bi bi-person-check me-2"></i> ${btn.innerText} (demo)`;
-        document.body.appendChild(msg);
-        setTimeout(() => { msg.remove(); }, 1800);
-        
-        const offcanvasElem = document.getElementById('offcanvasNavbar');
-        if (offcanvasElem && offcanvasElem.classList.contains('show')) {
-          let offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElem);
-          if (offcanvasInstance) offcanvasInstance.hide();
-        }
-      });
-    });
+    fetch("https://script.google.com/macros/s/AKfycbxKfHzpwE-rNWurMULF4T3cYQV7ZGhDrDAVzTKnhNIJZk4KCZ52gvGq630V--8Be07ydw/exec", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(response => {
 
-    // optional chat button demo
-    const chatBtn = document.querySelector('.btn-pill[href="#"]');
-    if (chatBtn && chatBtn.innerText.includes('Start chat')) {
-      chatBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const msg = document.createElement('div');
-        msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 bg-dark text-white rounded-5 shadow-lg';
-        msg.style.zIndex = '9999';
-        msg.style.background = '#1b4a6e';
-        msg.innerHTML = '<i class="bi bi-messenger me-2"></i> Live chat demo – we\'ll connect you soon.';
-        document.body.appendChild(msg);
-        setTimeout(() => { msg.remove(); }, 2000);
-      });
-    }
-  })();
+      const msg = document.createElement('div');
+      msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 text-white rounded-5 shadow-lg';
+      msg.style.zIndex = '9999';
+      msg.style.background = '#1b4a6e';
+      msg.innerHTML = '<i class="bi bi-check2-circle me-2"></i> Message sent successfully!';
+      document.body.appendChild(msg);
+
+      setTimeout(() => { msg.remove(); }, 3000);
+
+      form.reset();
+    })
+    .catch(error => {
+      alert("Error sending message");
+      console.log(error);
+    });
+  };
+
+  // OFFCANVAS DEMO BUTTON
+  document.querySelectorAll('.offcanvas .btn-pill, .offcanvas .gradient-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const msg = document.createElement('div');
+      msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 text-white rounded-5 shadow-lg';
+      msg.style.zIndex = '9999';
+      msg.style.background = '#1b4a6e';
+      msg.innerHTML = `<i class="bi bi-person-check me-2"></i> ${btn.innerText} (demo)`;
+      document.body.appendChild(msg);
+
+      setTimeout(() => { msg.remove(); }, 1800);
+
+      const offcanvasElem = document.getElementById('offcanvasNavbar');
+      if (offcanvasElem && offcanvasElem.classList.contains('show')) {
+        let offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElem);
+        if (offcanvasInstance) offcanvasInstance.hide();
+      }
+    });
+  });
+
+  // CHAT BUTTON DEMO
+  const chatBtn = document.querySelector('.btn-pill[href="#"]');
+  if (chatBtn && chatBtn.innerText.includes('Start chat')) {
+    chatBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const msg = document.createElement('div');
+      msg.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 text-white rounded-5 shadow-lg';
+      msg.style.zIndex = '9999';
+      msg.style.background = '#1b4a6e';
+      msg.innerHTML = '<i class="bi bi-messenger me-2"></i> Live chat demo – we\'ll connect you soon.';
+      document.body.appendChild(msg);
+
+      setTimeout(() => { msg.remove(); }, 2000);
+    });
+  }
+
+})();
 </script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

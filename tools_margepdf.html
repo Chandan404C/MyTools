@@ -332,6 +332,115 @@
             width: 100%;
         }
         
+        /* ------- NEW SECTION: how-to, features, faq, related ------- */
+        .info-grid-section {
+            max-width: 1000px;
+            margin: 2.5rem auto 0;
+            background: #ffffff;
+            border-radius: 48px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 12px 32px -12px rgba(25, 60, 90, 0.15);
+            border: 1px solid rgba(79, 126, 179, 0.15);
+        }
+        .section-badge {
+            display: inline-block;
+            background: #dde9f5;
+            color: #1b4a6e;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.35rem 1.4rem;
+            border-radius: 40px;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.3px;
+        }
+        .feature-item, .benefit-item {
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        .feature-item i, .benefit-item i {
+            font-size: 1.8rem;
+            color: #2b699d;
+            background: #e3f0fd;
+            padding: 0.8rem;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+        .feature-text h5, .benefit-text h5 {
+            font-weight: 700;
+            color: #132b44;
+            margin-bottom: 0.2rem;
+        }
+        .feature-text p, .benefit-text p {
+            color: #3e5f7a;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        .faq-item {
+            border-bottom: 1px solid #dae5f2;
+            padding: 1rem 0;
+        }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question {
+            font-weight: 700;
+            color: #1b405d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .faq-question i {
+            color: #4f7eb3;
+            transition: transform 0.2s;
+        }
+        .faq-answer {
+            color: #3a5e7e;
+            font-size: 0.95rem;
+            padding-top: 0.7rem;
+        }
+        .related-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+        .related-chip {
+            background: #e3edf7;
+            color: #1b4a6e;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+        .related-chip:hover {
+            background: #cde0f2;
+            border-color: #7ba1c9;
+        }
+        
+        /* responsive adjustments for info section */
+        @media (max-width: 768px) {
+            .info-grid-section {
+                padding: 1.5rem 1.5rem;
+                border-radius: 32px;
+            }
+            .feature-item, .benefit-item {
+                gap: 1rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .info-grid-section {
+                padding: 1.2rem 1.2rem;
+            }
+            .feature-item i, .benefit-item i {
+                font-size: 1.5rem;
+                padding: 0.6rem;
+            }
+        }
+        
         /* RESPONSIVE BREAKPOINTS - with fixed filename input */
         @media (max-width: 768px) {
             .merge-card {
@@ -724,6 +833,111 @@
                     <i class="bi bi-download"></i> Download PDF
                 </a>
             </div>
+        </div>
+    </div>
+
+    <!-- ========== NEW INFO SECTION: How to, Features, Benefits, FAQ, Related Tools ========== -->
+    <div class="info-grid-section">
+        <div class="section-badge"><i class="bi bi-info-circle me-2"></i>quick guide</div>
+        <!-- row: how to + features -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <h5 class="fw-bold mb-3" style="color:#132b44;"><i class="bi bi-play-circle me-2" style="color:#2c5f8a;"></i> How to use</h5>
+                <ol class="ps-3" style="color:#285577;">
+                    <li class="mb-2"><strong>Upload</strong> – drag PDFs or click the zone.</li>
+                    <li class="mb-2"><strong>Reorder</strong> – use ↑↓ buttons to arrange pages.</li>
+                    <li class="mb-2"><strong>Name</strong> – set your output filename.</li>
+                    <li class="mb-2"><strong>Merge & download</strong> – click the big blue button.</li>
+                </ol>
+            </div>
+            <div class="col-md-6">
+                <h5 class="fw-bold mb-3" style="color:#132b44;"><i class="bi bi-stars me-2" style="color:#2c5f8a;"></i> Features</h5>
+                <div class="feature-item">
+                    <i class="bi bi-arrow-up-down"></i>
+                    <div class="feature-text">
+                        <h5>Drag‑free reorder</h5>
+                        <p>Use arrow buttons to rearrange pages instantly.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-shield-check"></i>
+                    <div class="feature-text">
+                        <h5>100% client‑side</h5>
+                        <p>Files never leave your device — private & secure.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-pencil-square"></i>
+                    <div class="feature-text">
+                        <h5>Custom filename</h5>
+                        <p>Name your merged PDF anything, .pdf added automatically.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits row (simple highlights) -->
+        <h5 class="fw-bold mb-3" style="color:#132b44;"><i class="bi bi-gem me-2" style="color:#2c5f8a;"></i> Benefits</h5>
+        <div class="row g-4 mb-5">
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-light p-3 rounded-4 text-center h-100">
+                    <i class="bi bi-lightning-charge-fill fs-1" style="color:#1d6090;"></i>
+                    <h6 class="fw-bold mt-2">Lightning fast</h6>
+                    <p class="small text-secondary">Merging happens in your browser, no waiting.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-light p-3 rounded-4 text-center h-100">
+                    <i class="bi bi-infinity fs-1" style="color:#1d6090;"></i>
+                    <h6 class="fw-bold mt-2">Unlimited files</h6>
+                    <p class="small text-secondary">No size caps, no watermarks, no sign‑up.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-light p-3 rounded-4 text-center h-100">
+                    <i class="bi bi-phone fs-1" style="color:#1d6090;"></i>
+                    <h6 class="fw-bold mt-2">Mobile friendly</h6>
+                    <p class="small text-secondary">Works on phone, tablet, desktop – fully responsive.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-light p-3 rounded-4 text-center h-100">
+                    <i class="bi bi-file-earmark-pdf fs-1" style="color:#1d6090;"></i>
+                    <h6 class="fw-bold mt-2">Preserves quality</h6>
+                    <p class="small text-secondary">Exact copy of original pages, no re‑encoding.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <h5 class="fw-bold mb-3" style="color:#132b44;"><i class="bi bi-question-circle me-2" style="color:#2c5f8a;"></i> Frequently asked</h5>
+        <div class="faq-item">
+            <div class="faq-question" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false">
+                <span>Is there a limit on file size?</span> <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="collapse faq-answer" id="faq1">No, as long as your device can handle the files. PDF‑lib runs locally, so it depends on your RAM.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false">
+                <span>Can I merge encrypted PDFs?</span> <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="collapse faq-answer" id="faq2">Only password‑free PDFs are supported. If a file requires a password, the merge will fail.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false">
+                <span>Do you keep my files on a server?</span> <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="collapse faq-answer" id="faq3">Never. Everything stays in your browser. Once you close the tab, all traces are gone.</div>
+        </div>
+
+        <!-- Related tools -->
+        <h5 class="fw-bold mt-4 mb-2" style="color:#132b44;"><i class="bi bi-link-45deg me-2" style="color:#2c5f8a;"></i> Related tools</h5>
+        <div class="related-chips">
+            <a href="#" class="related-chip"><i class="bi bi-file-pdf me-1"></i>Split PDF</a>
+            <a href="#" class="related-chip"><i class="bi bi-arrow-left-right me-1"></i>PDF to Word</a>
+            <a href="#" class="related-chip"><i class="bi bi-image me-1"></i>PDF to JPG</a>
+            <a href="#" class="related-chip"><i class="bi bi-lock me-1"></i>Unlock PDF</a>
+            <a href="#" class="related-chip"><i class="bi bi-compress me-1"></i>Compress PDF</a>
         </div>
     </div>
 </section>

@@ -128,6 +128,57 @@
         .brand-dark { color: #132b44; }
         .accent-blue { color: #2b699d; }
         .accent-red { color: #d05b5b; }
+
+        /* new cards for tool sections */
+        .info-card {
+            background: #f8fbfe;
+            border-radius: 24px;
+            padding: 1.5rem;
+            height: 100%;
+            border: 1px solid #e6edf5;
+        }
+        .info-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #132b44;
+            margin-bottom: 1rem;
+        }
+        .info-card i {
+            color: #2b699d;
+            margin-right: 6px;
+        }
+        .related-tool-badge {
+            background: white;
+            border-radius: 60px;
+            padding: 0.65rem 1.2rem;
+            font-weight: 500;
+            color: #132b44;
+            border: 1px solid #cfdeef;
+            transition: 0.2s;
+        }
+        .related-tool-badge:hover {
+            background: #2b699d;
+            color: white;
+            border-color: #2b699d;
+        }
+        .faq-item {
+            border-bottom: 1px solid #dde5ed;
+            padding: 1rem 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-question {
+            font-weight: 600;
+            color: #1c3f5c;
+        }
+        .faq-answer {
+            color: #4a5b6b;
+            padding-left: 1.2rem;
+            border-left: 3px solid #a9c6e5;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body>
@@ -275,6 +326,117 @@
             </div>
         </div>
     </div>
+
+    <!-- ========== NEW SECTIONS: How to Use, Features, Why, FAQ, Related Tools ========== -->
+    <div class="row g-4 mt-5">
+        <!-- How to Use & Features (2 cols) -->
+        <div class="col-md-6">
+            <div class="info-card h-100">
+                <h3><i class="bi bi-question-circle-fill"></i> How to Use</h3>
+                <ol class="ps-3 mb-0" style="color:#1e3b5c;">
+                    <li class="mb-2"><strong>Upload</strong> – Drag & drop a PDF or click the dropzone.</li>
+                    <li class="mb-2"><strong>Choose split mode</strong> – Extract every page, or enter custom ranges (e.g. 1-3,5,8-11).</li>
+                    <li class="mb-2"><strong>Set prefix</strong> – Name your output files (e.g. “report” → report_p1.pdf).</li>
+                    <li class="mb-2"><strong>Split & download</strong> – Click the split button, then grab the ZIP.</li>
+                </ol>
+                <p class="small text-secondary mt-3 mb-0"><i class="bi bi-lightning-charge-fill"></i> All processing happens in your browser – no upload to any server.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="info-card h-100">
+                <h3><i class="bi bi-star-fill"></i> Features</h3>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Extract every page as a separate PDF</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Custom page ranges (non‑sequential, groups)</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Preserve original text, fonts & layout</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> All files bundled in one ZIP</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> 100% client‑side, zero privacy concerns</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> No file size limits (depends on your device)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Use This Tool (full width) -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h3><i class="bi bi-emoji-smile-fill"></i> Why Use This Tool?</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-2 mb-md-0">
+                        <p class="fw-medium mb-1"><i class="bi bi-shield-check"></i> <strong>Private & secure</strong></p>
+                        <p class="small text-secondary">Your document never leaves your computer. No cloud, no tracking.</p>
+                    </div>
+                    <div class="col-md-4 mb-2 mb-md-0">
+                        <p class="fw-medium mb-1"><i class="bi bi-rocket-takeoff"></i> <strong>Fast & lightweight</strong></p>
+                        <p class="small text-secondary">Splits even large PDFs in seconds using optimised libraries.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="fw-medium mb-1"><i class="bi bi-universal-access"></i> <strong>Free forever</strong></p>
+                        <p class="small text-secondary">No registration, no watermarks, no hidden limits.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ (2 columns) -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h3 class="mb-3"><i class="bi bi-patch-question-fill"></i> Frequently Asked Questions</h3>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="faq-item">
+                            <div class="faq-question">📄 Can I split a password‑protected PDF?</div>
+                            <div class="faq-answer">No – the tool does not support encrypted PDFs. Please remove the password first.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">🔢 What range formats are accepted?</div>
+                            <div class="faq-answer">Single pages: <code>5</code> ; ranges: <code>2-6</code> ; combinations: <code>1-3, 5, 7-9</code>. Spaces are optional.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">💾 Where are my files after splitting?</div>
+                            <div class="faq-answer">They are bundled into a ZIP archive that you download. Nothing is stored online.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="faq-item">
+                            <div class="faq-question">📏 Is there a maximum file size?</div>
+                            <div class="faq-answer">No hard limit – but very large PDFs may use significant RAM. Works smoothly for most documents under 200 MB.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">🔄 Can I reorder pages during split?</div>
+                            <div class="faq-answer">Currently the tool preserves the order within each range. For custom reordering, try our “Organize PDF” tool.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">🌐 Does it work on mobile?</div>
+                            <div class="faq-answer">Yes! The interface is fully responsive – split PDFs directly from your phone.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Tools -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h3 class="mb-3"><i class="bi bi-grid-3x3-gap-fill"></i> Related Tools</h3>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#" class="related-tool-badge text-decoration-none"><i class="bi bi-files me-1"></i>Merge PDF</a>
+                    <a href="#" class="related-tool-badge text-decoration-none"><i class="bi bi-arrow-left-right"></i> Reorder pages</a>
+                    <a href="#" class="related-tool-badge text-decoration-none"><i class="bi bi-crop"></i> Compress PDF</a>
+                    <a href="#" class="related-tool-badge text-decoration-none"><i class="bi bi-file-pdf"></i> PDF to Word</a>
+                    <a href="#" class="related-tool-badge text-decoration-none"><i class="bi bi-images"></i> JPG to PDF</a>
+                    <a href="#" class="related-tool-badge text-decoration-none"><i class="bi bi-pencil-square"></i> Annotate PDF</a>
+                </div>
+                <p class="small text-secondary mt-3 mb-0"><i class="bi bi-arrow-up-short"></i> More free tools available on the <a href="tools.html" class="text-decoration-none">Tools page</a>.</p>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <!-- ========== FOOTER (unchanged) ========== -->

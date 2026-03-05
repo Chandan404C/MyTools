@@ -55,6 +55,60 @@
             background: #e8f0fa;
             border-radius: 28px;
         }
+
+        /* new cards for tool sections */
+        .info-card {
+            background: #f8fbfe;
+            border-radius: 24px;
+            padding: 1.5rem;
+            height: 100%;
+            border: 1px solid #e6edf5;
+        }
+        .info-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #132b44;
+            margin-bottom: 1rem;
+        }
+        .info-card i {
+            color: #2b699d;
+            margin-right: 6px;
+        }
+        .related-tool-badge {
+            background: white;
+            border-radius: 60px;
+            padding: 0.65rem 1.2rem;
+            font-weight: 500;
+            color: #132b44;
+            border: 1px solid #cfdeef;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .related-tool-badge:hover {
+            background: #2b699d;
+            color: white;
+            border-color: #2b699d;
+        }
+        .faq-item {
+            border-bottom: 1px solid #dde5ed;
+            padding: 1rem 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-question {
+            font-weight: 600;
+            color: #1c3f5c;
+        }
+        .faq-answer {
+            color: #4a5b6b;
+            padding-left: 1.2rem;
+            border-left: 3px solid #a9c6e5;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
         @media (max-width: 576px) {
             .file-info-card {
                 flex-wrap: wrap;
@@ -213,6 +267,118 @@
             </div>
         </div>
     </div>
+
+    <!-- ========== NEW SECTIONS: How to Use, Features, Why, FAQ, Related Tools ========== -->
+    <div class="row g-4 mt-5">
+        <!-- How to Use & Features (2 cols) -->
+        <div class="col-md-6">
+            <div class="info-card h-100">
+                <h3><i class="bi bi-question-circle-fill"></i> How to Use</h3>
+                <ol class="ps-3 mb-0" style="color:#1e3b5c;">
+                    <li class="mb-2"><strong>Upload PDF</strong> – Drag & drop a file or click the dropzone.</li>
+                    <li class="mb-2"><strong>Adjust quality</strong> – Slide to choose compression level (lower = smaller file).</li>
+                    <li class="mb-2"><strong>Click compress</strong> – Processing happens in your browser.</li>
+                    <li class="mb-2"><strong>Download</strong> – Save your compressed PDF instantly.</li>
+                </ol>
+                <p class="small text-secondary mt-3 mb-0"><i class="bi bi-lightning-charge-fill"></i> All processing is local – files never leave your device.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="info-card h-100">
+                <h3><i class="bi bi-star-fill"></i> Features</h3>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Adjustable image quality (10% – 90%)</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Preserves text and vector elements</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Real‑time size preview</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> No file size limits (browser‑dependent)</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> 100% client‑side, zero privacy concerns</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Works offline after page load</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Use This Tool (full width) -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h3><i class="bi bi-emoji-smile-fill"></i> Why Use This Tool?</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-2 mb-md-0">
+                        <p class="fw-medium mb-1"><i class="bi bi-shield-check"></i> <strong>Private & secure</strong></p>
+                        <p class="small text-secondary">Your document never leaves your computer. No cloud, no tracking, no upload.</p>
+                    </div>
+                    <div class="col-md-4 mb-2 mb-md-0">
+                        <p class="fw-medium mb-1"><i class="bi bi-rocket-takeoff"></i> <strong>Fast & efficient</strong></p>
+                        <p class="small text-secondary">Optimized image recompression reduces file size while keeping documents readable.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="fw-medium mb-1"><i class="bi bi-universal-access"></i> <strong>Free forever</strong></p>
+                        <p class="small text-secondary">No registration, no watermarks, no hidden limits. Use as much as you need.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ (2 columns) -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h3 class="mb-3"><i class="bi bi-patch-question-fill"></i> Frequently Asked Questions</h3>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="faq-item">
+                            <div class="faq-question">🔒 Is my data secure?</div>
+                            <div class="faq-answer">Absolutely. Everything runs in your browser – the file is never transmitted. You can even disconnect from the internet after the page loads.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">📉 How much can I reduce file size?</div>
+                            <div class="faq-answer">Typically 40‑80% for image‑heavy PDFs. Text‑only PDFs may not shrink much – our tool focuses on recompressing images.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">📏 Any file size limits?</div>
+                            <div class="faq-answer">No artificial limits, but very large files may use significant RAM. Works smoothly for most documents under 200 MB.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="faq-item">
+                            <div class="faq-question">🎨 Does it affect text quality?</div>
+                            <div class="faq-answer">No – only images are recompressed. Text, fonts, and vector graphics remain crisp and searchable.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">📱 Works on mobile?</div>
+                            <div class="faq-answer">Yes! The interface is fully responsive. Compress PDFs directly from your phone or tablet.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">🔄 Can I batch compress multiple files?</div>
+                            <div class="faq-answer">Currently we process one file at a time. For batch compression, check our “Batch Tools” section (coming soon).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Tools -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h3 class="mb-3"><i class="bi bi-grid-3x3-gap-fill"></i> Related Tools</h3>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#" class="related-tool-badge"><i class="bi bi-files me-1"></i>Merge PDF</a>
+                    <a href="#" class="related-tool-badge"><i class="bi bi-symmetry-vertical"></i> Split PDF</a>
+                    <a href="#" class="related-tool-badge"><i class="bi bi-arrow-left-right"></i> Reorder pages</a>
+                    <a href="#" class="related-tool-badge"><i class="bi bi-file-pdf"></i> PDF to Word</a>
+                    <a href="#" class="related-tool-badge"><i class="bi bi-images"></i> JPG to PDF</a>
+                    <a href="#" class="related-tool-badge"><i class="bi bi-pencil-square"></i> Annotate PDF</a>
+                    <a href="#" class="related-tool-badge"><i class="bi bi-lock"></i> Unlock PDF</a>
+                </div>
+                <p class="small text-secondary mt-3 mb-0"><i class="bi bi-arrow-up-short"></i> More free tools available on the <a href="tools.html" class="text-decoration-none">Tools page</a>.</p>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <!-- ========== FOOTER (unchanged) ========== -->

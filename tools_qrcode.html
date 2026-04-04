@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator · ToolHub</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Generate custom QR codes from any URL or text instantly. Choose colors, size, and download for free with ToolHub.">
+    <meta name="keywords" content="qr code generator, create qr code, custom qr code, free qr code, toolhub">
+    <meta name="author" content="ToolHub">
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="QR Code Generator · ToolHub">
+    <meta property="og:description" content="Generate custom QR codes from any URL or text instantly. Choose colors, size, and download for free with ToolHub.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://toolhub.com/tools_qrcode.html">
+    <meta property="og:site_name" content="ToolHub">
+    <!-- Bootstrap 5 + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- external CSS (same style.css as all other pages) -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── QR tool-specific styles (minimal, consistent with other tool pages) ── */
+        .conversion-card {
+            background-color: #f8fafd;
+            border-radius: 2.5rem;
+            box-shadow: inset 0 2px 8px rgba(0,20,40,0.02), 0 20px 30px -10px rgba(20,60,120,0.12);
+        }
+
+        /* Input field styled to match the site palette */
+        .qr-input {
+            border-radius: 60px;
+            padding: 0.85rem 1.6rem;
+            border: 2px solid rgba(79, 126, 179, 0.25);
+            background: white;
+            font-size: 1.05rem;
+            transition: all 0.15s;
+            width: 100%;
+            color: #132b44;
+        }
+        .qr-input:focus {
+            border-color: #4f7eb3;
+            box-shadow: 0 0 0 4px rgba(79,126,179,0.18);
+            outline: none;
+        }
+
+        /* Customization option row */
+        .option-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,30,60,0.05);
+        }
+        .option-label {
+            font-weight: 500;
+            font-size: 0.93rem;
+            color: #1f3a5f;
+            margin-bottom: 0.4rem;
+        }
+
+        /* QR canvas wrapper */
+        #qrOutputWrap {
+            display: none;
+        }
+        .qr-result-card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -12px rgba(20,60,120,0.13);
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+        #qrCanvas {
+            border-radius: 1rem;
+            max-width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        #qrCanvas:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 40px rgba(20,60,100,0.15);
+        }
+
+        /* Format radio pills */
+        .format-pill-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .format-pill {
+            display: none;
+        }
+        .format-pill + label {
+            background: #eef4fd;
+            color: #1f3a5f;
+            border-radius: 40px;
+            padding: 0.35rem 1.1rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 2px solid transparent;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .format-pill:checked + label {
+            background: #132b44;
+            color: white;
+            border-color: #132b44;
+        }
+        .format-pill + label:hover {
+            border-color: #4f7eb3;
+        }
+
+        /* Color swatch button */
+        input[type="color"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            background: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; border-radius: 50%; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; }
+
+        /* Error correction badges */
+        .ec-pill {
+            display: none;
+        }
+        .ec-pill + label {
+            background: #eef4fd;
+            color: #1f3a5f;
+            border-radius: 40px;
+            padding: 0.3rem 0.9rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 2px solid transparent;
+            transition: all 0.12s;
+        }
+        .ec-pill:checked + label {
+            background: #4f7eb3;
+            color: white;
+            border-color: #4f7eb3;
+        }
+
+        /* Animated generation spinner */
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner-icon { display: inline-block; animation: spin 0.7s linear infinite; }
+    </style>
+</head>
+<body>
+
+<!-- STICKY NAVBAR (identical pattern to all other pages) -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+            <span class="fs-3 fw-bold" style="color:#132b44;">Tool<span style="color:#4e7eb3;">Hub</span></span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+            </ul>
+            <div class="d-flex gap-2">
+                <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+                <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" style="color:#132b44;">
+            <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>ToolHub
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom active" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+            <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+            <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- MAIN CONTENT: QR CODE GENERATOR TOOL -->
+<main class="container py-5" style="max-width: 1100px;">
+
+    <!-- Tool header (badge + heading) -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-subtle text-primary fw-semibold px-4 py-2 rounded-pill mb-3">
+            <i class="bi bi-qr-code me-2"></i>QR Code Generator
+        </span>
+        <h1 class="display-5 fw-bold" style="color:#132b44;">Generate Custom QR Codes</h1>
+        <p class="text-secondary-emphasis">Turn any URL, text, or link into a scannable QR code — customise colours, size, and download instantly.</p>
+    </div>
+
+    <!-- Main tool card -->
+    <div class="conversion-card p-4 p-lg-5">
+
+        <!-- URL / Text input -->
+        <div class="mb-4">
+            <label class="fw-semibold mb-2" for="qrInput">
+                <i class="bi bi-link-45deg me-2" style="color:#4f7eb3;"></i>Enter URL or Text
+            </label>
+            <input
+                type="text"
+                id="qrInput"
+                class="qr-input"
+                placeholder="https://example.com  or  any text you want…"
+                autocomplete="off"
+                spellcheck="false"
+            >
+        </div>
+
+        <!-- Customisation options row -->
+        <div class="row g-3 mb-4">
+
+            <!-- Foreground color -->
+            <div class="col-6 col-md-3">
+                <div class="option-card h-100">
+                    <div class="option-label"><i class="bi bi-palette me-1" style="color:#4f7eb3;"></i>QR Color</div>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <input type="color" id="fgColor" value="#132b44" title="QR code foreground colour">
+                        <small class="text-secondary" id="fgColorHex">#132b44</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Background color -->
+            <div class="col-6 col-md-3">
+                <div class="option-card h-100">
+                    <div class="option-label"><i class="bi bi-square me-1" style="color:#4f7eb3;"></i>Background</div>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <input type="color" id="bgColor" value="#ffffff" title="QR code background colour">
+                        <small class="text-secondary" id="bgColorHex">#ffffff</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Size -->
+            <div class="col-6 col-md-3">
+                <div class="option-card h-100">
+                    <div class="option-label"><i class="bi bi-arrows-angle-expand me-1" style="color:#4f7eb3;"></i>Size (px)</div>
+                    <div class="mt-2">
+                        <input type="range" class="form-range" id="qrSize" min="128" max="512" step="32" value="256">
+                        <div class="d-flex justify-content-between">
+                            <small class="text-secondary">128</small>
+                            <small class="fw-semibold" style="color:#4f7eb3;" id="sizeLabel">256 px</small>
+                            <small class="text-secondary">512</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error correction -->
+            <div class="col-6 col-md-3">
+                <div class="option-card h-100">
+                    <div class="option-label"><i class="bi bi-shield-check me-1" style="color:#4f7eb3;"></i>Error Correction</div>
+                    <div class="d-flex flex-wrap gap-1 mt-2">
+                        <input class="ec-pill" type="radio" name="ecLevel" id="ecL" value="L">
+                        <label for="ecL">L</label>
+                        <input class="ec-pill" type="radio" name="ecLevel" id="ecM" value="M" checked>
+                        <label for="ecM">M</label>
+                        <input class="ec-pill" type="radio" name="ecLevel" id="ecQ" value="Q">
+                        <label for="ecQ">Q</label>
+                        <input class="ec-pill" type="radio" name="ecLevel" id="ecH" value="H">
+                        <label for="ecH">H</label>
+                    </div>
+                    <small class="text-secondary d-block mt-1" style="font-size:0.78rem;">Higher = more resilient</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download format -->
+        <div class="mb-4">
+            <label class="fw-semibold mb-2">
+                <i class="bi bi-download me-2" style="color:#4f7eb3;"></i>Download Format
+            </label>
+            <div class="format-pill-group mt-1">
+                <input class="format-pill" type="radio" name="dlFormat" id="fmtPng" value="png" checked>
+                <label for="fmtPng">PNG</label>
+                <input class="format-pill" type="radio" name="dlFormat" id="fmtSvg" value="svg">
+                <label for="fmtSvg">SVG</label>
+                <input class="format-pill" type="radio" name="dlFormat" id="fmtJpg" value="jpg">
+                <label for="fmtJpg">JPG</label>
+            </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="d-flex flex-column flex-sm-row gap-3 mt-4 justify-content-center">
+            <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="generateBtn">
+                <i class="bi bi-qr-code me-2"></i>Generate QR Code
+            </button>
+            <button class="btn-pill btn px-5 py-3 rounded-pill bg-white border-0" style="color:#132b44;" id="clearBtn">
+                <i class="bi bi-trash3 me-2"></i>Clear
+            </button>
+        </div>
+
+        <!-- Privacy note -->
+        <p class="text-center text-secondary small mt-4 mb-0 opacity-75">
+            <i class="bi bi-incognito me-2"></i>100% client-side — your data never leaves your device.
+        </p>
+    </div>
+
+    <!-- QR Output -->
+    <div class="mt-5" id="qrOutputWrap">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-check2-circle fs-2" style="color:#4f7eb3;"></i>
+            <h4 class="fw-semibold mb-0">Your QR Code is ready</h4>
+        </div>
+        <div class="qr-result-card">
+            <canvas id="qrCanvas"></canvas>
+            <p class="mt-3 mb-4 text-secondary small" id="qrMetaText"></p>
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="downloadBtn">
+                    <i class="bi bi-download me-2"></i>Download QR Code
+                </button>
+                <button class="btn-pill btn px-5 py-3 rounded-pill bg-white border-0" style="color:#132b44;" id="copyBtn">
+                    <i class="bi bi-clipboard me-2"></i>Copy to Clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- How-it-works steps (three columns) -->
+    <div class="row mt-5 g-4">
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-1-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Enter your URL or any text</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-2-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Customise colours, size &amp; error level</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-3-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Download PNG, SVG, or JPG</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER (identical to all other pages) -->
+<footer class="pt-5 pb-4 px-3">
+    <div class="container-lg">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <span class="fs-3 fw-bold text-white">ToolHub</span>
+                <p class="my-3 small opacity-75">Free &amp; unlimited tools for PDF, images and office documents.</p>
+            </div>
+            <div class="col-md-2">
+                <span class="fw-semibold text-white">Products</span><br>
+                <a href="#" class="footer-link">PDF merge</a><br>
+                <a href="#" class="footer-link">Split</a><br>
+                <a href="#" class="footer-link">Convert</a>
+            </div>
+            <div class="col-md-2">
+                <span class="fw-semibold text-white">Company</span><br>
+                <a href="about.html" class="footer-link">About</a><br>
+                <a href="privacy.html" class="footer-link">Privacy Policy</a><br>
+                <a href="terms.html" class="footer-link">Terms &amp; Conditions</a><br>
+                <a href="disclaimer.html" class="footer-link">Disclaimer</a><br>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <i class="bi bi-twitter-x fs-4 me-3"></i>
+                <i class="bi bi-instagram fs-4 me-3"></i>
+                <i class="bi bi-github fs-4"></i>
+            </div>
+        </div>
+        <hr class="opacity-25 my-4">
+        <p class="text-center small opacity-50 mb-0">© ToolHub — like your favourite PDF suite, but cooler.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- QRious – lightweight QR library (no server needed) -->
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
+<script>
+(function () {
+
+    // ── DOM refs ──────────────────────────────────────────────────────────────
+    const qrInput      = document.getElementById('qrInput');
+    const fgColor      = document.getElementById('fgColor');
+    const bgColor      = document.getElementById('bgColor');
+    const fgColorHex   = document.getElementById('fgColorHex');
+    const bgColorHex   = document.getElementById('bgColorHex');
+    const qrSize       = document.getElementById('qrSize');
+    const sizeLabel    = document.getElementById('sizeLabel');
+    const generateBtn  = document.getElementById('generateBtn');
+    const clearBtn     = document.getElementById('clearBtn');
+    const downloadBtn  = document.getElementById('downloadBtn');
+    const copyBtn      = document.getElementById('copyBtn');
+    const qrCanvas     = document.getElementById('qrCanvas');
+    const qrOutputWrap = document.getElementById('qrOutputWrap');
+    const qrMetaText   = document.getElementById('qrMetaText');
+
+    let qr = null;   // QRious instance
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function getECLevel() {
+        return document.querySelector('input[name="ecLevel"]:checked').value;
+    }
+    function getFormat() {
+        return document.querySelector('input[name="dlFormat"]:checked').value;
+    }
+    function showToast(message, icon = 'bi-check2-circle') {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 text-white rounded-5 shadow-lg';
+        toast.style.cssText = 'z-index:9999;background:#1b4a6e;font-weight:500;';
+        toast.innerHTML = `<i class="bi ${icon} me-2"></i>${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2200);
+    }
+
+    // ── Colour picker live labels ─────────────────────────────────────────────
+    fgColor.addEventListener('input', () => { fgColorHex.textContent = fgColor.value; });
+    bgColor.addEventListener('input', () => { bgColorHex.textContent = bgColor.value; });
+
+    // ── Size slider label ─────────────────────────────────────────────────────
+    qrSize.addEventListener('input', () => {
+        sizeLabel.textContent = qrSize.value + ' px';
+    });
+
+    // ── Generate ──────────────────────────────────────────────────────────────
+    generateBtn.addEventListener('click', function () {
+        const text = qrInput.value.trim();
+        if (!text) {
+            showToast('Please enter a URL or text first.', 'bi-exclamation-circle');
+            qrInput.focus();
+            return;
+        }
+
+        const size = parseInt(qrSize.value, 10);
+        const ecLevel = getECLevel();
+
+        // Show animated icon while "generating"
+        generateBtn.innerHTML = '<i class="bi bi-arrow-repeat spinner-icon me-2"></i>Generating…';
+        generateBtn.disabled = true;
+
+        setTimeout(() => {
+            try {
+                if (!qr) {
+                    qr = new QRious({ element: qrCanvas });
+                }
+                qr.set({
+                    value: text,
+                    size: size,
+                    foreground: fgColor.value,
+                    background: bgColor.value,
+                    level: ecLevel,
+                    padding: Math.round(size * 0.05),
+                });
+
+                // Meta info
+                qrMetaText.innerHTML =
+                    `<i class="bi bi-link-45deg me-1"></i><strong>${text.length > 60 ? text.substring(0, 57) + '…' : text}</strong>` +
+                    `&nbsp;&nbsp;·&nbsp;&nbsp;${size} × ${size} px&nbsp;&nbsp;·&nbsp;&nbsp;EC: ${ecLevel}`;
+
+                qrOutputWrap.style.display = 'block';
+                qrOutputWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                showToast('Could not generate QR code. Try a shorter text.', 'bi-x-circle');
+            }
+
+            generateBtn.innerHTML = '<i class="bi bi-qr-code me-2"></i>Generate QR Code';
+            generateBtn.disabled = false;
+        }, 300);
+    });
+
+    // Allow Enter key to trigger generation
+    qrInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') generateBtn.click();
+    });
+
+    // ── Clear ─────────────────────────────────────────────────────────────────
+    clearBtn.addEventListener('click', function () {
+        qrInput.value = '';
+        qrOutputWrap.style.display = 'none';
+        qr = null;
+        qrInput.focus();
+    });
+
+    // ── Download ──────────────────────────────────────────────────────────────
+    downloadBtn.addEventListener('click', function () {
+        if (!qr) return;
+        const format = getFormat();
+        let dataUrl, filename;
+
+        if (format === 'svg') {
+            // Build SVG string from canvas pixel data
+            const svgData = canvasToSVG(qrCanvas);
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url  = URL.createObjectURL(blob);
+            triggerDownload(url, 'qrcode.svg');
+            URL.revokeObjectURL(url);
+            showToast('SVG downloaded!', 'bi-download');
+            return;
+        }
+
+        if (format === 'jpg') {
+            // Draw on a white-backed canvas (JPG doesn't support transparency)
+            const offscreen = document.createElement('canvas');
+            offscreen.width  = qrCanvas.width;
+            offscreen.height = qrCanvas.height;
+            const ctx = offscreen.getContext('2d');
+            ctx.fillStyle = bgColor.value;
+            ctx.fillRect(0, 0, offscreen.width, offscreen.height);
+            ctx.drawImage(qrCanvas, 0, 0);
+            dataUrl  = offscreen.toDataURL('image/jpeg', 0.95);
+            filename = 'qrcode.jpg';
+        } else {
+            dataUrl  = qrCanvas.toDataURL('image/png');
+            filename = 'qrcode.png';
+        }
+
+        triggerDownload(dataUrl, filename);
+        showToast(`${format.toUpperCase()} downloaded!`, 'bi-download');
+    });
+
+    function triggerDownload(url, filename) {
+        const a = document.createElement('a');
+        a.href     = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    // Minimal canvas → SVG converter (embeds canvas as base64 image)
+    function canvasToSVG(canvas) {
+        const w = canvas.width;
+        const h = canvas.height;
+        const imgData = canvas.toDataURL('image/png');
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+  <image href="${imgData}" width="${w}" height="${h}"/>
+</svg>`;
+    }
+
+    // ── Copy to Clipboard ─────────────────────────────────────────────────────
+    copyBtn.addEventListener('click', async function () {
+        if (!qr) return;
+        try {
+            const blob = await new Promise(resolve => qrCanvas.toBlob(resolve));
+            await navigator.clipboard.write([
+                new ClipboardItem({ 'image/png': blob })
+            ]);
+            showToast('QR code copied to clipboard!', 'bi-clipboard-check');
+        } catch (err) {
+            // Fallback: open image in new tab so user can manually copy
+            const url = qrCanvas.toDataURL('image/png');
+            const w = window.open();
+            w.document.write(`<img src="${url}" style="max-width:100%;">`);
+            showToast('Opened in new tab – right-click to copy.', 'bi-info-circle');
+        }
+    });
+
+})();
+</script>
+
+</body>
+</html>

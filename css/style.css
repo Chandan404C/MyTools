@@ -310,4 +310,46 @@
     @media (max-width: 991px) {
       body { padding-top: 70px; }
     }
->>>>>>> ba173a6eb99c5f188029a3dfef33c1ec50f50ca4
+
+
+
+    /* custome foter css  */
+
+
+    /* footer css  */
+.footer-section {
+  background: #1B2B44;
+  color: #ccc;
+}
+
+.footer-link {
+  color: #bbb;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 6px;
+  transition: 0.3s;
+}
+
+.footer-link:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #161b22;
+  color: #fff;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.social-icon:hover {
+  background: #0d6efd;
+  transform: translateY(-3px);
+}

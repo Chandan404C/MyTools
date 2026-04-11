@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Counter Online | Free Character & Word Count Tool | DocFixer</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Count words, characters, sentences, and paragraphs instantly with DocFixer's free online Word Counter. Paste or type your text and get real-time writing stats — no upload needed.">
+  <meta name="keywords" content="word counter, character counter, word count online, count words free, text analyzer, sentence counter, paragraph counter, reading time estimator">
+  <meta name="author" content="DocFixer">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://docfixer.online/tools_wordcounter.html">
+
+  <!-- Open Graph for Social Media -->
+  <meta property="og:title" content="Word Counter Online | Free Character & Word Count Tool | DocFixer">
+  <meta property="og:description" content="Count words, characters, sentences, and paragraphs instantly with DocFixer's free online Word Counter. Real-time stats — no upload needed.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://docfixer.online/tools_wordcounter.html">
+  <meta property="og:site_name" content="DocFixer">
+  <meta property="og:image" content="https://docfixer.online/images/og-wordcounter.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Word Counter Online | Free Character & Word Count Tool | DocFixer">
+  <meta name="twitter:description" content="Count words, characters, sentences, and paragraphs instantly with DocFixer's free online Word Counter. Real-time stats — no upload needed.">
+  <meta name="twitter:image" content="https://docfixer.online/images/og-wordcounter.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DocFixer Word Counter",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "description": "Count words, characters, sentences, and paragraphs instantly with DocFixer's free online Word Counter. Real-time stats with no upload needed.",
+    "url": "https://docfixer.online/tools_wordcounter.html",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- FAQ Structured Data for Google Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the word counter work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply type or paste your text into the input area. The counter updates in real time, showing word count, character count (with and without spaces), sentence count, paragraph count, and estimated reading time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the word counter free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, DocFixer's Word Counter is completely free with no registration required. You can use it as many times as you like."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the tool upload my text to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All processing happens entirely in your browser. Your text is never sent to any server, ensuring complete privacy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the maximum text length I can count?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "There is no artificial limit. The tool can handle very long documents — limited only by your browser's memory."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Bootstrap 5 + Icons & cool font -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google font (Inter) for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ── Word Counter specific styles ── */
+    .wc-textarea {
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+      border: 2px solid #a9c6e5;
+      border-radius: 20px;
+      padding: 1.1rem 1.3rem;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+      background: #f8fbfe;
+      color: #132b44;
+    }
+    .wc-textarea:focus {
+      border-color: #2b699d;
+      background: #fff;
+    }
+    .wc-textarea::placeholder {
+      color: #9ab5cc;
+    }
+
+    /* Stat cards row */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .stat-card {
+      background: #fff;
+      border: 1px solid #d8e8f5;
+      border-radius: 20px;
+      padding: 1.1rem 0.75rem;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .stat-card:hover {
+      box-shadow: 0 6px 24px rgba(43,105,157,0.10);
+      transform: translateY(-2px);
+    }
+    .stat-card .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2b699d;
+      line-height: 1.1;
+      transition: color 0.2s;
+    }
+    .stat-card .stat-label {
+      font-size: 0.78rem;
+      color: #6b8fa8;
+      font-weight: 500;
+      margin-top: 0.25rem;
+    }
+    .stat-card.highlight .stat-num {
+      color: #1e4f7a;
+    }
+
+    /* Animated number pulse */
+    @keyframes numPop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.18); color: #4f7eb3; }
+      100% { transform: scale(1); }
+    }
+    .stat-num.pop {
+      animation: numPop 0.28s ease;
+    }
+
+    /* Density / keyword section */
+    .density-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .density-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #eaf2f9;
+      font-size: 0.9rem;
+      color: #1c3f5c;
+    }
+    .density-list li:last-child { border-bottom: none; }
+    .density-bar-wrap {
+      flex: 1;
+      background: #e8f0fa;
+      border-radius: 30px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .density-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4f7eb3, #2b699d);
+      border-radius: 30px;
+      transition: width 0.35s ease;
+    }
+    .density-pct {
+      font-size: 0.78rem;
+      color: #6b8fa8;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    /* Action buttons */
+    .wc-btn {
+      background: #2b699d;
+      border: none;
+      border-radius: 40px;
+      padding: 0.65rem 1.8rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .wc-btn:hover { background: #1e4f7a; }
+    .wc-btn-outline {
+      background: transparent;
+      border: 2px solid #a9c6e5;
+      border-radius: 40px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 600;
+      color: #2b699d;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .wc-btn-outline:hover {
+      background: #e2effa;
+      border-color: #2b699d;
+    }
+
+    /* File upload zone */
+    .wc-dropzone {
+      border: 2px dashed #a9c6e5;
+      border-radius: 20px;
+      background: #f5faff;
+      text-align: center;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+      color: #4a6b85;
+    }
+    .wc-dropzone:hover {
+      background: #e2effa;
+      border-color: #2b699d;
+    }
+
+    /* Info cards (same as pdfcompress) */
+    .info-card {
+      background: #f8fbfe;
+      border-radius: 24px;
+      padding: 1.5rem;
+      height: 100%;
+      border: 1px solid #e6edf5;
+    }
+    .info-card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #132b44;
+      margin-bottom: 1rem;
+    }
+    .info-card i { color: #2b699d; margin-right: 6px; }
+
+    .related-tool-badge {
+      background: white;
+      border-radius: 60px;
+      padding: 0.65rem 1.2rem;
+      font-weight: 500;
+      color: #132b44;
+      border: 1px solid #cfdeef;
+      transition: 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .related-tool-badge:hover {
+      background: #2b699d;
+      color: white;
+      border-color: #2b699d;
+    }
+
+    .faq-item { border-bottom: 1px solid #dde5ed; padding: 1rem 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { font-weight: 600; color: #1c3f5c; }
+    .faq-answer {
+      color: #4a5b6b;
+      padding-left: 1.2rem;
+      border-left: 3px solid #a9c6e5;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Char limit warning */
+    .limit-warn { color: #d05b5b; font-weight: 600; }
+
+    @media (max-width: 576px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .d-flex.wc-actions { flex-direction: column; }
+      .d-flex.wc-actions button { width: 100%; }
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6E91RY4GS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F6E91RY4GS');
+  </script>
+</head>
+<body>
+
+<!-- STICKY NAVBAR -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+  <div class="container-fluid px-lg-5">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+      <span class="fs-3 fw-bold" style="color:#132b44;">Doc<span style="color:#4e7eb3;">Fixer</span></span>
+    </a>
+
+    <!-- Mobile toggler -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Desktop menu -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+        <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+      <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>DocFixer
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom active" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+      <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+      <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container my-5" style="font-family: 'Inter', sans-serif;">
+  <div class="row justify-content-center">
+    <div class="col-lg-9 col-md-11 col-12">
+
+      <!-- Tool header -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-textarea-t fs-1 me-3" style="color:#4f7eb3;"></i>
+        <div>
+          <h1 class="fw-bold mb-1" style="color:#132b44;">Word Counter</h1>
+          <p class="text-secondary mb-0">Type or paste any text to get instant word, character, sentence &amp; paragraph counts.</p>
+        </div>
+      </div>
+
+      <!-- Main tool card -->
+      <div class="card border-0 shadow-sm p-4 mb-4" style="background:#f8fbfe; border-radius:28px;">
+
+        <!-- Textarea -->
+        <label for="wcTextarea" class="fw-semibold mb-2" style="color:#132b44;"><i class="bi bi-pencil-square me-1" style="color:#2b699d;"></i>Your Text</label>
+        <textarea id="wcTextarea" class="wc-textarea" placeholder="Start typing or paste your text here…" spellcheck="true" aria-label="Text input for word counting"></textarea>
+
+        <!-- Char limit indicator -->
+        <div class="d-flex justify-content-between align-items-center mt-2 small text-secondary">
+          <span id="wcCharIndicator">0 characters</span>
+          <span id="wcGoalIndicator" class="d-none"></span>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stat-grid" role="region" aria-label="Text statistics">
+          <div class="stat-card highlight">
+            <div class="stat-num" id="statWords">0</div>
+            <div class="stat-label">Words</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="statChars">0</div>
+            <div class="stat-label">Characters</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="statCharsNoSpace">0</div>
+            <div class="stat-label">No Spaces</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="statSentences">0</div>
+            <div class="stat-label">Sentences</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="statParagraphs">0</div>
+            <div class="stat-label">Paragraphs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="statReadTime">0</div>
+            <div class="stat-label">Read (min)</div>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="d-flex flex-wrap gap-2 mt-4 wc-actions">
+          <button class="wc-btn" id="wcCopyBtn" aria-label="Copy text to clipboard"><i class="bi bi-clipboard me-2"></i>Copy Text</button>
+          <button class="wc-btn-outline" id="wcClearBtn" aria-label="Clear text area"><i class="bi bi-trash me-2"></i>Clear</button>
+          <button class="wc-btn-outline" id="wcDownloadBtn" aria-label="Download text as .txt file"><i class="bi bi-download me-2"></i>Download .txt</button>
+          <!-- Word goal -->
+          <button class="wc-btn-outline" id="wcGoalBtn" aria-label="Set word count goal"><i class="bi bi-target me-2"></i>Set Goal</button>
+        </div>
+
+        <!-- Goal input (hidden by default) -->
+        <div id="wcGoalPanel" class="mt-3 d-none">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <label for="wcGoalInput" class="fw-semibold small text-secondary">Target words:</label>
+            <input type="number" id="wcGoalInput" class="form-control form-control-sm" style="width:120px; border-radius:30px;" min="1" max="999999" placeholder="e.g. 500" aria-label="Word count goal">
+            <button class="wc-btn" style="padding:0.45rem 1.2rem; font-size:0.88rem;" id="wcSetGoalBtn">Apply</button>
+            <button class="wc-btn-outline" style="padding:0.4rem 1rem; font-size:0.88rem;" id="wcClearGoalBtn">Remove Goal</button>
+          </div>
+          <div id="wcGoalProgress" class="mt-2 d-none">
+            <div class="d-flex justify-content-between small mb-1">
+              <span id="wcGoalProgressLabel" class="text-secondary">Progress</span>
+              <span id="wcGoalProgressPct" class="fw-semibold" style="color:#2b699d;">0%</span>
+            </div>
+            <div class="progress" style="height:8px; border-radius:30px;">
+              <div id="wcGoalBar" class="progress-bar" role="progressbar" style="background:#2b699d; width:0%; border-radius:30px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copy feedback toast -->
+        <div id="wcCopyToast" class="alert alert-success mt-3 d-none py-2 px-3" style="border-radius:14px; font-size:0.9rem;" role="alert">
+          <i class="bi bi-check2-circle me-2"></i>Text copied to clipboard!
+        </div>
+      </div>
+
+      <!-- ── Keyword Density Card ── -->
+      <div class="card border-0 shadow-sm p-4 mb-4" style="background:#f8fbfe; border-radius:28px;">
+        <h2 class="fw-bold mb-1" style="font-size:1.15rem; color:#132b44;"><i class="bi bi-bar-chart-line me-2" style="color:#2b699d;"></i>Top Keywords &amp; Density</h2>
+        <p class="text-secondary small mb-3">Shows the most frequent words (3+ letters) and their usage percentage.</p>
+        <ul class="density-list" id="wcDensityList">
+          <li class="text-secondary small" id="wcDensityPlaceholder"><i class="bi bi-info-circle me-2"></i>Start typing to see keyword analysis.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SEO INFO SECTIONS ========== -->
+  <div class="row g-4 mt-2">
+    <!-- How to Use & Features -->
+    <div class="col-md-6">
+      <div class="info-card h-100">
+        <h3><i class="bi bi-question-circle-fill"></i> How to Use</h3>
+        <ol class="ps-3 mb-0" style="color:#1e3b5c;">
+          <li class="mb-2"><strong>Type or paste</strong> – Enter your text directly or paste from any source.</li>
+          <li class="mb-2"><strong>See stats instantly</strong> – Words, characters, sentences &amp; more update in real time.</li>
+          <li class="mb-2"><strong>Set a goal</strong> – Click "Set Goal" to track progress toward a target word count.</li>
+          <li class="mb-2"><strong>Copy or download</strong> – Export your text or copy it back with one click.</li>
+        </ol>
+        <p class="small text-secondary mt-3 mb-0"><i class="bi bi-lightning-charge-fill"></i> All processing is local – your text never leaves your device.</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="info-card h-100">
+        <h3><i class="bi bi-star-fill"></i> Features</h3>
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Real-time word, character &amp; sentence count</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Character count with &amp; without spaces</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Paragraph counter</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Estimated reading time</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Keyword density analyzer (top 10 words)</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Word count goal tracker with progress bar</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Copy &amp; download text as .txt</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>100% client-side – zero privacy concerns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Use This Tool -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3><i class="bi bi-emoji-smile-fill"></i> Why Use This Tool?</h3>
+        <div class="row">
+          <div class="col-md-4 mb-2 mb-md-0">
+            <p class="fw-medium mb-1"><i class="bi bi-shield-check"></i> <strong>Private &amp; secure</strong></p>
+            <p class="small text-secondary">Your text never leaves your browser. No cloud storage, no logging, no tracking whatsoever.</p>
+          </div>
+          <div class="col-md-4 mb-2 mb-md-0">
+            <p class="fw-medium mb-1"><i class="bi bi-rocket-takeoff"></i> <strong>Instant &amp; lightweight</strong></p>
+            <p class="small text-secondary">No page reload needed. Stats update as you type — even on very large documents.</p>
+          </div>
+          <div class="col-md-4">
+            <p class="fw-medium mb-1"><i class="bi bi-universal-access"></i> <strong>Free forever</strong></p>
+            <p class="small text-secondary">No sign-up, no watermarks, no limits. Perfect for students, writers, bloggers, and professionals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3 class="mb-3"><i class="bi bi-patch-question-fill"></i> Frequently Asked Questions</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="faq-item">
+              <div class="faq-question">📊 What does the word counter measure?</div>
+              <div class="faq-answer">It measures words, total characters, characters without spaces, sentences, paragraphs, and estimated reading time (based on 200 words per minute).</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">🔒 Is my text stored anywhere?</div>
+              <div class="faq-answer">No. Everything runs in your browser. Your text is never sent to any server. You can even use the tool offline after the page has loaded.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📏 Is there a text length limit?</div>
+              <div class="faq-answer">There is no imposed limit. The tool handles very large texts limited only by your browser's memory.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-item">
+              <div class="faq-question">🎯 What is the word goal feature?</div>
+              <div class="faq-answer">Set a target word count and a progress bar will track how close you are. Great for essays, blog posts, or reports with a required length.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📱 Does it work on mobile?</div>
+              <div class="faq-answer">Yes! The interface is fully responsive and works on all screen sizes including phones and tablets.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">🔤 What are keywords / density?</div>
+              <div class="faq-answer">The keyword density section shows the top 10 most-used words (3+ letters) and the percentage of the total word count each represents — useful for SEO writing.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Tools -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3 class="mb-3"><i class="bi bi-grid-3x3-gap-fill"></i> Related Tools</h3>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="tools_pdfcompress.html" class="related-tool-badge"><i class="bi bi-file-earmark-zip me-1"></i>PDF Compressor</a>
+          <a href="tools_pdftoword.html" class="related-tool-badge"><i class="bi bi-file-word me-1"></i>PDF to Word</a>
+          <a href="tools_margepdf.html" class="related-tool-badge"><i class="bi bi-files me-1"></i>Merge PDF</a>
+          <a href="tools_splitpdf.html" class="related-tool-badge"><i class="bi bi-symmetry-vertical me-1"></i>Split PDF</a>
+          <a href="tools_imagecompress.html" class="related-tool-badge"><i class="bi bi-image me-1"></i>Image Compressor</a>
+          <a href="tools_qrcode.html" class="related-tool-badge"><i class="bi bi-qr-code me-1"></i>QR Code Generator</a>
+        </div>
+        <p class="small text-secondary mt-3 mb-0"><i class="bi bi-arrow-up-short"></i> More free tools available on the <a href="tools.html" class="text-decoration-none">Tools page</a>.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer-section pt-5 pb-4">
+  <div class="container-lg">
+    <div class="row g-4">
+
+      <!-- Brand -->
+      <div class="col-md-4">
+        <h3 class="fw-bold text-white">DocFixer</h3>
+        <p class="mt-3 text-light small">
+          Free &amp; unlimited tools for PDF, images and office documents.
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Products</h6>
+        <ul class="list-unstyled">
+          <li><a href="tools_margepdf.html" class="footer-link">PDF Merge</a></li>
+          <li><a href="tools_splitpdf.html" class="footer-link">Split</a></li>
+          <li><a href="tools_imagtopdf.html" class="footer-link">Convert</a></li>
+          <li><a href="tools_pdfcompress.html" class="footer-link">PDF Compress</a></li>
+          <li><a href="tools_wordcounter.html" class="footer-link">Word Counter</a></li>
+          <li><a href="tools_qrcode.html" class="footer-link">QR Code Generate</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Company</h6>
+        <ul class="list-unstyled">
+          <li><a href="about.html" class="footer-link">About</a></li>
+          <li><a href="tools.html" class="footer-link">Tools</a></li>
+          <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+          <li><a href="terms.html" class="footer-link">Terms &amp; Conditions</a></li>
+          <li><a href="disclaimer.html" class="footer-link">Disclaimer</a></li>
+          <li><a href="contact.html" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div class="col-md-4 text-md-end text-start">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Follow Us</h6>
+        <a href="https://x.com/codefy001" target="_blank" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://www.instagram.com/codefy_03" target="_blank" class="social-icon"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61579636438080" target="_blank" class="social-icon"><i class="bi bi-facebook"></i></a>
+      </div>
+
+    </div>
+
+    <hr class="border-light opacity-25 my-4">
+
+    <!-- Bottom -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small">
+      <p class="mb-2 mb-md-0">© DocFixer — like your favourite PDF suite, but cooler.</p>
+      <p class="mb-0">
+        Designed &amp; Developed by
+        <a href="https://codefy.in" target="_blank" class="fw-bold text-white text-decoration-none">Codefy</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ========== WORD COUNTER SCRIPT ========== -->
+<script>
+(function () {
+  'use strict';
+
+  // ── DOM refs ──────────────────────────────────────
+  const textarea        = document.getElementById('wcTextarea');
+  const statWords       = document.getElementById('statWords');
+  const statChars       = document.getElementById('statChars');
+  const statCharsNoSp   = document.getElementById('statCharsNoSpace');
+  const statSentences   = document.getElementById('statSentences');
+  const statParagraphs  = document.getElementById('statParagraphs');
+  const statReadTime    = document.getElementById('statReadTime');
+  const charIndicator   = document.getElementById('wcCharIndicator');
+  const densityList     = document.getElementById('wcDensityList');
+  const densityPlaceholder = document.getElementById('wcDensityPlaceholder');
+
+  const copyBtn         = document.getElementById('wcCopyBtn');
+  const clearBtn        = document.getElementById('wcClearBtn');
+  const downloadBtn     = document.getElementById('wcDownloadBtn');
+  const goalBtn         = document.getElementById('wcGoalBtn');
+  const goalPanel       = document.getElementById('wcGoalPanel');
+  const goalInput       = document.getElementById('wcGoalInput');
+  const setGoalBtn      = document.getElementById('wcSetGoalBtn');
+  const clearGoalBtn    = document.getElementById('wcClearGoalBtn');
+  const goalProgress    = document.getElementById('wcGoalProgress');
+  const goalProgressLabel = document.getElementById('wcGoalProgressLabel');
+  const goalProgressPct   = document.getElementById('wcGoalProgressPct');
+  const goalBar           = document.getElementById('wcGoalBar');
+  const goalIndicator     = document.getElementById('wcGoalIndicator');
+  const copyToast         = document.getElementById('wcCopyToast');
+
+  let wordGoal = 0;
+  let toastTimer = null;
+
+  // ── Helpers ───────────────────────────────────────
+  function countWords(text) {
+    const trimmed = text.trim();
+    if (!trimmed) return 0;
+    return trimmed.split(/\s+/).filter(w => w.length > 0).length;
+  }
+
+  function countSentences(text) {
+    const trimmed = text.trim();
+    if (!trimmed) return 0;
+    const matches = trimmed.match(/[^.!?]*[.!?]+/g);
+    return matches ? matches.length : (trimmed.length > 0 ? 1 : 0);
+  }
+
+  function countParagraphs(text) {
+    const trimmed = text.trim();
+    if (!trimmed) return 0;
+    return trimmed.split(/\n\s*\n/).filter(p => p.trim().length > 0).length || 1;
+  }
+
+  function estimateReadTime(words) {
+    // Average adult reads ~200 wpm
+    return Math.ceil(words / 200);
+  }
+
+  function animateStat(el, newValue) {
+    const current = parseInt(el.textContent) || 0;
+    if (current === newValue) return;
+    el.textContent = newValue;
+    el.classList.remove('pop');
+    // Reflow trick to restart animation
+    void el.offsetWidth;
+    el.classList.add('pop');
+    el.addEventListener('animationend', () => el.classList.remove('pop'), { once: true });
+  }
+
+  // ── Keyword density ───────────────────────────────
+  const STOP_WORDS = new Set([
+    'the','and','for','are','but','not','you','all','can','her','was','one','our','out',
+    'day','get','has','him','his','how','its','may','new','now','old','see','two','way',
+    'who','did','let','put','say','she','too','use','that','this','with','have','from',
+    'they','will','been','than','then','when','your','more','also','into','some','what',
+    'there','their','about','which','would','make','like','time','just','know','take',
+    'people','think','come','could','these','given','most','well','over','such','after',
+    'each','much','very','even','back','good','many','only','both','last','other','same',
+    'been','were','said','have','does'
+  ]);
+
+  function buildDensity(text) {
+    const words = text.toLowerCase().match(/\b[a-z]{3,}\b/g) || [];
+    const total = words.length;
+    if (total === 0) {
+      densityList.innerHTML = '';
+      densityList.appendChild(densityPlaceholder);
+      densityPlaceholder.classList.remove('d-none');
+      return;
+    }
+
+    const freq = {};
+    words.forEach(w => {
+      if (!STOP_WORDS.has(w)) freq[w] = (freq[w] || 0) + 1;
+    });
+
+    const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+    densityList.innerHTML = '';
+    if (sorted.length === 0) {
+      densityList.innerHTML = '<li class="text-secondary small"><i class="bi bi-info-circle me-2"></i>No significant keywords found yet.</li>';
+      return;
+    }
+
+    sorted.forEach(([word, count]) => {
+      const pct = ((count / total) * 100).toFixed(1);
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span style="min-width:90px; font-weight:600;">${word}</span>
+        <div class="density-bar-wrap">
+          <div class="density-bar" style="width:${Math.min(pct * 4, 100)}%"></div>
+        </div>
+        <span class="density-pct">${pct}%</span>
+        <span class="text-secondary" style="font-size:0.78rem; min-width:28px;">${count}×</span>
+      `;
+      densityList.appendChild(li);
+    });
+  }
+
+  // ── Goal progress ─────────────────────────────────
+  function updateGoalProgress(words) {
+    if (!wordGoal) return;
+    const pct = Math.min(Math.round((words / wordGoal) * 100), 100);
+    goalProgressPct.textContent = pct + '%';
+    goalBar.style.width = pct + '%';
+    const remaining = Math.max(wordGoal - words, 0);
+    goalProgressLabel.textContent = remaining > 0
+      ? `${remaining} words remaining to reach ${wordGoal}`
+      : `🎉 Goal reached! (${words} / ${wordGoal} words)`;
+    goalBar.style.background = pct >= 100 ? '#2ecc71' : '#2b699d';
+  }
+
+  // ── Main update function ──────────────────────────
+  function updateAll() {
+    const text = textarea.value;
+
+    const words      = countWords(text);
+    const chars      = text.length;
+    const charsNoSp  = text.replace(/\s/g, '').length;
+    const sentences  = countSentences(text);
+    const paragraphs = countParagraphs(text);
+    const readTime   = estimateReadTime(words);
+
+    animateStat(statWords, words);
+    animateStat(statChars, chars);
+    animateStat(statCharsNoSp, charsNoSp);
+    animateStat(statSentences, sentences);
+    animateStat(statParagraphs, paragraphs);
+    animateStat(statReadTime, readTime);
+
+    charIndicator.textContent = chars + ' character' + (chars !== 1 ? 's' : '');
+
+    // Goal indicator in textarea bar
+    if (wordGoal) {
+      goalIndicator.textContent = words + ' / ' + wordGoal + ' words';
+      goalIndicator.classList.remove('d-none');
+      goalIndicator.className = words >= wordGoal ? 'fw-semibold text-success' : 'text-secondary';
+      updateGoalProgress(words);
+    }
+
+    buildDensity(text);
+  }
+
+  // ── Event listeners ───────────────────────────────
+  textarea.addEventListener('input', updateAll);
+
+  // Copy text
+  copyBtn.addEventListener('click', async () => {
+    if (!textarea.value) return;
+    try {
+      await navigator.clipboard.writeText(textarea.value);
+    } catch {
+      // Fallback for older browsers
+      textarea.select();
+      document.execCommand('copy');
+    }
+    copyToast.classList.remove('d-none');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => copyToast.classList.add('d-none'), 2500);
+  });
+
+  // Clear
+  clearBtn.addEventListener('click', () => {
+    textarea.value = '';
+    updateAll();
+    textarea.focus();
+  });
+
+  // Download .txt
+  downloadBtn.addEventListener('click', () => {
+    const text = textarea.value;
+    if (!text) return;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'docfixer_text_' + Date.now() + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Toggle goal panel
+  goalBtn.addEventListener('click', () => {
+    goalPanel.classList.toggle('d-none');
+    if (!goalPanel.classList.contains('d-none')) goalInput.focus();
+  });
+
+  // Apply goal
+  setGoalBtn.addEventListener('click', () => {
+    const val = parseInt(goalInput.value);
+    if (!val || val < 1) { goalInput.focus(); return; }
+    wordGoal = val;
+    goalProgress.classList.remove('d-none');
+    updateAll();
+  });
+  goalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') setGoalBtn.click();
+  });
+
+  // Clear goal
+  clearGoalBtn.addEventListener('click', () => {
+    wordGoal = 0;
+    goalInput.value = '';
+    goalProgress.classList.add('d-none');
+    goalIndicator.classList.add('d-none');
+    goalIndicator.textContent = '';
+  });
+
+  // Initial render
+  updateAll();
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1050 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ═══ PRIMARY SEO — injected by JS ═══ -->
+  <title id="pageTitle">DocFixer Blog | Free PDF & Image Tool Guides</title>
+  <meta name="description"  id="pageDesc"    content="Step-by-step guide from DocFixer.">
+  <meta name="keywords"     id="pageKeys"    content="docfixer, pdf tools, image tools">
+  <meta name="author"                        content="DocFixer Team">
+  <meta name="robots"                        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical"     id="pageCanon"   href="https://docfixer.online/blog_detail.html">
+
+  <!-- ═══ OPEN GRAPH ═══ -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="DocFixer">
+  <meta property="og:locale"      content="en_US">
+  <meta property="og:url"         id="ogUrl"   content="https://docfixer.online/blog_detail.html">
+  <meta property="og:title"       id="ogTitle" content="DocFixer Blog">
+  <meta property="og:description" id="ogDesc"  content="Free guide from DocFixer team.">
+  <meta property="og:image"       id="ogImage" content="https://docfixer.online/images/blog-og.png">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" id="ogPubTime"  content="2026-04-12T00:00:00+05:30">
+  <meta property="article:modified_time"  id="ogModTime"  content="2026-04-12T00:00:00+05:30">
+  <meta property="article:author"         content="DocFixer Team">
+  <meta property="article:section"        id="ogSection"  content="PDF Guides">
+
+  <!-- ═══ TWITTER CARD ═══ -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@codefy001">
+  <meta name="twitter:title"       id="twTitle" content="DocFixer Blog">
+  <meta name="twitter:description" id="twDesc"  content="Free guide from DocFixer team.">
+  <meta name="twitter:image"       id="twImage" content="https://docfixer.online/images/blog-og.png">
+
+  <!-- ═══ JSON-LD — injected by JS after DOM ready ═══ -->
+  <script id="ldJson" type="application/ld+json">{}</script>
+
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6E91RY4GS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F6E91RY4GS');
+  </script>
+
+  <style>
+    .detail-hero {
+      border-radius: 0 0 3rem 3rem; padding: 4rem 0 3rem;
+      position: relative; overflow: hidden;
+    }
+    .detail-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(145deg,#eef4fe 0%,#ffffff 100%); z-index: 0;
+    }
+    .detail-hero > * { position: relative; z-index: 1; }
+    .hero-emoji {
+      font-size: 5rem; display: block; margin-bottom: 1.2rem;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.12));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .article-meta span { font-size:.85rem; color:#8fa8c8; display:inline-flex; align-items:center; gap:4px; }
+
+    /* Article body */
+    .article-body { max-width:800px; margin:0 auto; font-size:1.05rem; color:#2e3a4a; line-height:1.85; }
+    .article-body h2 { font-size:1.6rem; font-weight:700; color:#132b44; margin-top:2.5rem; margin-bottom:.8rem; }
+    .article-body h3 { font-size:1.25rem; font-weight:600; color:#1a3a5c; margin-top:2rem; margin-bottom:.6rem; }
+    .article-body p  { margin-bottom:1.2rem; }
+    .article-body ul,.article-body ol { padding-left:1.4rem; margin-bottom:1.2rem; }
+    .article-body li { margin-bottom:.4rem; }
+    .article-body a  { color:#3c6aa7; }
+    .article-body a:hover { color:#1a3a5c; }
+
+    .tip-box {
+      background:linear-gradient(135deg,#eef4fe,#deeeff);
+      border-left:4px solid #4f7eb3; border-radius:12px;
+      padding:1rem 1.4rem; margin:1.5rem 0; font-size:.95rem; color:#1f3a5f;
+    }
+    .tip-box strong { color:#1f3a5f; }
+
+    .steps-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin:1.5rem 0; }
+    .step-card { background:#f8faff; border:1px solid rgba(79,126,179,.15); border-radius:14px; padding:1rem 1.2rem; text-align:center; }
+    .step-card .step-num { width:36px;height:36px; background:#1f3a5f;color:#fff; border-radius:50%; font-weight:700; display:flex;align-items:center;justify-content:center; margin:0 auto .6rem; font-size:.9rem; }
+    .step-card p { font-size:.88rem; color:#4a6080; margin:0; }
+
+    /* FAQ accordion SEO style */
+    .faq-item { border:1px solid rgba(79,126,179,.15); border-radius:14px; margin-bottom:.75rem; overflow:hidden; }
+    .faq-q { font-size:1rem; font-weight:600; color:#132b44; padding:1rem 1.3rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; background:#f8faff; transition:background .15s; }
+    .faq-q:hover { background:#eef4fe; }
+    .faq-q .faq-icon { transition:transform .25s; }
+    .faq-q.open .faq-icon { transform:rotate(180deg); }
+    .faq-a { font-size:.95rem; color:#4a6080; padding:0 1.3rem; max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s; }
+    .faq-a.open { max-height:300px; padding:.8rem 1.3rem 1rem; }
+
+    .cta-block { background:linear-gradient(135deg,#1a3a5c,#2d6ba8); border-radius:20px; padding:2rem 2.5rem; color:#fff; text-align:center; margin:2.5rem 0; }
+    .cta-block h3 { font-weight:700; margin-bottom:.4rem; }
+    .cta-block p  { opacity:.85; margin-bottom:1.2rem; }
+    .cta-block .btn { background:#fff; color:#1a3a5c; font-weight:700; border-radius:50px; padding:.6rem 2rem; }
+    .cta-block .btn:hover { background:#e8f0ff; }
+
+    /* Sidebar */
+    .sidebar-card { background:#f8faff; border:1px solid rgba(79,126,179,.12); border-radius:18px; padding:1.4rem; margin-bottom:1.5rem; }
+    .sidebar-card h5 { font-size:1rem; font-weight:700; color:#132b44; margin-bottom:1rem; }
+    .related-post { display:flex; align-items:flex-start; gap:10px; padding:.6rem 0; border-bottom:1px solid rgba(0,0,0,.06); text-decoration:none; color:#132b44; transition:color .15s; }
+    .related-post:last-child { border-bottom:none; }
+    .related-post:hover { color:#3c6aa7; }
+    .related-post .rp-icon { font-size:1.4rem; flex-shrink:0; }
+    .related-post .rp-title { font-size:.88rem; font-weight:600; line-height:1.3; }
+
+    /* Footer */
+    .footer-section { background:#1B2B44; color:#ccc; }
+    .footer-link { color:#bbb; text-decoration:none; display:inline-block; margin-bottom:6px; transition:.3s; }
+    .footer-link:hover { color:#fff; transform:translateX(3px); }
+    .social-icon { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; background:#161b22; color:#fff; border-radius:50%; margin-right:10px; font-size:18px; transition:.3s; }
+    .social-icon:hover { background:#0d6efd; transform:translateY(-3px); }
+
+    /* Reading progress */
+    #readProgress { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,#3c6aa7,#6c97d4); z-index:9999; transition:width .1s linear; }
+  </style>
+</head>
+<body>
+  <div id="readProgress" style="width:0%" role="progressbar" aria-label="Reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4" aria-label="Main navigation">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center" href="index.html" aria-label="DocFixer Home">
+        <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;" aria-hidden="true"></i>
+        <span class="fs-3 fw-bold" style="color:#132b44;">Doc<span style="color:#4e7eb3;">Fixer</span></span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1" aria-hidden="true"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1" aria-hidden="true"></i>About</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="tools.html"><i class="bi bi-grid me-1" aria-hidden="true"></i>Tools</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="blog.html" aria-current="page"><i class="bi bi-journal-richtext me-1" aria-hidden="true"></i>Blog</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1" aria-hidden="true"></i>User Guide</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1" aria-hidden="true"></i>Contact</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Log in</a>
+          <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2" aria-hidden="true"></i>Sign up</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- OFF CANVAS -->
+  <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+        <i class="bi bi-magic me-2" style="color:#4f7eb3;" aria-hidden="true"></i>DocFixer
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2" aria-hidden="true"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2" aria-hidden="true"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="tools.html"><i class="bi bi-grid me-2" aria-hidden="true"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom active" href="blog.html" aria-current="page"><i class="bi bi-journal-richtext me-2" aria-hidden="true"></i>Blog</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2" aria-hidden="true"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2" aria-hidden="true"></i>Contact</a></li>
+        <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Log in</a></li>
+        <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2" aria-hidden="true"></i>Sign up</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="detail-hero text-center">
+    <div class="container-lg px-3">
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none" style="color:#4f7eb3;">Home</a></li>
+          <li class="breadcrumb-item"><a href="blog.html" class="text-decoration-none" style="color:#4f7eb3;">Blog</a></li>
+          <li class="breadcrumb-item active text-secondary" id="breadcrumbCurrent" aria-current="page">Loading…</li>
+        </ol>
+      </nav>
+      <span id="heroEmoji" class="hero-emoji" aria-hidden="true">📄</span>
+      <span class="badge-soft d-inline-block mb-3" id="heroTag">PDF</span>
+      <h1 class="display-5 fw-bold mb-3" style="color:#132b44;" id="heroTitle">Loading…</h1>
+      <div class="article-meta d-flex flex-wrap gap-3 justify-content-center mb-2">
+        <span><i class="bi bi-calendar3" aria-hidden="true"></i> <time id="heroDate" datetime="2026-04-12">Apr 12, 2026</time></span>
+        <span><i class="bi bi-person-circle" aria-hidden="true"></i> DocFixer Team</span>
+        <span id="heroReadTime"><i class="bi bi-clock" aria-hidden="true"></i> 5 min read</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT + SIDEBAR -->
+  <main>
+    <section class="py-5 bg-white">
+      <div class="container-lg px-3">
+        <div class="row g-5">
+
+          <!-- Article -->
+          <div class="col-lg-8">
+            <article id="articleBody" class="article-body" aria-label="Blog article content">
+              <!-- injected by JS -->
+            </article>
+
+            <!-- FAQ -->
+            <section id="faqSection" class="mt-5" aria-label="Frequently asked questions">
+              <h2 class="fw-bold mb-4" style="color:#132b44;" id="faqHeading">Frequently Asked Questions</h2>
+              <div id="faqList"></div>
+            </section>
+
+            <!-- Back link -->
+            <div class="mt-5 pt-3 border-top">
+              <a href="blog.html" class="text-decoration-none fw-semibold" style="color:#3c6aa7;">
+                <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to all blog posts
+              </a>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <aside class="col-lg-4" aria-label="Sidebar">
+            <!-- Try Tool CTA -->
+            <div class="sidebar-card text-center">
+              <div id="sidebarEmoji" style="font-size:3rem;margin-bottom:.5rem;" aria-hidden="true">📄</div>
+              <h2 class="sidebar-card" style="font-size:1rem;font-weight:700;color:#132b44;margin-bottom:.5rem;" id="sidebarTitle">Try this Tool Free</h2>
+              <p class="small text-secondary mb-3" id="sidebarDesc">Open the tool and try it free — no signup needed.</p>
+              <a id="sidebarCta" href="tools.html" class="gradient-btn btn w-100">
+                <i class="bi bi-box-arrow-up-right me-2" aria-hidden="true"></i>Open Free Tool
+              </a>
+            </div>
+
+            <!-- Related Posts -->
+            <div class="sidebar-card">
+              <h2 style="font-size:1rem;font-weight:700;color:#132b44;margin-bottom:1rem;"><i class="bi bi-journals me-2" aria-hidden="true"></i>Related Posts</h2>
+              <nav id="relatedPosts" aria-label="Related articles"></nav>
+            </div>
+
+            <!-- All Tools -->
+            <div class="sidebar-card">
+              <h2 style="font-size:1rem;font-weight:700;color:#132b44;margin-bottom:1rem;"><i class="bi bi-grid me-2" aria-hidden="true"></i>All Free Tools</h2>
+              <a href="tools.html" class="btn btn-outline-secondary w-100 rounded-pill" style="font-size:.9rem;">Browse 9+ Free Tools →</a>
+            </div>
+
+            <!-- Tag cloud -->
+            <div class="sidebar-card">
+              <h2 style="font-size:1rem;font-weight:700;color:#132b44;margin-bottom:1rem;"><i class="bi bi-tags me-2" aria-hidden="true"></i>Topics</h2>
+              <div class="d-flex flex-wrap gap-2">
+                <a href="blog.html" class="badge rounded-pill text-decoration-none" style="background:#e8f0ff;color:#1a4ab3;padding:.4rem .9rem;font-size:.78rem;font-weight:600;">PDF</a>
+                <a href="blog.html" class="badge rounded-pill text-decoration-none" style="background:#e8f0ff;color:#1a4ab3;padding:.4rem .9rem;font-size:.78rem;font-weight:600;">Images</a>
+                <a href="blog.html" class="badge rounded-pill text-decoration-none" style="background:#e8ffe8;color:#1a7a1a;padding:.4rem .9rem;font-size:.78rem;font-weight:600;">Word / Text</a>
+                <a href="blog.html" class="badge rounded-pill text-decoration-none" style="background:#fff0e8;color:#b35000;padding:.4rem .9rem;font-size:.78rem;font-weight:600;">Security</a>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer-section pt-5 pb-4" role="contentinfo">
+    <div class="container-lg">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h3 class="fw-bold text-white">DocFixer</h3>
+          <p class="mt-3 text-light small">Free & unlimited tools for PDF, images and office documents.</p>
+        </div>
+        <div class="col-6 col-md-2">
+          <h4 class="text-uppercase text-white fw-semibold mb-3" style="font-size:.85rem;">Products</h4>
+          <ul class="list-unstyled">
+            <li><a href="tools_margepdf.html" class="footer-link">PDF Merge</a></li>
+            <li><a href="tools_splitpdf.html" class="footer-link">Split PDF</a></li>
+            <li><a href="tools_imagtopdf.html" class="footer-link">JPG to PDF</a></li>
+            <li><a href="tools_pdfcompress.html" class="footer-link">PDF Compress</a></li>
+            <li><a href="tools_qrcode.html" class="footer-link">QR Code</a></li>
+            <li><a href="tools_wordcounter.html" class="footer-link">Word Counter</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <h4 class="text-uppercase text-white fw-semibold mb-3" style="font-size:.85rem;">Company</h4>
+          <ul class="list-unstyled">
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="blog.html" class="footer-link">Blog</a></li>
+            <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+            <li><a href="terms.html" class="footer-link">Terms & Conditions</a></li>
+            <li><a href="disclaimer.html" class="footer-link">Disclaimer</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 text-md-end text-start">
+          <h4 class="text-uppercase text-white fw-semibold mb-3" style="font-size:.85rem;">Follow Us</h4>
+          <a href="https://x.com/codefy001" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="DocFixer on X"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
+          <a href="https://www.instagram.com/codefy_03" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="DocFixer on Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61579636438080" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="DocFixer on Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <hr class="border-light opacity-25 my-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small">
+        <p class="mb-2 mb-md-0">© 2026 DocFixer — like your favourite PDF suite, but cooler.</p>
+        <p class="mb-0">Designed & Developed by <a href="https://codefy.in" target="_blank" rel="noopener noreferrer" class="fw-bold text-white text-decoration-none">Codefy</a></p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+// BLOG POST DATABASE  (title · keywords · content · faqs)
+// ═══════════════════════════════════════════════════
+const POSTS = {
+  'merge-pdf': {
+    title:    'How to Merge PDFs in Seconds – Free Online Guide',
+    shortTitle:'How to Merge PDFs in Seconds',
+    emoji:    '📄',
+    tag:      'PDF Tutorial',
+    tagStyle: 'background:#ffe8e8;color:#c0392b;',
+    readTime: '4 min read',
+    toolUrl:  'tools_margepdf.html',
+    toolName: 'Merge PDF Tool',
+    toolDesc: 'Combine unlimited PDFs instantly — free, private & browser-based.',
+    section:  'PDF Guides',
+    keywords: 'merge pdf, combine pdf online free, join pdf files, merge multiple pdfs, pdf merger no upload',
+    desc:     "Learn step-by-step how to merge multiple PDF files into one single document using DocFixer's free online Merge PDF tool. No software, no signup required.",
+    faqs: [
+      { q: 'Can I merge more than 2 PDFs at once?',           a: 'Yes! DocFixer has no hard limit on the number of files. You can merge as many PDFs as your device memory allows.' },
+      { q: 'Will quality drop after merging PDFs?',           a: 'No. DocFixer uses lossless merging — every page is kept at its original resolution and quality.' },
+      { q: 'Does merging PDFs work on mobile?',               a: 'Yes. The tool works in any modern browser — Safari on iPhone, Chrome on Android and all desktop browsers.' },
+      { q: 'Are my files uploaded to a server?',              a: 'Never. All processing happens locally inside your browser. Your files never leave your device.' },
+      { q: 'Can I reorder pages before merging?',             a: 'Yes — drag and drop the uploaded file cards to set the exact page order before you click Merge.' }
+    ],
+    content: `
+      <p>Dealing with dozens of separate PDF files — invoices, reports, slide decks — is a daily headache for millions of professionals. DocFixer's <strong>Merge PDF</strong> tool lets you combine as many PDFs as you need into one clean, shareable document in seconds, entirely inside your browser with zero file uploads.</p>
+
+      <h2>Why Merge PDFs? 5 Common Use Cases</h2>
+      <p>Merging PDF files is one of the most searched document tasks online. Here are the most common scenarios:</p>
+      <ul>
+        <li>Combining multiple chapters of an e-book or research paper into one file</li>
+        <li>Bundling monthly invoices for an accountant or finance team</li>
+        <li>Joining a cover letter, CV and portfolio into one submission PDF</li>
+        <li>Compiling project reports from multiple departments into a single document</li>
+        <li>Merging scanned pages into one multi-page PDF document</li>
+      </ul>
+
+      <h2>How to Merge PDFs with DocFixer — Step by Step</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Click <strong>"Choose Files"</strong> or drag your PDFs into the upload area.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p><strong>Reorder files</strong> by dragging cards into your preferred sequence.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Click the <strong>"Merge PDF"</strong> button and wait a moment.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p><strong>Download</strong> your merged PDF file instantly.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> Upload all files at once and then drag to reorder — this is much faster than uploading one by one. The final PDF will follow the exact card order you set.
+      </div>
+
+      <h2>Privacy & Security — Your Files Stay on Your Device</h2>
+      <p>DocFixer processes everything <strong>locally in your browser</strong> using JavaScript and PDF-lib. Your files are never uploaded to any server. Once you close the tab, nothing is retained anywhere. This is especially important for sensitive documents like contracts, medical records and financial reports.</p>
+
+      <h2>File Size & Limits</h2>
+      <p>There are no strict file size limits. Performance depends on your device's available memory. For best results, keep individual PDFs under 100 MB. Merging 50 PDFs × 2 MB each works perfectly on any modern laptop.</p>
+
+      <h2>Supported PDF Types</h2>
+      <p>DocFixer supports standard <code>.pdf</code> files including:</p>
+      <ul>
+        <li>Digitally-created PDFs (Word exports, design exports)</li>
+        <li>Scanned PDFs (image-based)</li>
+        <li>Password-protected PDFs (once password is removed)</li>
+      </ul>
+
+      <div class="cta-block">
+        <h3>Ready to merge your PDFs?</h3>
+        <p>No sign-up. No file size limit. 100% free and private.</p>
+        <a href="tools_margepdf.html" class="btn">Merge PDF Now — It's Free →</a>
+      </div>
+    `
+  },
+
+  'split-pdf': {
+    title:    'How to Split a PDF and Extract Exact Pages Online',
+    shortTitle:'Split PDF – Extract Exact Pages',
+    emoji:    '✂️',
+    tag:      'PDF Tutorial',
+    tagStyle: 'background:#ffe8e8;color:#c0392b;',
+    readTime: '3 min read',
+    toolUrl:  'tools_splitpdf.html',
+    toolName: 'Split PDF Tool',
+    toolDesc: 'Extract pages or split by range with zero quality loss.',
+    section:  'PDF Guides',
+    keywords: 'split pdf, extract pages from pdf free, divide pdf online, pdf page extractor, split pdf no upload',
+    desc:     'Step-by-step guide to splitting a large PDF into individual pages or specific page ranges using DocFixer — free, private and browser-based.',
+    faqs: [
+      { q: 'Can I extract non-consecutive pages?',             a: 'Yes. Use comma-separated ranges like "1-3, 7, 10-15" to extract any combination of pages.' },
+      { q: 'Can I split a password-protected PDF?',            a: 'You need to remove the PDF password first. Once unlocked, you can split it with no issues.' },
+      { q: 'Is there a limit on PDF page count?',              a: 'No hard limits — you can split PDFs with thousands of pages. Performance depends on your device.' },
+      { q: 'Can I download all extracted pages as a ZIP?',     a: 'Yes. After splitting, you can download individual pages or all of them as a single ZIP file.' }
+    ],
+    content: `
+      <p>Got a 200-page PDF report and only need 5 specific pages? DocFixer's <strong>Split PDF</strong> tool lets you extract exactly the pages you need — or divide a large PDF into multiple smaller files — without any software installation. Everything runs in your browser.</p>
+
+      <h2>When Should You Split a PDF?</h2>
+      <ul>
+        <li>Extracting a single contract clause from a long legal agreement</li>
+        <li>Sharing just one chapter from a technical manual</li>
+        <li>Separating scanned multi-page documents into individual image-PDFs</li>
+        <li>Splitting a presentation by section for different audiences</li>
+        <li>Reducing file size by removing unnecessary pages</li>
+      </ul>
+
+      <h2>How to Split a PDF with DocFixer</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Upload your PDF using the file picker or drag and drop.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Choose: <strong>by page range</strong> or <strong>extract individual pages</strong>.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Preview your selection and click <strong>"Split"</strong>.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Download pages individually or as a <strong>ZIP archive</strong>.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> Use the range format <code>1-5, 8, 10-12</code> to extract non-contiguous pages in a single pass — much faster than extracting them one at a time.
+      </div>
+
+      <h2>Privacy & Security</h2>
+      <p>Your PDF never leaves your browser. All splitting happens locally using JavaScript — no file uploads, no server processing and no data retention. Ideal for confidential legal, medical or financial documents.</p>
+
+      <div class="cta-block">
+        <h3>Split your PDF instantly</h3>
+        <p>Free, private, no account required — works in every browser.</p>
+        <a href="tools_splitpdf.html" class="btn">Split PDF Now — Free →</a>
+      </div>
+    `
+  },
+
+  'compress-pdf': {
+    title:    'How to Compress a PDF Without Losing Quality – Free Guide',
+    shortTitle:'Compress PDF Without Losing Quality',
+    emoji:    '🗜️',
+    tag:      'PDF Tutorial',
+    tagStyle: 'background:#ffe8e8;color:#c0392b;',
+    readTime: '5 min read',
+    toolUrl:  'tools_pdfcompress.html',
+    toolName: 'Compress PDF Tool',
+    toolDesc: 'Shrink PDF file sizes by up to 80% — text & images stay crisp.',
+    section:  'PDF Guides',
+    keywords: 'compress pdf, reduce pdf size online free, compress pdf without losing quality, pdf file size reducer, small pdf free',
+    desc:     "Learn how to reduce PDF file size without visible quality loss using DocFixer's free browser-based PDF compressor. No uploads, no signup needed.",
+    faqs: [
+      { q: 'How much can DocFixer reduce a PDF file size?',    a: 'Typically 40–80%, depending on image content. Text-heavy PDFs compress more than image-heavy ones.' },
+      { q: 'Will compression affect text readability?',        a: 'No. Text is stored as vectors and is not affected by compression. Only embedded images are resampled.' },
+      { q: 'Which compression level should I use?',            a: 'For email: Medium. For forms/portals: High. For archiving: Low to preserve maximum quality.' },
+      { q: 'Is the compressed PDF identical to the original?', a: 'The layout, text and structure are identical. Only image DPI and embedded metadata may differ.' }
+    ],
+    content: `
+      <p>Large PDFs cause real problems — email services reject attachments over 10 MB, submission portals enforce 5 MB limits, and bloated files eat storage space. DocFixer's <strong>Compress PDF</strong> tool reduces file sizes dramatically while keeping your content sharp and readable.</p>
+
+      <h2>Why Compress PDFs? Real Numbers</h2>
+      <ul>
+        <li>Gmail limits attachments to <strong>25 MB</strong></li>
+        <li>Government & university portals often enforce <strong>5 MB</strong> limits</li>
+        <li>A compressed PDF loads <strong>3–5× faster</strong> in a browser or email client</li>
+        <li>Cloud storage costs go down with smaller files</li>
+      </ul>
+
+      <h2>How PDF Compression Works</h2>
+      <p>DocFixer applies multiple compression techniques simultaneously:</p>
+      <ul>
+        <li><strong>Image resampling</strong> — reduces embedded image DPI to screen-friendly resolution (72–150 DPI)</li>
+        <li><strong>Font subsetting</strong> — embeds only the characters actually used in the document</li>
+        <li><strong>Metadata stripping</strong> — removes hidden data like edit history, author info and thumbnails</li>
+        <li><strong>Stream compression</strong> — applies DEFLATE (ZIP) compression to content streams</li>
+      </ul>
+
+      <h2>Step-by-Step: Compress a PDF with DocFixer</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Upload your PDF or drag it into the compression tool.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Select a compression level: <strong>Low, Medium or High</strong>.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Click <strong>"Compress"</strong> and view the before/after file size.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p><strong>Download</strong> your compressed PDF.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> For text-only PDFs (reports, CVs), even the "Low" setting can cut file size by 40–60% with absolutely zero visible difference.
+      </div>
+
+      <h2>Compression Levels Explained</h2>
+      <ul>
+        <li><strong>Low:</strong> Minimal compression, highest possible quality — ideal for archiving and printing</li>
+        <li><strong>Medium:</strong> Well-balanced — best for email sharing and web display</li>
+        <li><strong>High:</strong> Maximum size reduction — for upload-restricted online forms and mobile sharing</li>
+      </ul>
+
+      <div class="cta-block">
+        <h3>Compress your PDF now — for free</h3>
+        <p>No uploads to servers. 100% free, private and instant.</p>
+        <a href="tools_pdfcompress.html" class="btn">Compress PDF Free →</a>
+      </div>
+    `
+  },
+
+  'jpg-to-pdf': {
+    title:    'Convert JPG to PDF Online Free – Step-by-Step Guide',
+    shortTitle:'Convert JPG Images to PDF Online',
+    emoji:    '🖼️',
+    tag:      'Image Tutorial',
+    tagStyle: 'background:#e8f0ff;color:#1a4ab3;',
+    readTime: '4 min read',
+    toolUrl:  'tools_imagtopdf.html',
+    toolName: 'JPG to PDF Converter',
+    toolDesc: 'Convert JPG, PNG and WebP images to a PDF in one click.',
+    section:  'Image Guides',
+    keywords: 'jpg to pdf, convert image to pdf free, png to pdf online, photo to pdf, image to pdf converter no upload',
+    desc:     'Free step-by-step guide to converting JPG, PNG and WebP images into a professional PDF document online — no signup, no software needed.',
+    faqs: [
+      { q: 'Which image formats are supported?',               a: 'JPG, JPEG, PNG and WebP. You can mix different formats in a single PDF conversion.' },
+      { q: 'Can I set the page size and orientation?',         a: 'Yes. You can choose A4, Letter or fit-to-image, and set portrait or landscape orientation.' },
+      { q: 'Can I reorder images before converting?',          a: 'Yes — simply drag the image thumbnails into your preferred order before converting.' },
+      { q: 'How many images can I convert at once?',           a: 'There is no fixed limit. Performance depends on image file sizes and your device RAM.' }
+    ],
+    content: `
+      <p>Whether you have scanned receipts, handwritten notes, product photos or ID documents, DocFixer's <strong>JPG to PDF</strong> converter turns your images into a clean, professional PDF in seconds — no signup, no software download needed.</p>
+
+      <h2>When to Convert Images to PDF?</h2>
+      <ul>
+        <li>Sending scanned handwritten notes as a professional document</li>
+        <li>Compiling product photos into a vendor catalog PDF</li>
+        <li>Submitting identification documents (passport scan) as a PDF</li>
+        <li>Combining multiple screenshots into a design review document</li>
+        <li>Converting a series of PNG images into a printable PDF booklet</li>
+      </ul>
+
+      <h2>How to Convert JPG to PDF with DocFixer</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Upload one or more images (JPG, PNG or WebP).</p></div>
+        <div class="step-card"><div class="step-num">2</div><p><strong>Reorder</strong> images by dragging thumbnails.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Choose <strong>page size</strong> (A4, Letter) and orientation.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Click <strong>"Convert to PDF"</strong> and download.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> For scanned text documents, always use <strong>PNG format</strong> instead of JPEG — PNG is lossless so text edges stay sharp instead of compressed and blurry.
+      </div>
+
+      <h2>Supported Image Formats</h2>
+      <p>DocFixer accepts <code>JPG</code>, <code>JPEG</code>, <code>PNG</code> and <code>WebP</code>. You can freely mix formats in a single batch conversion.</p>
+
+      <div class="cta-block">
+        <h3>Convert your images to PDF now</h3>
+        <p>All in your browser. Zero uploads. Instant download. Free forever.</p>
+        <a href="tools_imagtopdf.html" class="btn">Convert JPG to PDF →</a>
+      </div>
+    `
+  },
+
+  'image-compress': {
+    title:    'How to Compress Images for the Web — Free Online Guide',
+    shortTitle:'Compress Images for Web in Seconds',
+    emoji:    '📸',
+    tag:      'Image Tutorial',
+    tagStyle: 'background:#e8f0ff;color:#1a4ab3;',
+    readTime: '4 min read',
+    toolUrl:  'tools_imagecompress.html',
+    toolName: 'Image Compressor',
+    toolDesc: 'Shrink JPG, PNG and WebP images for faster websites — free & private.',
+    section:  'Image Guides',
+    keywords: 'compress image online free, reduce image size, jpg compressor, png optimizer, webp image compressor, image size reducer no upload',
+    desc:     "Free guide on how to compress JPEG, PNG and WebP images for faster websites without visible quality loss - using DocFixer's browser-based image compressor.",
+    faqs: [
+      { q: 'What quality setting should I use for web images?',a: '70–80% is the sweet spot — typically 50–70% smaller file with no visible quality difference to users.' },
+      { q: 'Does compression reduce image dimensions (pixels)?',a: 'No. DocFixer only reduces file encoding quality. Image dimensions stay exactly the same.' },
+      { q: 'Can I compress multiple images at once?',           a: 'Yes — batch compress as many images as you like and download them all as a ZIP file.' },
+      { q: 'Which formats are supported?',                      a: 'JPG, JPEG, PNG and WebP. Output is always delivered in the same format as the input.' }
+    ],
+    content: `
+      <p>Page speed is one of Google's core ranking signals — and oversized images are the number-one cause of slow websites. DocFixer's <strong>Image Compressor</strong> lets you shrink JPG, PNG and WebP files right in your browser with a single click. No installs, no accounts, no file uploads.</p>
+
+      <h2>Why Image Compression Is Critical for SEO</h2>
+      <ul>
+        <li>Google Core Web Vitals (LCP) grades your page heavily on image load speed</li>
+        <li>Mobile users on 4G expect pages to load in under <strong>3 seconds</strong></li>
+        <li>Smaller images reduce CDN bandwidth costs by 40–60%</li>
+        <li>Instagram, Facebook and WhatsApp have strict upload size limits</li>
+        <li>Lighthouse performance audit penalises unoptimised images</li>
+      </ul>
+
+      <h2>How to Compress Images with DocFixer</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Upload one or multiple images (JPG, PNG, WebP).</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Adjust the <strong>quality slider</strong> (70–80% is optimal for web).</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Preview the before/after file size comparison.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Download compressed files individually or as a <strong>ZIP</strong>.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> A quality setting of <strong>75%</strong> typically reduces file size by 50–70% with zero perceptible difference to the human eye at normal viewing distances.
+      </div>
+
+      <h2>Batch Image Compression</h2>
+      <p>DocFixer lets you compress an entire folder of images at once — just multi-select your files, adjust quality and download a ZIP. This saves hours of manual work for web designers, photographers and e-commerce store managers.</p>
+
+      <div class="cta-block">
+        <h3>Start compressing images free</h3>
+        <p>Free, private and instant. No software required.</p>
+        <a href="tools_imagecompress.html" class="btn">Compress Images Free →</a>
+      </div>
+    `
+  },
+
+  'pdf-to-jpg': {
+    title:    'How to Convert PDF Pages to JPG Images Free — Full Guide',
+    shortTitle:'Convert PDF Pages to JPG Images',
+    emoji:    '📷',
+    tag:      'Image Tutorial',
+    tagStyle: 'background:#e8f0ff;color:#1a4ab3;',
+    readTime: '3 min read',
+    toolUrl:  'tools_image.html',
+    toolName: 'PDF to JPG Converter',
+    toolDesc: 'Extract every page of a PDF as a high-quality JPG image.',
+    section:  'Image Guides',
+    keywords: 'pdf to jpg, convert pdf to image online free, extract images from pdf, pdf page to jpeg, pdf screenshot tool no upload',
+    desc:     'Free guide on converting PDF pages to high-resolution JPG images using DocFixer — browser-based, no uploads, no signup required.',
+    faqs: [
+      { q: 'What DPI (resolution) should I choose?',           a: '72 DPI for screen display, 150 DPI for presentations and social media, 300 DPI for print-quality output.' },
+      { q: 'Can I convert only specific pages?',               a: 'Yes. After uploading, you can select which pages to convert rather than the entire document.' },
+      { q: 'What is the output image format?',                 a: 'High-quality JPEG (.jpg) images — one per PDF page.' },
+      { q: 'Can I convert a 100-page PDF?',                    a: 'Yes. Large PDFs may take a moment to process, depending on your device performance.' }
+    ],
+    content: `
+      <p>Need to share a single PDF slide on social media? Or extract a chart from a lengthy report? DocFixer's <strong>PDF to JPG</strong> tool converts every page of your PDF into high-quality JPEG images right in your browser — no server uploads, 100% private.</p>
+
+      <h2>Common Use Cases for PDF to JPG Conversion</h2>
+      <ul>
+        <li>Sharing a single PDF page on LinkedIn, Instagram or Twitter</li>
+        <li>Extracting charts and infographics from research reports</li>
+        <li>Creating image thumbnails for PDF preview cards on websites</li>
+        <li>Editing PDF content in image editors (Photoshop, Canva, GIMP)</li>
+        <li>Converting scanned PDFs to images for OCR processing</li>
+      </ul>
+
+      <h2>How to Convert PDF to JPG</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Upload your PDF using the file picker or drag and drop.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Select <strong>image quality / DPI</strong> setting.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Click <strong>"Convert"</strong> — pages process instantly.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Download images <strong>individually or as a ZIP</strong>.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> For social media posts and presentations, choose <strong>150 DPI</strong> — it gives crisp, sharp images without creating unnecessarily huge files.
+      </div>
+
+      <div class="cta-block">
+        <h3>Convert PDF to JPG images free</h3>
+        <p>100% browser-based. No server uploads. Instant download.</p>
+        <a href="tools_image.html" class="btn">Convert PDF to JPG →</a>
+      </div>
+    `
+  },
+
+  'qr-code': {
+    title:    'How to Create Custom QR Codes Free — Full Tutorial',
+    shortTitle:'Create Custom QR Codes for Free',
+    emoji:    '🔳',
+    tag:      'Image Tutorial',
+    tagStyle: 'background:#e8f0ff;color:#1a4ab3;',
+    readTime: '5 min read',
+    toolUrl:  'tools_qrcode.html',
+    toolName: 'QR Code Generator',
+    toolDesc: 'Generate branded QR codes for URLs, Wi-Fi, contacts & more.',
+    section:  'Image Guides',
+    keywords: 'qr code generator free, create qr code online, custom qr code, qr code for url, branded qr code download svg png',
+    desc:     "Complete guide to creating custom branded QR codes for URLs, Wi-Fi, contacts and text. Download as PNG, SVG or JPG with DocFixer's free QR code generator.",
+    faqs: [
+      { q: 'What can I encode in a QR code?',                 a: 'URLs, plain text, Wi-Fi credentials (SSID + password), email addresses, phone numbers, vCard contacts and SMS messages.' },
+      { q: 'What download format should I use?',              a: 'Use SVG for print (scales infinitely). Use PNG for websites and social media. Use JPG for universal compatibility.' },
+      { q: 'Can I put a logo inside the QR code?',            a: 'Yes. DocFixer lets you upload a PNG logo to embed in the centre — up to 30% of the QR code area without affecting scannability.' },
+      { q: 'What is the minimum print size for a QR code?',   a: 'At least 2×2 cm (0.8×0.8 inches) for reliable scanning from a typical smartphone distance.' },
+      { q: 'Do QR codes expire?',                             a: 'No. A QR code encoding a URL or text does not expire. However, if your destination URL changes, the QR code becomes outdated.' }
+    ],
+    content: `
+      <p>QR codes appear everywhere — product packaging, restaurant menus, business cards and event posters. DocFixer's <strong>QR Code Generator</strong> lets you create beautiful, fully-branded QR codes in seconds and download them as <strong>PNG, SVG or JPG</strong> without spending a rupee.</p>
+
+      <h2>What Can You Encode in a QR Code?</h2>
+      <ul>
+        <li><strong>Website URLs</strong> — link directly to any page, form or landing page</li>
+        <li><strong>Plain text</strong> — encode a message, address or instructions</li>
+        <li><strong>Wi-Fi credentials</strong> — let guests connect without typing passwords</li>
+        <li><strong>Contact info (vCard)</strong> — share your name, phone and email at events</li>
+        <li><strong>PDF document links</strong> — link directly to a hosted PDF</li>
+        <li><strong>Payment UPI links</strong> — enable mobile payment scanning</li>
+      </ul>
+
+      <h2>How to Generate a QR Code with DocFixer</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Type or paste your URL, text or data.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Customise <strong>colours</strong> — foreground, background, corners.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Optionally upload a <strong>logo</strong> for the centre.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Download as <strong>PNG, SVG or JPG</strong> — instant.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> Always download as <strong>SVG</strong> for any print use — SVG scales infinitely without pixelation, making it perfect for banners, posters and business cards at any size.
+      </div>
+
+      <h2>QR Code Design Best Practices</h2>
+      <ul>
+        <li>Use <strong>high contrast</strong> — dark foreground on a light background for maximum scan reliability</li>
+        <li><strong>Shorten URLs</strong> before encoding — shorter data = less complex QR = easier to scan</li>
+        <li>Always <strong>test-scan</strong> before printing in bulk</li>
+        <li>Add a <strong>call-to-action</strong> nearby — "Scan for menu", "Scan to connect"</li>
+        <li>Minimum print size: <strong>2 × 2 cm</strong> for reliable smartphone scanning</li>
+      </ul>
+
+      <div class="cta-block">
+        <h3>Generate your QR code — completely free</h3>
+        <p>Fully customisable. Instant download. No account needed.</p>
+        <a href="tools_qrcode.html" class="btn">Open QR Code Generator →</a>
+      </div>
+    `
+  },
+
+  'watermark': {
+    title:    'How to Add a Watermark to Images and PDFs — Free Guide',
+    shortTitle:'How to Watermark Images & PDFs',
+    emoji:    '🔏',
+    tag:      'Security Tutorial',
+    tagStyle: 'background:#fff0e8;color:#b35000;',
+    readTime: '6 min read',
+    toolUrl:  'tools_watermark.html',
+    toolName: 'Watermark Tool',
+    toolDesc: 'Add text or logo watermarks to images & PDFs — free & private.',
+    section:  'Security Guides',
+    keywords: 'watermark pdf free, add watermark to image online, watermark photo online free, logo watermark tool, text watermark pdf no upload',
+    desc:     'Complete guide to adding professional text or logo watermarks to images and PDFs online using DocFixer — control opacity, position and rotation for free.',
+    faqs: [
+      { q: 'Can I watermark a PDF with my company logo?',      a: 'Yes. Upload your PNG logo and overlay it on any PDF page with full opacity and position control.' },
+      { q: 'What image formats can be watermarked?',           a: 'JPG, JPEG, PNG and WebP images. You can also watermark multi-page PDF documents.' },
+      { q: 'Can I create a tiled (repeating) watermark?',      a: 'Yes. DocFixer supports tiled watermark patterns that repeat across the entire page for stronger protection.' },
+      { q: 'Does watermarking compress or reduce quality?',    a: 'No. Watermarking adds a visual overlay without re-encoding or compressing the original content.' },
+      { q: 'Are my files uploaded to any server?',             a: 'Never. All watermarking happens locally using the Canvas API and PDF-lib in your browser.' }
+    ],
+    content: `
+      <p>Whether you're a photographer protecting your portfolio, a designer sharing draft work with clients, or a business stamping documents as "CONFIDENTIAL", watermarks are essential. DocFixer's <strong>Watermark Tool</strong> adds professional watermarks to images and PDFs with full control — entirely in your browser.</p>
+
+      <h2>Why Use Watermarks?</h2>
+      <ul>
+        <li>Prevent unauthorised use of your photos and creative work</li>
+        <li>Mark draft or proof documents as "DRAFT" or "CONFIDENTIAL"</li>
+        <li>Brand PDF reports and proposals with your company logo</li>
+        <li>Deter image theft on social media, portfolios and websites</li>
+        <li>Add copyright notice to images before sharing publicly</li>
+      </ul>
+
+      <h2>Watermark Types Supported</h2>
+      <p>DocFixer supports two watermark types with full customisation:</p>
+      <ul>
+        <li><strong>Text watermarks</strong> — custom text in any font size, colour and opacity</li>
+        <li><strong>Image/logo watermarks</strong> — overlay your PNG brand logo or handwritten signature</li>
+      </ul>
+
+      <h2>How to Watermark an Image or PDF</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Upload your image (JPG/PNG) or PDF file.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Choose <strong>Text</strong> or <strong>Image</strong> watermark type.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Set <strong>opacity</strong>, size, position and rotation angle.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Preview the result and click <strong>"Download"</strong>.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> For photos shared publicly, use a <strong>diagonal watermark at 30–40° rotation</strong> with 40% opacity — it's visually balanced, hard to crop out, and clearly identifies the author without ruining the image.
+      </div>
+
+      <h2>Watermark Position Options</h2>
+      <ul>
+        <li><strong>Centre</strong> — single stamp in the middle of the document</li>
+        <li><strong>Corner positions</strong> — top-left, top-right, bottom-left, bottom-right</li>
+        <li><strong>Custom X / Y coordinates</strong> — pixel-precise placement</li>
+        <li><strong>Tiled pattern</strong> — repeating watermark across the entire page for maximum protection</li>
+      </ul>
+
+      <h2>Privacy Guarantee</h2>
+      <p>Your files are never sent to any external server. All watermarking uses the HTML5 Canvas API and PDF-lib — keeping sensitive documents, portfolios and confidential PDFs completely on your device.</p>
+
+      <div class="cta-block">
+        <h3>Protect your work with a watermark — free</h3>
+        <p>No login, no uploads, works on images & PDFs.</p>
+        <a href="tools_watermark.html" class="btn">Open Watermark Tool →</a>
+      </div>
+    `
+  },
+
+  'word-counter': {
+    title:    'Free Word Counter Online — Count Words, Characters & Keyword Density',
+    shortTitle:'Word Counter: Count Words, Characters & More',
+    emoji:    '📝',
+    tag:      'Text Tool Guide',
+    tagStyle: 'background:#e8ffe8;color:#1a7a1a;',
+    readTime: '5 min read',
+    toolUrl:  'tools_wordcounter.html',
+    toolName: 'Word Counter Tool',
+    toolDesc: 'Instantly count words, characters, sentences, paragraphs & keyword density.',
+    section:  'Text Guides',
+    keywords: 'word counter online free, character counter, count words in text, reading time calculator, keyword density checker, sentence counter online',
+    desc:     'Free online word counter that instantly counts words, characters, sentences, paragraphs, reading time and keyword density in any text. No signup needed.',
+    faqs: [
+      { q: 'How does the word counter calculate reading time?', a: 'Based on the average adult silent reading speed of 200 words per minute. Technical content may take 150 WPM; conversational text around 250 WPM.' },
+      { q: 'Does the tool save my text?',                       a: 'No. Your text is only processed locally in your browser and is never stored or sent to any server.' },
+      { q: 'Can I count words in a PDF or Word document?',      a: 'Copy the text from your document and paste it in — the counter updates live as you type or paste.' },
+      { q: 'What languages does the word counter support?',     a: 'Any language that uses spaces between words. Paragraph/sentence detection works best with English and Latin-script languages.' },
+      { q: 'How is keyword density calculated?',                a: 'Keyword density = (keyword occurrences ÷ total words) × 100. DocFixer shows the top 10 keywords by frequency.' }
+    ],
+    content: `
+      <p>Whether you're a student needing to hit a 1,000-word minimum, a blogger checking SEO content length or a professional trimming a business email, DocFixer's <strong>Word Counter</strong> gives you instant, live statistics about any text — no page reload needed.</p>
+
+      <h2>What the Word Counter Measures</h2>
+      <ul>
+        <li><strong>Word count</strong> — total words, updated live as you type</li>
+        <li><strong>Character count</strong> — with spaces and without spaces</li>
+        <li><strong>Sentence count</strong> — detected by full stop, question mark and exclamation point</li>
+        <li><strong>Paragraph count</strong> — separated by blank lines</li>
+        <li><strong>Reading time</strong> — estimated at 200 WPM (average adult)</li>
+        <li><strong>Keyword density table</strong> — top 10 keywords with frequency percentage</li>
+      </ul>
+
+      <h2>How to Use the Word Counter</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Paste or type your text into the large input area.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>All stats update <strong>live in real time</strong> — no button click needed.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Review the <strong>keyword density</strong> table below the stats.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Click <strong>"Clear"</strong> to reset and start a new analysis.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 SEO Tip:</strong> For blog posts, aim for a primary keyword density of <strong>1–3%</strong>. Higher than 3% risks keyword stuffing penalties from Google; lower than 1% may not send a strong enough topic signal.
+      </div>
+
+      <h2>Who Uses the Word Counter?</h2>
+      <ul>
+        <li><strong>Students</strong> — ensure essays and assignments meet word count requirements</li>
+        <li><strong>Bloggers & Content Writers</strong> — target 1,000–2,000 words for SEO-optimised articles</li>
+        <li><strong>Social Media Managers</strong> — check character limits for Twitter (280), LinkedIn (3,000) and Instagram bios (150)</li>
+        <li><strong>Translators</strong> — count source text words for accurate project quoting</li>
+        <li><strong>Authors</strong> — track chapter word counts and daily writing targets</li>
+        <li><strong>SEO Specialists</strong> — analyse keyword density before publishing</li>
+      </ul>
+
+      <h2>Ideal Content Lengths by Platform</h2>
+      <ul>
+        <li><strong>Twitter / X:</strong> Under 280 characters per tweet</li>
+        <li><strong>LinkedIn post:</strong> 1,300–2,000 characters for best engagement</li>
+        <li><strong>Blog article:</strong> 1,200–2,500 words for Google ranking potential</li>
+        <li><strong>Email subject line:</strong> Under 50 characters (6–8 words)</li>
+        <li><strong>University essay:</strong> Varies — always check your institution's guidelines</li>
+      </ul>
+
+      <div class="cta-block">
+        <h3>Count your words right now — free</h3>
+        <p>Live stats. No signup. Completely free & private.</p>
+        <a href="tools_wordcounter.html" class="btn">Open Word Counter →</a>
+      </div>
+    `
+  }
+};
+
+// ─────────────────────────────────────────────────
+// All posts meta (for related + breadcrumb + LD+JSON)
+// ─────────────────────────────────────────────────
+const ALL_META = [
+  { id:'merge-pdf',      emoji:'📄', title:'How to Merge PDFs in Seconds' },
+  { id:'split-pdf',      emoji:'✂️', title:'Split PDF – Extract Exact Pages' },
+  { id:'compress-pdf',   emoji:'🗜️', title:'Compress PDF Without Losing Quality' },
+  { id:'jpg-to-pdf',     emoji:'🖼️', title:'Convert JPG Images to PDF Online' },
+  { id:'image-compress', emoji:'📸', title:'Compress Images for Web in Seconds' },
+  { id:'pdf-to-jpg',     emoji:'📷', title:'Convert PDF Pages to JPG Images' },
+  { id:'qr-code',        emoji:'🔳', title:'Create Custom QR Codes for Free' },
+  { id:'watermark',      emoji:'🔏', title:'How to Watermark Images & PDFs' },
+  { id:'word-counter',   emoji:'📝', title:'Word Counter: Count Words & More' }
+];
+
+// ─────────────────────────────────────────────────
+// Utilities
+// ─────────────────────────────────────────────────
+function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
+function setMeta(id, attr, val){ const el=document.getElementById(id); if(el) el[attr]=val; }
+function setTag(id, attr, val){ const el=document.getElementById(id); if(el) el.setAttribute(attr,val); }
+
+// ─────────────────────────────────────────────────
+// Render
+// ─────────────────────────────────────────────────
+function renderPost(){
+  const id   = getParam('id') || 'merge-pdf';
+  const post = POSTS[id];
+  const BASE = 'https://docfixer.online/';
+  const URL  = BASE + 'blog_detail.html?id=' + id;
+
+  if(!post){
+    document.getElementById('articleBody').innerHTML = '<p class="text-danger">Post not found. <a href="blog.html">← Back to Blog</a></p>';
+    return;
+  }
+
+  // ── Page <title> & meta ──
+  document.title = post.title + ' | DocFixer Blog';
+  setMeta('pageDesc','content', post.desc);
+  setMeta('pageKeys','content', post.keywords);
+  setTag ('pageCanon','href', URL);
+
+  // ── Open Graph ──
+  setTag('ogUrl',  'content', URL);
+  setTag('ogTitle','content', post.title + ' | DocFixer Blog');
+  setTag('ogDesc', 'content', post.desc);
+  setTag('ogSection','content', post.section);
+  const ogImg = BASE + 'images/blog-og-' + id + '.png';
+  setTag('ogImage','content', ogImg);
+
+  // ── Twitter ──
+  setTag('twTitle','content', post.shortTitle + ' | DocFixer Blog');
+  setTag('twDesc', 'content', post.desc);
+  setTag('twImage','content', ogImg);
+
+  // ── Hero ──
+  document.getElementById('heroEmoji').textContent   = post.emoji;
+  document.getElementById('heroTitle').textContent   = post.shortTitle;
+  document.getElementById('heroReadTime').innerHTML  = '<i class="bi bi-clock" aria-hidden="true"></i> ' + post.readTime;
+  document.getElementById('breadcrumbCurrent').textContent = post.shortTitle;
+
+  const tagEl = document.getElementById('heroTag');
+  tagEl.textContent = post.tag;
+  tagEl.setAttribute('style', post.tagStyle + ';padding:4px 14px;border-radius:30px;font-weight:600;font-size:.82rem;');
+
+  // ── Article body ──
+  document.getElementById('articleBody').innerHTML = post.content;
+
+  // ── FAQ section ──
+  const faqList = document.getElementById('faqList');
+  if(post.faqs && post.faqs.length){
+    faqList.innerHTML = post.faqs.map((f,i)=>`
+      <div class="faq-item">
+        <div class="faq-q" id="faq-q-${i}" aria-expanded="false" aria-controls="faq-a-${i}" role="button" tabindex="0">
+          <span>${f.q}</span>
+          <i class="bi bi-chevron-down faq-icon" aria-hidden="true"></i>
+        </div>
+        <div class="faq-a" id="faq-a-${i}" role="region" aria-labelledby="faq-q-${i}">${f.a}</div>
+      </div>`).join('');
+
+    faqList.querySelectorAll('.faq-q').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const ans = btn.nextElementSibling;
+        const open = ans.classList.contains('open');
+        // Close all
+        faqList.querySelectorAll('.faq-q').forEach(b=>{ b.classList.remove('open'); b.setAttribute('aria-expanded','false'); b.nextElementSibling.classList.remove('open'); });
+        if(!open){ btn.classList.add('open'); btn.setAttribute('aria-expanded','true'); ans.classList.add('open'); }
+      });
+      btn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); btn.click(); } });
+    });
+  } else {
+    document.getElementById('faqSection').style.display='none';
+  }
+
+  // ── Sidebar ──
+  document.getElementById('sidebarEmoji').textContent = post.emoji;
+  document.getElementById('sidebarTitle').textContent = post.toolName;
+  document.getElementById('sidebarDesc').textContent  = post.toolDesc;
+  document.getElementById('sidebarCta').href          = post.toolUrl;
+
+  // Related posts (4 others)
+  const others = ALL_META.filter(p=>p.id!==id).slice(0,4);
+  document.getElementById('relatedPosts').innerHTML = others.map(p=>
+    `<a href="blog_detail.html?id=${p.id}" class="related-post">
+       <span class="rp-icon" aria-hidden="true">${p.emoji}</span>
+       <span class="rp-title">${p.title}</span>
+     </a>`
+  ).join('');
+
+  // ── JSON-LD: BlogPosting + FAQPage + BreadcrumbList ──
+  const faqLD = post.faqs ? post.faqs.map(f=>({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  })) : [];
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": URL + "#blogpost",
+        "headline": post.title,
+        "description": post.desc,
+        "keywords": post.keywords,
+        "datePublished": "2026-04-12T00:00:00+05:30",
+        "dateModified":  "2026-04-12T00:00:00+05:30",
+        "author": { "@type": "Organization", "name": "DocFixer Team", "url": "https://docfixer.online/about.html" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "DocFixer",
+          "url": "https://docfixer.online/",
+          "logo": { "@type": "ImageObject", "url": "https://docfixer.online/images/logo.png" }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": URL },
+        "url": URL,
+        "image": {
+          "@type": "ImageObject",
+          "url": ogImg,
+          "width": 1200,
+          "height": 630
+        },
+        "articleSection": post.section,
+        "inLanguage": "en-US",
+        "isPartOf": { "@type": "Blog", "name": "DocFixer Blog", "url": BASE + "blog.html" }
+      },
+      ...(faqLD.length ? [{
+        "@type": "FAQPage",
+        "mainEntity": faqLD
+      }] : []),
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home",  "item": BASE },
+          { "@type": "ListItem", "position": 2, "name": "Blog",  "item": BASE + "blog.html" },
+          { "@type": "ListItem", "position": 3, "name": post.shortTitle, "item": URL }
+        ]
+      }
+    ]
+  };
+
+  document.getElementById('ldJson').textContent = JSON.stringify(ld, null, 2);
+}
+
+renderPost();
+
+// Reading progress bar
+document.addEventListener('scroll', ()=>{
+  const doc = document.documentElement;
+  const pct = doc.scrollHeight - doc.clientHeight > 0
+    ? Math.round(doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100) : 0;
+  const bar = document.getElementById('readProgress');
+  bar.style.width = pct + '%';
+  bar.setAttribute('aria-valuenow', pct);
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

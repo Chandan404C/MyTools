@@ -72,4 +72,44 @@
     <loc>https://docfixer.online/tools_wordcounter.html</loc>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://docfixer.online/blog.html</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=merge-pdf</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=split-pdf</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=compress-pdf</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=jpg-to-pdf</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=image-compress</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=pdf-to-jpg</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=qr-code</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=watermark</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=word-counter</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>

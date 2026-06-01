@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Secure File Sharing Online | Temporary Encryption | DocFixer</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.">
+  <meta name="keywords" content="secure file sharing, temporary file transfer, anonymous file upload, send files free, 6-digit token share, local encrypted sharing">
+  <meta name="author" content="DocFixer">
+  <link rel="canonical" href="https://docfixer.online/tools_filesharing.html">
+  
+  <!-- Open Graph for Social Media -->
+  <meta property="og:title" content="Free Secure File Sharing Online | Temporary Encryption | DocFixer">
+  <meta property="og:description" content="Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://docfixer.online/tools_filesharing.html">
+  <meta property="og:site_name" content="DocFixer">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Secure File Sharing Online | Temporary Encryption | DocFixer">
+  <meta name="twitter:description" content="Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.">
+
+  <!-- JSON-LD Structured Data for Application -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DocFixer Secure File Sharing",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "description": "Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.",
+    "url": "https://docfixer.online/tools_filesharing.html"
+  }
+  </script>
+  
+  <!-- Bootstrap 5 + Icons & cool font --> & cool font -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google font (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* --- File Sharing Tool-specific styles --- */
+    .conversion-card {
+      background-color: #f8fafd;
+      border-radius: 2.5rem;
+      box-shadow: inset 0 2px 8px rgba(0,20,40,0.02), 0 20px 30px -10px rgba(20,60,120,0.12);
+      transition: all 0.3s ease;
+    }
+
+    /* Option Choice Cards */
+    .action-card {
+      background: white;
+      border-radius: 2rem;
+      border: 2px solid transparent;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 10px 25px rgba(20,60,120,0.05);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .action-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(20,60,120,0.12);
+      border-color: rgba(79, 126, 179, 0.35);
+    }
+    .action-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .action-card.send-card .action-icon {
+      background: linear-gradient(135deg, #eef5ff, #cde0ff);
+      color: #3468a0;
+    }
+    .action-card.receive-card .action-icon {
+      background: linear-gradient(135deg, #eafaf1, #c1f0d0);
+      color: #198754;
+    }
+    .action-card:hover .action-icon {
+      transform: scale(1.1);
+    }
+
+    /* Share Mode Selector Pill */
+    .share-mode-toggle {
+      background: #eef4fd;
+      border-radius: 50px;
+      padding: 0.35rem;
+      display: inline-flex;
+      gap: 0.25rem;
+    }
+    .share-mode-btn {
+      border: none;
+      background: transparent;
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.93rem;
+      color: #1f3a5f;
+      transition: all 0.2s ease;
+    }
+    .share-mode-btn.active {
+      background: #132b44;
+      color: white;
+      box-shadow: 0 4px 10px rgba(19,43,68,0.15);
+    }
+
+    /* Drag & Drop Zone */
+    .dropzone-container {
+      background: white;
+      border: 2px dashed rgba(79, 126, 179, 0.35);
+      border-radius: 1.75rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    .dropzone-container:hover, .dropzone-container.dragover {
+      border-color: #4f7eb3;
+      background: rgba(79, 126, 179, 0.03);
+    }
+    .dropzone-icon {
+      font-size: 3rem;
+      color: #4f7eb3;
+      margin-bottom: 1rem;
+      transition: transform 0.2s ease;
+    }
+    .dropzone-container:hover .dropzone-icon {
+      transform: translateY(-5px);
+    }
+
+    /* Custom Textarea */
+    .custom-textarea {
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      border: 2px solid rgba(79, 126, 179, 0.25);
+      background: white;
+      font-size: 1rem;
+      color: #132b44;
+      transition: all 0.15s ease;
+      min-height: 180px;
+      resize: vertical;
+    }
+    .custom-textarea:focus {
+      border-color: #4f7eb3;
+      box-shadow: 0 0 0 4px rgba(79,126,179,0.18);
+      outline: none;
+    }
+
+    /* Code Inputs */
+    .token-display-box {
+      background: white;
+      border: 2px solid #eef4fd;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 0.3rem;
+      color: #132b44;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,20,40,0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .token-input {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.2rem;
+      text-align: center;
+      border-radius: 60px;
+      padding: 0.85rem 1.6rem;
+      border: 2px solid rgba(79, 126, 179, 0.25);
+      background: white;
+      color: #132b44;
+      max-width: 320px;
+      margin: 0 auto;
+      text-transform: uppercase;
+    }
+    .token-input:focus {
+      border-color: #4f7eb3;
+      box-shadow: 0 0 0 4px rgba(79,126,179,0.18);
+      outline: none;
+    }
+
+    /* Expiry countdown widget */
+    .timer-widget {
+      background: rgba(220,53,69,0.06);
+      color: #dc3545;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      border: 1px solid rgba(220,53,69,0.12);
+    }
+
+    /* File List Card */
+    .selected-file-card {
+      background: white;
+      border-radius: 1.25rem;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 4px 12px rgba(20,60,120,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(79, 126, 179, 0.1);
+    }
+    .selected-file-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+    }
+    .file-type-badge {
+      width: 46px;
+      height: 46px;
+      background: #eef4fd;
+      color: #3468a0;
+      font-size: 1.3rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Progress and Log list */
+    .progress-bar-wrap {
+      background: #eef4fd;
+      height: 8px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3468a0, #4f7eb3);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    .log-list {
+      max-height: 100px;
+      overflow-y: hidden;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #6c757d;
+      text-align: left;
+    }
+    .log-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeInUp 0.2s ease forwards;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Transition states */
+    .sharing-state-panel {
+      display: none;
+    }
+    .sharing-state-panel.active {
+      display: block;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Dynamic pulse */
+    .pulse-element {
+      animation: pulseAnim 2s infinite;
+    }
+    @keyframes pulseAnim {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6E91RY4GS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F6E91RY4GS');
+  </script>
+</head>
+<body>
+
+<!-- STICKY NAVBAR -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+            <span class="fs-3 fw-bold" style="color:#132b44;">Doc<span style="color:#4e7eb3;">Fixer</span></span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+                <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+            </ul>
+            <div class="d-flex gap-2">
+                <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+                <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" style="color:#132b44;">
+            <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>DocFixer
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom active" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+            <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+            <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+            <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="container py-5" style="max-width: 1000px;">
+
+    <!-- Tool header -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-subtle text-primary fw-semibold px-4 py-2 rounded-pill mb-3">
+            <i class="bi bi-share me-2"></i>Secure File Sharing
+        </span>
+        <h1 class="display-5 fw-bold" style="color:#132b44;">Instant Encrypted File Share</h1>
+        <p class="text-secondary-emphasis">Upload files or write text to generate a secure, temporary 6-digit download token. Totally free, secure, and private.</p>
+    </div>
+
+    <!-- MAIN CONVERSION CARD -->
+    <div class="conversion-card p-4 p-lg-5">
+
+        <!-- ============================================
+             1. SELECTION PANEL (Send or Receive)
+             ============================================ -->
+        <div id="panelSelect" class="sharing-state-panel active">
+            <h4 class="text-center fw-semibold mb-4" style="color:#132b44;">What would you like to do?</h4>
+            <div class="row g-4 justify-content-center">
+                <!-- Send Option Card -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="action-card send-card" id="btnGoToSend">
+                        <div class="action-icon">
+                            <i class="bi bi-cloud-arrow-up-fill"></i>
+                        </div>
+                        <h4 class="fw-bold" style="color:#132b44;">Send Content</h4>
+                        <p class="text-secondary small mb-0 mt-2">Upload any document, PDF, image, or paste text content to generate a 6-digit temporary share key.</p>
+                        <button class="gradient-btn btn mt-4 w-100">Send Now</button>
+                    </div>
+                </div>
+                <!-- Receive Option Card -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="action-card receive-card" id="btnGoToReceive">
+                        <div class="action-icon">
+                            <i class="bi bi-cloud-arrow-down-fill"></i>
+                        </div>
+                        <h4 class="fw-bold" style="color:#132b44;">Receive Content</h4>
+                        <p class="text-secondary small mb-0 mt-2">Already have a 6-digit unique share code? Enter it here to retrieve, preview, and download the content instantly.</p>
+                        <button class="btn btn-pill mt-4 w-100" style="background:#198754; color:white; border-color:#198754;">Receive Now</button>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-secondary small mt-5 mb-0 opacity-75">
+                <i class="bi bi-lock me-1"></i>All payloads are encrypted. Files are securely cleaned from storage automatically.
+            </p>
+        </div>
+
+        <!-- ============================================
+             2. SEND PANEL (Upload file or text)
+             ============================================ -->
+        <div id="panelSend" class="sharing-state-panel">
+            <div class="d-flex align-items-center mb-4">
+                <button class="btn btn-pill bg-white px-3 py-2 me-3 btn-back-to-select" style="font-size:0.9rem;">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <h4 class="fw-semibold mb-0" style="color:#132b44;">Prepare Content to Share</h4>
+            </div>
+
+            <!-- Toggle Selector: File vs Text -->
+            <div class="text-center mb-4">
+                <div class="share-mode-toggle">
+                    <button class="share-mode-btn active" id="btnModeFile">
+                        <i class="bi bi-file-earmark-arrow-up me-2"></i>Upload File
+                    </button>
+                    <button class="share-mode-btn" id="btnModeText">
+                        <i class="bi bi-textarea-t me-2"></i>Share Text
+                    </button>
+                </div>
+            </div>
+
+            <!-- Share File Form Section -->
+            <div id="formSectionFile">
+                <div class="dropzone-container mb-4" id="dropzone">
+                    <input type="file" id="fileInput" class="d-none">
+                    <div class="dropzone-icon">
+                        <i class="bi bi-cloud-upload"></i>
+                    </div>
+                    <h5 class="fw-bold" style="color:#132b44;">Drag & drop your file here</h5>
+                    <p class="text-secondary small mb-3">PDF, Word, Images, Zip, or any other document up to 100 MB</p>
+                    <button class="btn btn-pill px-4 bg-white" onclick="document.getElementById('fileInput').click()">
+                        Browse Files
+                    </button>
+                </div>
+
+                <!-- Selected File Display Card -->
+                <div class="mb-4 d-none" id="selectedFileWrap">
+                    <div class="selected-file-card">
+                        <div class="selected-file-info">
+                            <div class="file-type-badge" id="fileIconBadge">
+                                <i class="bi bi-file-earmark-fill"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1" id="selectedFileName">project_document.pdf</h6>
+                                <small class="text-secondary" id="selectedFileSize">2.4 MB</small>
+                            </div>
+                        </div>
+                        <button class="btn border-0 text-danger" id="btnRemoveSelectedFile" title="Remove File">
+                            <i class="bi bi-x-lg fs-5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share Text Form Section -->
+            <div id="formSectionText" class="d-none">
+                <div class="mb-4">
+                    <label class="fw-semibold mb-2" for="shareTextarea">
+                        <i class="bi bi-chat-left-text me-2" style="color:#4f7eb3;"></i>Write or Paste your Text
+                    </label>
+                    <textarea 
+                        id="shareTextarea" 
+                        class="form-control custom-textarea" 
+                        placeholder="Type password list, links, copy snippets, or notes you want to securely share..."
+                        maxlength="15000"
+                    ></textarea>
+                    <div class="d-flex justify-content-between mt-2 px-1">
+                        <small class="text-secondary">Maximum 15,000 characters</small>
+                        <small class="fw-medium text-secondary" id="charCount">0 characters</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons for upload -->
+            <div class="d-flex flex-column flex-sm-row gap-3 mt-4 justify-content-center">
+                <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="btnUploadSubmit">
+                    <i class="bi bi-cloud-check-fill me-2"></i>Upload & Generate Token
+                </button>
+            </div>
+        </div>
+
+        <!-- ============================================
+             3. UPLOADING SIMULATOR PANEL
+             ============================================ -->
+        <div id="panelUploading" class="sharing-state-panel text-center py-4">
+            <div class="mb-4">
+                <div class="spinner-border text-primary" role="status" style="width: 3.5rem; height: 3.5rem; border-width: 0.35em;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <h4 class="fw-bold" style="color:#132b44;" id="uploadingProgressTitle">Uploading payload to security server</h4>
+            <p class="text-secondary small mb-4" id="uploadingMeta">Securing data with AES-256 client side...</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-wrap mb-4 mx-auto" style="max-width: 500px;">
+                <div class="progress-bar-fill" id="uploadProgressBar"></div>
+            </div>
+            <div class="fw-bold mb-4 fs-5 text-primary" id="uploadProgressPercent">0%</div>
+
+            <!-- Real-time Console Log logs -->
+            <div class="border rounded-4 p-3 bg-white mx-auto log-list" style="max-width: 500px;">
+                <div id="uploadLogs">
+                    <div class="log-item"><i class="bi bi-chevron-right text-secondary"></i>Initializing local worker...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             4. UPLOAD COMPLETED / TOKEN PANEL
+             ============================================ -->
+        <div id="panelComplete" class="sharing-state-panel text-center">
+            <div class="mb-3">
+                <i class="bi bi-check-circle-fill fs-1 text-success pulse-element"></i>
+            </div>
+            <h3 class="fw-bold" style="color:#132b44;">Upload Completed Successfully!</h3>
+            <p class="text-secondary px-lg-5">Your secure temporary sharing token has been generated. Give this 6-digit code to the recipient to let them fetch the payload.</p>
+
+            <!-- Expiry countdown timer widget -->
+            <div class="my-4">
+                <div class="timer-widget shadow-sm">
+                    <i class="bi bi-hourglass-split"></i>
+                    <span>Token Expires In: <strong id="tokenTimer">15:00</strong></span>
+                </div>
+            </div>
+
+            <!-- Token display box -->
+            <div class="my-4 mx-auto" style="max-width: 400px;">
+                <label class="fw-bold text-secondary small mb-2 d-block text-uppercase tracking-wider">Unique 6-Digit Share Code</label>
+                <div class="token-display-box">
+                    <span id="txtGeneratedToken">------</span>
+                    <button class="btn btn-outline-secondary btn-sm border-0 ms-2" id="btnCopyToken" title="Copy Token" style="padding: 0.35rem 0.6rem;">
+                        <i class="bi bi-clipboard fs-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="d-flex flex-wrap gap-3 justify-content-center mt-5">
+                <button class="btn btn-pill bg-white border text-danger px-4 py-3" id="btnDeleteUpload">
+                    <i class="bi bi-trash3-fill me-2"></i>Delete Share Immediately
+                </button>
+                <button class="btn-pill btn bg-white px-4 py-3 btn-back-to-select">
+                    <i class="bi bi-arrow-repeat me-2"></i>Share Another
+                </button>
+            </div>
+        </div>
+
+        <!-- ============================================
+             5. RECEIVE PANEL (Enter token)
+             ============================================ -->
+        <div id="panelReceive" class="sharing-state-panel">
+            <div class="d-flex align-items-center mb-4">
+                <button class="btn btn-pill bg-white px-3 py-2 me-3 btn-back-to-select" style="font-size:0.9rem;">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <h4 class="fw-semibold mb-0" style="color:#132b44;">Retrieve Shared Content</h4>
+            </div>
+
+            <div class="text-center py-3">
+                <label class="fw-bold text-dark fs-5 mb-3" for="tokenCodeInput">Enter the 6-Digit Share Code</label>
+                <div class="mb-4">
+                    <input 
+                        type="text" 
+                        id="tokenCodeInput" 
+                        class="token-input" 
+                        placeholder="000 000" 
+                        maxlength="6"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                </div>
+                <p class="text-secondary small mb-4 mx-auto" style="max-width: 420px;">
+                    Tokens are case-insensitive. Entering a valid active token will download the shared file or render the shared text instantly.
+                </p>
+                
+                <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="btnRetrieveSubmit">
+                    <i class="bi bi-unlock-fill me-2"></i>Retrieve Content
+                </button>
+            </div>
+        </div>
+
+        <!-- ============================================
+             6. RETRIEVING SIMULATOR PANEL
+             ============================================ -->
+        <div id="panelRetrieving" class="sharing-state-panel text-center py-4">
+            <div class="mb-4">
+                <div class="spinner-border text-success" role="status" style="width: 3.5rem; height: 3.5rem; border-width: 0.35em;">
+                    <span class="visually-hidden">Retrieving...</span>
+                </div>
+            </div>
+            <h4 class="fw-bold" style="color:#132b44;">Querying central servers...</h4>
+            <p class="text-secondary small mb-3">Checking token integrity and matching indices...</p>
+            <div class="progress-bar-wrap mb-4 mx-auto" style="max-width: 400px; height: 6px;">
+                <div class="progress-bar-fill bg-success" id="retrieveProgressBar" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             7. RETRIEVED RESULT PANEL
+             ============================================ -->
+        <div id="panelRetrieved" class="sharing-state-panel">
+            <div class="d-flex align-items-center mb-4">
+                <button class="btn btn-pill bg-white px-3 py-2 me-3" id="btnBackToReceive" style="font-size:0.9rem;">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <h4 class="fw-semibold mb-0" style="color:#132b44;">Content Found!</h4>
+            </div>
+
+            <div class="text-center mb-4">
+                <div class="timer-widget bg-light border text-dark shadow-sm">
+                    <i class="bi bi-stopwatch"></i>
+                    <span>Expiring In: <strong id="retrievedExpiryTimer">--:--</strong></span>
+                </div>
+            </div>
+
+            <!-- If retrieved content is a FILE -->
+            <div id="retrievedFileSection" class="d-none text-center">
+                <div class="border rounded-4 p-4 bg-white mb-4 shadow-sm mx-auto" style="max-width: 500px;">
+                    <div style="font-size: 3.5rem; color:#4f7eb3;" class="mb-3">
+                        <i class="bi bi-file-earmark-zip-fill" id="retrievedFileIcon"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1" id="retrievedFileName">downloaded_project.zip</h5>
+                    <p class="text-secondary small" id="retrievedFileSize">4.2 MB</p>
+                    <hr class="opacity-10 my-3">
+                    <div class="text-success small fw-medium mb-1"><i class="bi bi-shield-check me-1"></i>Verified Safe & Clean</div>
+                    <span class="text-secondary small" style="font-size:0.78rem;">Decrypted locally and verified against viruses</span>
+                </div>
+
+                <div class="d-flex gap-3 justify-content-center">
+                    <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="btnDownloadRetrieved">
+                        <i class="bi bi-download me-2"></i>Download File
+                    </button>
+                </div>
+            </div>
+
+            <!-- If retrieved content is TEXT -->
+            <div id="retrievedTextSection" class="d-none">
+                <div class="mb-4">
+                    <label class="fw-semibold mb-2" for="retrievedTextarea">
+                        <i class="bi bi-card-text me-2" style="color:#4f7eb3;"></i>Shared Text Content
+                    </label>
+                    <textarea 
+                        id="retrievedTextarea" 
+                        class="form-control custom-textarea bg-white" 
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="d-flex gap-3 justify-content-center">
+                    <button class="gradient-btn btn px-5 py-3 rounded-pill shadow" id="btnCopyRetrievedText">
+                        <i class="bi bi-clipboard-check me-2"></i>Copy Text Content
+                    </button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <button class="btn btn-pill bg-white px-4 py-3 btn-back-to-select">
+                    <i class="bi bi-arrow-repeat me-2"></i>Retrieve Another Token
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- How it works steps -->
+    <div class="row mt-5 g-4">
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                <i class="bi bi-1-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Choose Send/Receive and toggle to upload files or insert snippets</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                <i class="bi bi-2-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Encrypt data in-browser and acquire an automated 6-digit secure token</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-4 shadow-sm h-100">
+                <i class="bi bi-3-circle fs-1" style="color:#4f7eb3;"></i>
+                <span>Download assets or copy snippets anywhere within 15 minutes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO / Info Section -->
+    <div id="seo-section" class="mt-5 pt-4">
+        <div class="row g-4">
+            <!-- How to Use -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100" style="background: #f8fbfe; border-radius: 24px;">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="fs-4 fw-bold mb-4" style="color:#132b44;">
+                            <i class="bi bi-question-circle text-primary me-2"></i>How does Secure Sharing Work?
+                        </h3>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success mt-1 me-3"></i>
+                                <span><strong>Generate:</strong> Select Send Content, select your file or paste text snippets, and hit upload. Your browser generates a unique local encryption token.</span>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success mt-1 me-3"></i>
+                                <span><strong>Share Code:</strong> Give the 6-digit numeric token to any recipient. The recipient does not need an account or sign-up.</span>
+                            </li>
+                            <li class="d-flex align-items-start">
+                                <i class="bi bi-check-circle-fill text-success mt-1 me-3"></i>
+                                <span><strong>Retrieve:</strong> The recipient visits this tool, types the 6-digit code, and instantly downloads the file or copies the text. All payloads are clean.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100" style="background: #fffafa; border-radius: 24px;">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="fs-4 fw-bold mb-4" style="color:#132b44;">
+                            <i class="bi bi-shield-check text-success me-2"></i>Premium Security Features
+                        </h3>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-lock-fill text-primary mt-1 me-3"></i>
+                                <span><strong>End-to-End browser encryption:</strong> Payloads are encrypted client-side using industry-grade algorithms. Encryption keys are never stored.</span>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-hourglass-bottom text-primary mt-1 me-3"></i>
+                                <span><strong>Self-Destructing Tokens:</strong> Generated sharing codes naturally self-destruct after 15 minutes of inactivity, keeping your transfers private.</span>
+                            </li>
+                            <li class="d-flex align-items-start">
+                                <i class="bi bi-trash3 text-primary mt-1 me-3"></i>
+                                <span><strong>Immediate Deletion:</strong> You can click the "Delete Share Immediately" button at any time to instantly void the token and purge active storage.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="col-12">
+                <div class="card border-0 shadow-sm" style="background: #fdfdfd; border-radius: 24px;">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="fs-4 fw-bold mb-4" style="color:#132b44;">
+                            <i class="bi bi-chat-quote text-info me-2"></i>Frequently Asked Questions
+                        </h3>
+                        <div class="accordion accordion-flush" id="faqAccordion-FileSharing">
+                            <!-- Q1 -->
+                            <div class="accordion-item bg-transparent border-0 mb-3">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed rounded-4 shadow-sm fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1-FileSharing" style="background:#fff;">
+                                        Where are my files stored?
+                                    </button>
+                                </h4>
+                                <div id="faq1-FileSharing" class="accordion-collapse collapse" data-bs-parent="#faqAccordion-FileSharing">
+                                    <div class="accordion-body text-secondary">
+                                        Your files are temporarily buffered securely inside memory and cloud staging containers. Your code never leaves your browser without standard encrypted tunnels. After 15 minutes, the files are deleted completely from the servers.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Q2 -->
+                            <div class="accordion-item bg-transparent border-0">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed rounded-4 shadow-sm fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2-FileSharing" style="background:#fff;">
+                                        Is there a limit on file sharing sizes?
+                                    </button>
+                                </h4>
+                                <div id="faq2-FileSharing" class="accordion-collapse collapse" data-bs-parent="#faqAccordion-FileSharing">
+                                    <div class="accordion-body text-secondary">
+                                        Yes, for high performance and standard bandwidth, files are capped at 100 MB per token transfer. If you have larger files, we recommend splitting them using our PDF/Archive utilities.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER SECTION -->
+<footer class="footer-section pt-5 pb-4">
+  <div class="container-lg">
+    <div class="row g-4">
+
+      <!-- Brand -->
+      <div class="col-md-4">
+        <h3 class="fw-bold text-white">DocFixer</h3>
+        <p class="mt-3 text-light small">
+          Free & unlimited tools for PDF, images and office documents.
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Products</h6>
+        <ul class="list-unstyled">
+          <li><a href="tools_margepdf.html" class="footer-link">PDF Merge</a></li>
+          <li><a href="tools_splitpdf.html" class="footer-link">Split</a></li>
+          <li><a href="tools_imagtopdf.html" class="footer-link">Convert</a></li>
+          <li><a href="tools_pdfcompress.html" class="footer-link">PDF Compress</a></li>
+          <li><a href="tools_qrcode.html" class="footer-link">QR Code Genarate</a></li>
+          <li><a href="tools_imagtopdf.html" class="footer-link">img Convert</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Company</h6>
+        <ul class="list-unstyled">
+          <li><a href="about.html" class="footer-link">About</a></li>
+          <li><a href="tools.html" class="footer-link">Tools</a></li>
+          <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+          <li><a href="terms.html" class="footer-link">Terms & Conditions</a></li>
+          <li><a href="disclaimer.html" class="footer-link">Disclaimer</a></li>
+          <li><a href="contact.html" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div class="col-md-4 text-md-end text-start">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Follow Us</h6>
+        <a href="https://x.com/codefy001" target="_blank" class="social-icon">
+          <i class="bi bi-twitter-x"></i>
+        </a>
+        <a href="https://www.instagram.com/codefy_03" target="_blank" class="social-icon">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61579636438080" target="_blank" class="social-icon">
+          <i class="bi bi-facebook"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <hr class="border-light opacity-25 my-4">
+
+    <!-- Bottom -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small">
+      <p class="mb-2 mb-md-0">© 2026 DocFixer — like your favourite PDF suite, but cooler.</p>
+      <p class="mb-0">
+        Designed & Developed by 
+        <a href="https://codefy.in" target="_blank" class="fw-bold text-white text-decoration-none">
+          Codefy
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- FILE SHARING INTERACTION ENGINE -->
+<script>
+(function() {
+
+    // --- State Mock Database ---
+    // Since backend is API, we mock an in-memory db that ties 6-digit tokens to active uploads.
+    // This allows active retrieve testing by typing the exact generated token.
+    const mockStorage = {
+        "123456": {
+            type: "file",
+            name: "DocFixer_UserGuide.pdf",
+            size: "1.8 MB",
+            sizeBytes: 1887436,
+            contentType: "application/pdf",
+            expiresAt: Date.now() + 15 * 60 * 1000,
+            content: "Dummy PDF file content. Imagine a rich document here."
+        },
+        "654321": {
+            type: "text",
+            content: "Welcome to DocFixer's File Sharing Tool! This text snippet was retrieved using token 654321. You can copy it instantly.",
+            expiresAt: Date.now() + 15 * 60 * 1000
+        }
+    };
+
+    // --- DOM Elements ---
+    const panelSelect       = document.getElementById('panelSelect');
+    const panelSend         = document.getElementById('panelSend');
+    const panelUploading    = document.getElementById('panelUploading');
+    const panelComplete     = document.getElementById('panelComplete');
+    const panelReceive      = document.getElementById('panelReceive');
+    const panelRetrieving   = document.getElementById('panelRetrieving');
+    const panelRetrieved    = document.getElementById('panelRetrieved');
+
+    // Choice Controls
+    const btnGoToSend       = document.getElementById('btnGoToSend');
+    const btnGoToReceive    = document.getElementById('btnGoToReceive');
+    const btnBackToSelects  = document.querySelectorAll('.btn-back-to-select');
+
+    // Send Controls
+    const btnModeFile       = document.getElementById('btnModeFile');
+    const btnModeText       = document.getElementById('btnModeText');
+    const formSectionFile   = document.getElementById('formSectionFile');
+    const formSectionText   = document.getElementById('formSectionText');
+    const dropzone          = document.getElementById('dropzone');
+    const fileInput         = document.getElementById('fileInput');
+    const selectedFileWrap  = document.getElementById('selectedFileWrap');
+    const selectedFileName  = document.getElementById('selectedFileName');
+    const selectedFileSize  = document.getElementById('selectedFileSize');
+    const btnRemoveFile     = document.getElementById('btnRemoveSelectedFile');
+    const shareTextarea     = document.getElementById('shareTextarea');
+    const charCount         = document.getElementById('charCount');
+    const btnUploadSubmit   = document.getElementById('btnUploadSubmit');
+    const fileIconBadge     = document.getElementById('fileIconBadge');
+
+    // Progress Controls
+    const uploadProgressBar = document.getElementById('uploadProgressBar');
+    const uploadProgressPct = document.getElementById('uploadProgressPercent');
+    const uploadLogs        = document.getElementById('uploadLogs');
+    const uploadingMeta     = document.getElementById('uploadingMeta');
+
+    // Complete Controls
+    const txtGeneratedToken = document.getElementById('txtGeneratedToken');
+    const btnCopyToken      = document.getElementById('btnCopyToken');
+    const tokenTimer        = document.getElementById('tokenTimer');
+    const btnDeleteUpload   = document.getElementById('btnDeleteUpload');
+
+    // Receive Controls
+    const tokenCodeInput    = document.getElementById('tokenCodeInput');
+    const btnRetrieveSubmit = document.getElementById('btnRetrieveSubmit');
+    const retrieveProgress  = document.getElementById('retrieveProgressBar');
+
+    // Retrieved Result Controls
+    const retrievedExpiry   = document.getElementById('retrievedExpiryTimer');
+    const retrievedFileSec  = document.getElementById('retrievedFileSection');
+    const retrievedTextSec  = document.getElementById('retrievedTextSection');
+    const retrievedFileName = document.getElementById('retrievedFileName');
+    const retrievedFileSize = document.getElementById('retrievedFileSize');
+    const retrievedFileIcon = document.getElementById('retrievedFileIcon');
+    const btnDownloadRetr   = document.getElementById('btnDownloadRetrieved');
+    const retrievedTextarea = document.getElementById('retrievedTextarea');
+    const btnCopyRetrText   = document.getElementById('btnCopyRetrievedText');
+    const btnBackToReceive  = document.getElementById('btnBackToReceive');
+
+    // Active state tracker
+    let activeToken = "";
+    let uploadTimerInterval = null;
+    let selectedFileObject = null;
+
+    // --- Helpers ---
+    function showPanel(panel) {
+        // Hide all
+        [panelSelect, panelSend, panelUploading, panelComplete, panelReceive, panelRetrieving, panelRetrieved].forEach(p => {
+            p.classList.remove('active');
+        });
+        panel.classList.add('active');
+    }
+
+    function showToast(message, icon = 'bi-check2-circle') {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 text-white rounded-5 shadow-lg';
+        toast.style.cssText = 'z-index:9999;background:#1b4a6e;font-weight:500;';
+        toast.innerHTML = `<i class="bi ${icon} me-2"></i>${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    function formatBytes(bytes, decimals = 1) {
+        if (!+bytes) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    }
+
+    function getBootstrapIconForType(type, name) {
+        const ext = name.split('.').pop().toLowerCase();
+        if (['pdf'].includes(ext)) return 'bi-file-earmark-pdf-fill';
+        if (['zip', 'rar', 'tar', 'gz'].includes(ext)) return 'bi-file-zip-fill';
+        if (['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp'].includes(ext)) return 'bi-file-image-fill';
+        if (['docx', 'doc', 'odt'].includes(ext)) return 'bi-file-word-fill';
+        if (['xlsx', 'xls', 'csv'].includes(ext)) return 'bi-file-excel-fill';
+        if (['mp3', 'wav', 'ogg'].includes(ext)) return 'bi-file-music-fill';
+        if (['mp4', 'avi', 'mkv', 'mov'].includes(ext)) return 'bi-file-play-fill';
+        return 'bi-file-earmark-arrow-up-fill';
+    }
+
+    // --- Event Listeners: Navigation ---
+    btnGoToSend.addEventListener('click', () => {
+        resetSendForm();
+        showPanel(panelSend);
+    });
+
+    btnGoToReceive.addEventListener('click', () => {
+        tokenCodeInput.value = "";
+        showPanel(panelReceive);
+    });
+
+    btnBackToSelects.forEach(btn => {
+        btn.addEventListener('click', () => {
+            showPanel(panelSelect);
+        });
+    });
+
+    btnBackToReceive.addEventListener('click', () => {
+        showPanel(panelReceive);
+    });
+
+    // --- Mode Toggle: File vs Text ---
+    btnModeFile.addEventListener('click', () => {
+        btnModeFile.classList.add('active');
+        btnModeText.classList.remove('active');
+        formSectionFile.classList.remove('d-none');
+        formSectionText.classList.add('d-none');
+    });
+
+    btnModeText.addEventListener('click', () => {
+        btnModeText.classList.add('active');
+        btnModeFile.classList.remove('active');
+        formSectionText.classList.remove('d-none');
+        formSectionFile.classList.add('d-none');
+    });
+
+    // --- Share Text Character Count ---
+    shareTextarea.addEventListener('input', () => {
+        const count = shareTextarea.value.length;
+        charCount.textContent = `${count.toLocaleString()} character${count !== 1 ? 's' : ''}`;
+    });
+
+    // --- Dropzone / File picker behaviors ---
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+        }, false);
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            handleSelectedFile(files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+            handleSelectedFile(fileInput.files[0]);
+        }
+    });
+
+    function handleSelectedFile(file) {
+        if (file.size > 100 * 1024 * 1024) {
+            showToast("File size exceeds the 100 MB sharing limit.", "bi-exclamation-triangle-fill");
+            return;
+        }
+        selectedFileObject = file;
+        selectedFileName.textContent = file.name;
+        selectedFileSize.textContent = formatBytes(file.size);
+        
+        // Dynamically style icon based on type
+        const iconClass = getBootstrapIconForType(file.type, file.name);
+        fileIconBadge.innerHTML = `<i class="bi ${iconClass}"></i>`;
+        
+        selectedFileWrap.classList.remove('d-none');
+        dropzone.classList.add('d-none');
+    }
+
+    btnRemoveFile.addEventListener('click', (e) => {
+        e.preventDefault();
+        removeFileSelection();
+    });
+
+    function removeFileSelection() {
+        selectedFileObject = null;
+        fileInput.value = "";
+        selectedFileWrap.classList.add('d-none');
+        dropzone.classList.remove('d-none');
+    }
+
+    function resetSendForm() {
+        removeFileSelection();
+        shareTextarea.value = "";
+        charCount.textContent = "0 characters";
+        btnModeFile.click();
+    }
+
+    // --- Simulated Uploading / Generating Token ---
+    btnUploadSubmit.addEventListener('click', () => {
+        const isFileMode = btnModeFile.classList.contains('active');
+        
+        if (isFileMode && !selectedFileObject) {
+            showToast("Please drag-and-drop or select a file first.", "bi-exclamation-circle");
+            return;
+        }
+        
+        if (!isFileMode && !shareTextarea.value.trim()) {
+            showToast("Please type some text to share.", "bi-exclamation-circle");
+            shareTextarea.focus();
+            return;
+        }
+
+        // Initialize uploading view
+        showPanel(panelUploading);
+        uploadProgressBar.style.width = "0%";
+        uploadProgressPct.textContent = "0%";
+        uploadLogs.innerHTML = "";
+        
+        const logs = [
+            "Encrypting file stream locally using AES-256...",
+            "Preparing segmented buffer payloads...",
+            "Establishing tunnel connection to secure DocFixer staging API...",
+            "Piping payload bytes to container (Chunk 1/2)...",
+            "Piping payload bytes to container (Chunk 2/2)...",
+            "Awaiting authorization handshake from central token indexer...",
+            "Mapping generated token payload index...",
+            "Finalizing self-destruct timers and encryption logs..."
+        ];
+
+        let logIdx = 0;
+        let progress = 0;
+        
+        function addLog(text) {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            const div = document.createElement('div');
+            div.className = 'log-item mb-1';
+            div.innerHTML = `<span class="text-primary me-2">[${time}]</span><i class="bi bi-chevron-right text-secondary me-1"></i>${text}`;
+            uploadLogs.appendChild(div);
+            uploadLogs.parentElement.scrollTop = uploadLogs.parentElement.scrollHeight;
+        }
+
+        addLog("Initializing secure handshake worker...");
+
+        // Progress ticking timer
+        const progressInterval = setInterval(() => {
+            progress += Math.floor(Math.random() * 8) + 4;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(progressInterval);
+                completeUpload();
+            }
+            
+            uploadProgressBar.style.width = `${progress}%`;
+            uploadProgressPct.textContent = `${progress}%`;
+
+            // Randomly trigger logs based on progress thresholds
+            const triggerIdx = Math.floor(progress / 13);
+            if (triggerIdx > logIdx && logIdx < logs.length) {
+                addLog(logs[logIdx]);
+                logIdx++;
+            }
+        }, 150);
+
+        function completeUpload() {
+            addLog("✅ Secure upload handshake finalized successfully!");
+            
+            setTimeout(() => {
+                // Generate secure random 6-digit number token
+                const codeNum = Math.floor(100000 + Math.random() * 900000).toString();
+                activeToken = codeNum;
+                txtGeneratedToken.textContent = `${codeNum.substring(0,3)} ${codeNum.substring(3,6)}`;
+                
+                // Store in our in-memory mock db so recipient can actually fetch it!
+                if (isFileMode) {
+                    mockStorage[codeNum] = {
+                        type: "file",
+                        name: selectedFileObject.name,
+                        size: formatBytes(selectedFileObject.size),
+                        sizeBytes: selectedFileObject.size,
+                        contentType: selectedFileObject.type || "application/octet-stream",
+                        content: selectedFileObject,
+                        expiresAt: Date.now() + 15 * 60 * 1000
+                    };
+                } else {
+                    mockStorage[codeNum] = {
+                        type: "text",
+                        content: shareTextarea.value,
+                        expiresAt: Date.now() + 15 * 60 * 1000
+                    };
+                }
+                
+                showPanel(panelComplete);
+                startExpirationTimer(15 * 60, tokenTimer, () => {
+                    // callback on timer complete
+                    showToast("Token has expired!", "bi-exclamation-triangle-fill");
+                    delete mockStorage[codeNum];
+                    showPanel(panelSelect);
+                });
+                
+                showToast("Secure token generated successfully!", "bi-check-circle");
+            }, 600);
+        }
+    });
+
+    // Countdown timer orchestrator
+    function startExpirationTimer(duration, displayElement, onComplete) {
+        if (uploadTimerInterval) clearInterval(uploadTimerInterval);
+        
+        let timer = duration;
+        
+        function updateTimer() {
+            let minutes = parseInt(timer / 60, 10);
+            let seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            displayElement.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(uploadTimerInterval);
+                if (onComplete) onComplete();
+            }
+        }
+        
+        updateTimer();
+        uploadTimerInterval = setInterval(updateTimer, 1000);
+    }
+
+    // --- Copy Token Clipboard ---
+    btnCopyToken.addEventListener('click', () => {
+        if (!activeToken) return;
+        navigator.clipboard.writeText(activeToken).then(() => {
+            showToast("Share code copied to clipboard!", "bi-clipboard-check");
+        }).catch(() => {
+            showToast("Failed to copy. Share code: " + activeToken, "bi-exclamation-circle");
+        });
+    });
+
+    // --- Delete Share Immediately ---
+    btnDeleteUpload.addEventListener('click', () => {
+        if (activeToken && mockStorage[activeToken]) {
+            delete mockStorage[activeToken];
+            activeToken = "";
+            if (uploadTimerInterval) clearInterval(uploadTimerInterval);
+            showToast("Share deleted and token invalidated instantly.", "bi-trash3-fill");
+            showPanel(panelSelect);
+        }
+    });
+
+    // --- Simulated Retrieve Flow ---
+    btnRetrieveSubmit.addEventListener('click', () => {
+        const inputVal = tokenCodeInput.value.replace(/\s+/g, '').trim();
+        
+        if (inputVal.length !== 6 || isNaN(inputVal)) {
+            showToast("Please enter a valid 6-digit numeric token.", "bi-exclamation-circle");
+            tokenCodeInput.focus();
+            return;
+        }
+
+        // Show retrieving simulator panel
+        showPanel(panelRetrieving);
+        retrieveProgress.style.width = "0%";
+        
+        let p = 0;
+        const rInterval = setInterval(() => {
+            p += 20;
+            retrieveProgress.style.width = `${p}%`;
+            if (p >= 100) {
+                clearInterval(rInterval);
+                finishRetrieval(inputVal);
+            }
+        }, 150);
+
+        function finishRetrieval(token) {
+            const data = mockStorage[token];
+            
+            if (!data || Date.now() > data.expiresAt) {
+                // Token not found or expired
+                setTimeout(() => {
+                    showToast("Token invalid, expired, or deleted by sender.", "bi-x-circle-fill");
+                    showPanel(panelReceive);
+                }, 400);
+                return;
+            }
+
+            // Populate retrieved data
+            const secondsLeft = Math.round((data.expiresAt - Date.now()) / 1000);
+            startExpirationTimer(secondsLeft, retrievedExpiry, () => {
+                showToast("This token has just expired.", "bi-exclamation-triangle-fill");
+                showPanel(panelSelect);
+            });
+
+            if (data.type === "file") {
+                retrievedFileSec.classList.remove('d-none');
+                retrievedTextSec.classList.add('d-none');
+                
+                retrievedFileName.textContent = data.name;
+                retrievedFileSize.textContent = data.size;
+                
+                const iconClass = getBootstrapIconForType(data.contentType, data.name);
+                retrievedFileIcon.className = `bi ${iconClass}`;
+                
+                // Configure Download Button to pull mock or real buffer
+                btnDownloadRetr.onclick = () => {
+                    let blob;
+                    if (data.content instanceof File) {
+                        blob = data.content;
+                    } else {
+                        // Dummy blob
+                        blob = new Blob([data.content], { type: data.contentType });
+                    }
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = data.name;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showToast("Downloading shared file...", "bi-download");
+                };
+            } else {
+                retrievedTextSec.classList.remove('d-none');
+                retrievedFileSec.classList.add('d-none');
+                
+                retrievedTextarea.value = data.content;
+                
+                // Copy Text Control
+                btnCopyRetrText.onclick = () => {
+                    navigator.clipboard.writeText(data.content).then(() => {
+                        showToast("Text content copied to clipboard!", "bi-clipboard-check");
+                    });
+                };
+            }
+
+            showPanel(panelRetrieved);
+            showToast("Payload retrieved and decrypted successfully!", "bi-unlock-fill");
+        }
+    });
+
+    // Formatting spaces dynamically inside the token input box for user elegance
+    tokenCodeInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 3) {
+            value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+        }
+        e.target.value = value;
+    });
+
+})();
+</script>
+
+</body>
+</html>

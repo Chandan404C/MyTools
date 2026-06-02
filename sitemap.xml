@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- ═══════════════════════════════════════════
+       CORE PAGES
+  ════════════════════════════════════════════ -->
   <url>
     <loc>https://docfixer.online/</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://docfixer.online/tools.html</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -18,12 +22,38 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- ═══════════════════════════════════════════
+       TOOL PAGES  (high-value — priority 0.9)
+  ════════════════════════════════════════════ -->
   <url>
-    <loc>https://docfixer.online/tools_wordcounter.html</loc>
-    <lastmod>2026-04-15</lastmod>
+    <loc>https://docfixer.online/tools_jsonformatter.html</loc>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://docfixer.online/tools_wordcounter.html</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/tools_qrcode.html</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://docfixer.online/tools_filesharing.html</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════
+       TOOL PAGES  (standard — priority 0.8)
+  ════════════════════════════════════════════ -->
   <url>
     <loc>https://docfixer.online/tools_margepdf.html</loc>
     <lastmod>2026-04-15</lastmod>
@@ -61,14 +91,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://docfixer.online/tools_qrcode.html</loc>
-    <lastmod>2026-04-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://docfixer.online/tools_watermark.html</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -78,11 +102,15 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- ═══════════════════════════════════════════
+       INFO / SUPPORT PAGES
+  ════════════════════════════════════════════ -->
   <url>
     <loc>https://docfixer.online/user_guid.html</loc>
     <lastmod>2026-04-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/about.html</loc>
@@ -96,60 +124,74 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- ═══════════════════════════════════════════
+       BLOG ARTICLES
+  ════════════════════════════════════════════ -->
+  <url>
+    <loc>https://docfixer.online/blog_detail.html?id=json-formatter</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=merge-pdf</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=split-pdf</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=compress-pdf</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=jpg-to-pdf</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=image-compress</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=pdf-to-jpg</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=qr-code</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=watermark</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docfixer.online/blog_detail.html?id=word-counter</loc>
     <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
+
+  <!-- ═══════════════════════════════════════════
+       LEGAL PAGES  (low-priority, rarely changes)
+  ════════════════════════════════════════════ -->
   <url>
     <loc>https://docfixer.online/privacy.html</loc>
     <lastmod>2026-04-15</lastmod>
@@ -168,4 +210,5 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-</urlset>
+
+</urlset>

@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Formatter & Fixer Online | Beautify Minified JSON | DocFixer</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Fix, format and beautify corrupted or minified JSON instantly with DocFixer's free online JSON Formatter. Paste your JSON and get clean, indented output — no upload needed.">
+  <meta name="keywords" content="json formatter online free, fix corrupted json, beautify minified json, json validator, pretty print json, json fixer tool">
+  <meta name="author" content="DocFixer">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://docfixer.online/tools_jsonformatter.html">
+
+  <!-- Open Graph for Social Media -->
+  <meta property="og:title" content="JSON Formatter & Fixer Online | Beautify Minified JSON | DocFixer">
+  <meta property="og:description" content="Fix, format and beautify corrupted or minified JSON instantly with DocFixer. Paste your JSON and get clean, indented output — no upload needed.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://docfixer.online/tools_jsonformatter.html">
+  <meta property="og:site_name" content="DocFixer">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JSON Formatter & Fixer Online | Beautify Minified JSON | DocFixer">
+  <meta name="twitter:description" content="Fix, format and beautify corrupted or minified JSON instantly with DocFixer. Paste your JSON and get clean, indented output — no upload needed.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DocFixer JSON Formatter",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "description": "Fix, format and beautify corrupted or minified JSON instantly. All processing is client-side.",
+    "url": "https://docfixer.online/tools_jsonformatter.html",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- FAQ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can it fix corrupted JSON?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The tool attempts to auto-repair common JSON issues such as single quotes, missing commas, trailing commas, unquoted keys, and JavaScript-style comments before formatting."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my JSON data stored anywhere?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All processing happens entirely in your browser. Your JSON is never sent to any server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What indent size does it use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can choose 2-space, 4-space, or tab indentation from the settings above the output."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Bootstrap 5 + Icons & cool font -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google font (Inter) for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ── JSON Formatter specific styles ── */
+    :root {
+      --jf-blue: #2b699d;
+      --jf-blue-dark: #1e4f7a;
+      --jf-blue-light: #a9c6e5;
+      --jf-bg: #f8fbfe;
+      --jf-border: #d8e8f5;
+      --jf-text: #132b44;
+    }
+
+    .jf-editor-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 768px) {
+      .jf-editor-wrap { grid-template-columns: 1fr; }
+    }
+
+    .jf-panel-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6b8fa8;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .jf-textarea {
+      width: 100%;
+      min-height: 340px;
+      resize: vertical;
+      border: 2px solid var(--jf-blue-light);
+      border-radius: 20px;
+      padding: 1rem 1.2rem;
+      font-size: 0.88rem;
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      background: #f8fbfe;
+      color: var(--jf-text);
+      line-height: 1.65;
+    }
+    .jf-textarea:focus {
+      border-color: var(--jf-blue);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(43,105,157,0.10);
+    }
+    .jf-textarea::placeholder { color: #9ab5cc; }
+
+    /* Output textarea — styled differently */
+    .jf-output {
+      background: #f0f7ff;
+      border-color: #c0daf0;
+      cursor: default;
+    }
+    .jf-output.success { border-color: #4bae7a; background: #f0fff6; }
+    .jf-output.error   { border-color: #d05b5b; background: #fff5f5; }
+
+    /* Syntax highlighting layer */
+    .jf-highlight-wrap {
+      position: relative;
+    }
+
+    /* Status badge */
+    .jf-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.3rem 0.9rem;
+      border-radius: 30px;
+      transition: 0.2s;
+    }
+    .jf-status.idle    { background: #e9f1fb; color: #4f7eb3; }
+    .jf-status.ok      { background: #e6f9ef; color: #2a8a57; }
+    .jf-status.fixed   { background: #fff3e0; color: #b8600a; }
+    .jf-status.err     { background: #fdecea; color: #c0392b; }
+
+    /* Action buttons */
+    .jf-btn {
+      background: var(--jf-blue);
+      border: none;
+      border-radius: 40px;
+      padding: 0.65rem 1.8rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+    }
+    .jf-btn:hover  { background: var(--jf-blue-dark); transform: translateY(-1px); }
+    .jf-btn:active { transform: translateY(0); }
+
+    .jf-btn-outline {
+      background: transparent;
+      border: 2px solid var(--jf-blue-light);
+      border-radius: 40px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 600;
+      color: var(--jf-blue);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+    }
+    .jf-btn-outline:hover {
+      background: #e2effa;
+      border-color: var(--jf-blue);
+    }
+
+    /* Indent size selector */
+    .indent-selector {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .indent-opt {
+      background: white;
+      border: 2px solid var(--jf-border);
+      border-radius: 30px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #4f7eb3;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .indent-opt:hover { border-color: var(--jf-blue); color: var(--jf-blue-dark); }
+    .indent-opt.active {
+      background: var(--jf-blue);
+      border-color: var(--jf-blue);
+      color: white;
+    }
+
+    /* Stat chips */
+    .jf-stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+    .jf-stat-chip {
+      background: white;
+      border: 1px solid var(--jf-border);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #1c3f5c;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .jf-stat-chip i { color: var(--jf-blue); font-size: 0.85rem; }
+
+    /* Error panel */
+    .jf-error-panel {
+      background: #fdecea;
+      border: 1px solid #f5bcbc;
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      font-size: 0.88rem;
+      color: #8b1c1c;
+      display: none;
+      font-family: 'Fira Code', monospace;
+    }
+    .jf-error-panel.visible { display: block; }
+
+    /* Fix suggestions panel */
+    .jf-fix-panel {
+      background: #fff8ec;
+      border: 1px solid #f5d89c;
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      font-size: 0.87rem;
+      color: #7a4b00;
+      display: none;
+    }
+    .jf-fix-panel.visible { display: block; }
+    .jf-fix-panel ul { margin: 0.4rem 0 0 1rem; padding: 0; }
+    .jf-fix-panel li { margin-bottom: 0.25rem; }
+
+    /* ── Auto-fix diff / changes panel ── */
+    .jf-diff-panel {
+      background: #f3f9ff;
+      border: 1.5px solid #b8d6f3;
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      font-size: 0.85rem;
+      color: #1c3f5c;
+      display: none;
+      overflow: hidden;
+    }
+    .jf-diff-panel.visible {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .jf-diff-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #2b699d;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .jf-diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 0.8rem;
+    }
+    .jf-diff-table td {
+      padding: 0.28rem 0.6rem;
+      vertical-align: top;
+      border-radius: 6px;
+    }
+    .jf-diff-table tr { margin-bottom: 2px; display: block; }
+    .diff-removed {
+      background: #fdecea;
+      color: #9b1c1c;
+      text-decoration: line-through;
+      border-radius: 6px;
+      padding: 0.1rem 0.4rem;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+    .diff-added {
+      background: #e6f9ef;
+      color: #1a6a3a;
+      border-radius: 6px;
+      padding: 0.1rem 0.4rem;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+    .diff-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b8fa8;
+      min-width: 120px;
+      padding-right: 0.6rem;
+      vertical-align: top;
+      padding-top: 0.15rem;
+      white-space: nowrap;
+    }
+    /* Auto-fix indicator on input border */
+    .jf-textarea.auto-fixed {
+      border-color: #e0a832;
+      box-shadow: 0 0 0 4px rgba(224,168,50,0.12);
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+    /* Scanning animation while fixing */
+    @keyframes scanPulse {
+      0%, 100% { border-color: var(--jf-blue-light); }
+      50%       { border-color: #2b699d; }
+    }
+    .jf-textarea.scanning {
+      animation: scanPulse 0.5s ease 2;
+    }
+
+    /* Copy toast */
+    .jf-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #132b44;
+      color: white;
+      padding: 0.75rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      z-index: 9999;
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .jf-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Info & FAQ cards same style as wordcounter */
+    .info-card {
+      background: #f8fbfe;
+      border-radius: 24px;
+      padding: 1.5rem;
+      height: 100%;
+      border: 1px solid #e6edf5;
+    }
+    .info-card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #132b44;
+      margin-bottom: 1rem;
+    }
+    .info-card i { color: #2b699d; margin-right: 6px; }
+
+    .related-tool-badge {
+      background: white;
+      border-radius: 60px;
+      padding: 0.65rem 1.2rem;
+      font-weight: 500;
+      color: #132b44;
+      border: 1px solid #cfdeef;
+      transition: 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .related-tool-badge:hover {
+      background: #2b699d;
+      color: white;
+      border-color: #2b699d;
+    }
+
+    .faq-item { border-bottom: 1px solid #dde5ed; padding: 1rem 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { font-weight: 600; color: #1c3f5c; }
+    .faq-answer {
+      color: #4a5b6b;
+      padding-left: 1.2rem;
+      border-left: 3px solid #a9c6e5;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Animated pulse on format button */
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(43,105,157,0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(43,105,157,0); }
+      100% { box-shadow: 0 0 0 0 rgba(43,105,157,0); }
+    }
+    .jf-btn.pulse { animation: pulse-ring 0.6s ease; }
+
+    /* Tree view toggle */
+    .jf-mode-toggle {
+      display: flex;
+      gap: 0;
+      border: 2px solid var(--jf-border);
+      border-radius: 30px;
+      overflow: hidden;
+    }
+    .jf-mode-btn {
+      background: white;
+      border: none;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #4f7eb3;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .jf-mode-btn.active {
+      background: var(--jf-blue);
+      color: white;
+    }
+
+    /* File drop zone */
+    .jf-dropzone {
+      border: 2px dashed var(--jf-blue-light);
+      border-radius: 16px;
+      background: #f5faff;
+      text-align: center;
+      padding: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.88rem;
+      color: #4a6b85;
+      margin-top: 0.6rem;
+    }
+    .jf-dropzone:hover, .jf-dropzone.dragover {
+      background: #e2effa;
+      border-color: var(--jf-blue);
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6E91RY4GS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F6E91RY4GS');
+  </script>
+</head>
+<body>
+
+<!-- STICKY NAVBAR -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+  <div class="container-fluid px-lg-5">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+      <span class="fs-3 fw-bold" style="color:#132b44;">Doc<span style="color:#4e7eb3;">Fixer</span></span>
+    </a>
+
+    <!-- Mobile toggler -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Desktop menu -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="blog.html"><i class="bi bi-journal-richtext me-1"></i>Blog</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+        <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+      <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>DocFixer
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom active" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="blog.html"><i class="bi bi-journal-richtext me-2"></i>Blog</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+      <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+      <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2"></i>Sign up</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container my-5" style="font-family: 'Inter', sans-serif;">
+  <div class="row justify-content-center">
+    <div class="col-lg-11 col-12">
+
+      <!-- Tool header -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-braces fs-1 me-3" style="color:#4f7eb3;"></i>
+        <div>
+          <h1 class="fw-bold mb-1" style="color:#132b44;">JSON Formatter & Fixer</h1>
+          <p class="text-secondary mb-0">Paste corrupted, minified or messy JSON — we'll fix and beautify it instantly.</p>
+        </div>
+      </div>
+
+      <!-- Main tool card -->
+      <div class="card border-0 shadow-sm p-4 mb-4" style="background:#f8fbfe; border-radius:28px;">
+
+        <!-- Toolbar row -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+          <!-- Indent selector -->
+          <div class="d-flex align-items-center gap-2">
+            <span class="small fw-semibold text-secondary">Indent:</span>
+            <div class="indent-selector" id="indentSelector">
+              <button class="indent-opt active" data-indent="2" aria-label="2-space indent">2 spaces</button>
+              <button class="indent-opt" data-indent="4" aria-label="4-space indent">4 spaces</button>
+              <button class="indent-opt" data-indent="tab" aria-label="Tab indent">Tab</button>
+            </div>
+          </div>
+
+          <!-- Status badge -->
+          <span class="jf-status idle" id="jfStatus">
+            <i class="bi bi-circle-fill" style="font-size:0.55rem;"></i> Ready
+          </span>
+        </div>
+
+        <!-- Dual-panel editor -->
+        <div class="jf-editor-wrap">
+
+          <!-- INPUT panel -->
+          <div>
+            <div class="jf-panel-label">
+              <i class="bi bi-pencil-square" style="color:#2b699d;"></i> Input JSON
+            </div>
+            <textarea
+              id="jfInput"
+              class="jf-textarea"
+              placeholder='Paste your JSON here… e.g. {"name":"Alice","age":30}'
+              spellcheck="false"
+              aria-label="Paste your JSON input here"
+            ></textarea>
+
+            <!-- Drop zone -->
+            <div class="jf-dropzone" id="jfDropzone" role="button" tabindex="0" aria-label="Upload a JSON file by clicking or dropping">
+              <i class="bi bi-cloud-upload me-2"></i>Drop a <strong>.json</strong> file here or <strong>click to upload</strong>
+              <input type="file" id="jfFileInput" accept=".json,application/json,text/plain" style="display:none;">
+            </div>
+          </div>
+
+          <!-- OUTPUT panel -->
+          <div>
+            <div class="jf-panel-label d-flex justify-content-between">
+              <span><i class="bi bi-check2-square" style="color:#2b699d;"></i> Formatted Output</span>
+              <button class="jf-btn-outline" id="jfCopyBtn" style="padding:0.2rem 0.9rem; font-size:0.78rem; border-radius:20px;" aria-label="Copy formatted JSON to clipboard">
+                <i class="bi bi-clipboard me-1"></i>Copy
+              </button>
+            </div>
+            <textarea
+              id="jfOutput"
+              class="jf-textarea jf-output"
+              readonly
+              placeholder="Formatted JSON will appear here…"
+              spellcheck="false"
+              aria-label="Formatted JSON output"
+              aria-live="polite"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Error panel -->
+        <div class="jf-error-panel mt-3" id="jfErrorPanel" role="alert" aria-live="assertive">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i><span id="jfErrorMsg"></span>
+        </div>
+
+        <!-- Fix notes panel -->
+        <div class="jf-fix-panel mt-3" id="jfFixPanel" role="status" aria-live="polite">
+          <strong><i class="bi bi-wrench me-2"></i>Auto-fixed issues:</strong>
+          <ul id="jfFixList"></ul>
+        </div>
+
+        <!-- ── What Changed diff panel ── -->
+        <div class="jf-diff-panel mt-3" id="jfDiffPanel" role="status" aria-live="polite">
+          <div class="jf-diff-title">
+            <i class="bi bi-file-diff"></i> What Was Changed
+            <span id="jfDiffCount" style="background:#2b699d;color:white;border-radius:20px;padding:0.1rem 0.6rem;font-size:0.72rem;margin-left:auto;">0 fixes</span>
+          </div>
+          <table class="jf-diff-table" id="jfDiffTable" aria-label="List of auto-repairs applied to the JSON"></table>
+        </div>
+
+        <!-- Stats row -->
+        <div class="jf-stat-row" id="jfStatRow" aria-label="JSON statistics"></div>
+
+        <!-- Action buttons -->
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <button class="jf-btn" id="jfFormatBtn" aria-label="Format and fix JSON">
+            <i class="bi bi-magic me-2"></i>Format & Fix
+          </button>
+          <button class="jf-btn-outline" id="jfMinifyBtn" aria-label="Minify JSON">
+            <i class="bi bi-arrows-collapse me-2"></i>Minify
+          </button>
+          <button class="jf-btn-outline" id="jfClearBtn" aria-label="Clear all fields">
+            <i class="bi bi-trash me-2"></i>Clear
+          </button>
+          <button class="jf-btn-outline" id="jfDownloadBtn" aria-label="Download formatted JSON file">
+            <i class="bi bi-download me-2"></i>Download .json
+          </button>
+          <button class="jf-btn-outline" id="jfSampleBtn" aria-label="Load a sample JSON">
+            <i class="bi bi-play-circle me-2"></i>Load Sample
+          </button>
+        </div>
+
+      </div><!-- /main card -->
+
+    </div>
+  </div>
+
+  <!-- ========== SEO INFO SECTIONS ========== -->
+  <div class="row g-4 mt-2">
+    <div class="col-md-6">
+      <div class="info-card h-100">
+        <h3><i class="bi bi-question-circle-fill"></i> How to Use</h3>
+        <ol class="ps-3 mb-0" style="color:#1e3b5c;">
+          <li class="mb-2"><strong>Paste or upload</strong> – Paste your JSON directly or drop a <code>.json</code> file.</li>
+          <li class="mb-2"><strong>Click "Format & Fix"</strong> – The tool repairs common issues and pretty-prints the result.</li>
+          <li class="mb-2"><strong>Review fixes</strong> – Any auto-repairs are listed so you know exactly what changed.</li>
+          <li class="mb-2"><strong>Copy or download</strong> – Grab the clean JSON in one click.</li>
+        </ol>
+        <p class="small text-secondary mt-3 mb-0"><i class="bi bi-lightning-charge-fill"></i> All processing is local – your JSON never leaves your device.</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="info-card h-100">
+        <h3><i class="bi bi-star-fill"></i> What It Fixes</h3>
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Minified / compressed JSON — beautified with chosen indent</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Single quotes instead of double quotes</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Trailing commas in objects and arrays</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>JavaScript-style <code>// comments</code> and <code>/* block comments */</code></li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Unquoted object keys</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Missing commas between properties</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Real-time stats: keys, depth, arrays & size</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>100% client-side — zero privacy concerns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Use -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3><i class="bi bi-emoji-smile-fill"></i> Why Use This Tool?</h3>
+        <div class="row">
+          <div class="col-md-4 mb-2 mb-md-0">
+            <p class="fw-medium mb-1"><i class="bi bi-shield-check"></i> <strong>Private & secure</strong></p>
+            <p class="small text-secondary">Your JSON never leaves your browser. No cloud storage, no logging, no tracking whatsoever.</p>
+          </div>
+          <div class="col-md-4 mb-2 mb-md-0">
+            <p class="fw-medium mb-1"><i class="bi bi-rocket-takeoff"></i> <strong>Smart auto-repair</strong></p>
+            <p class="small text-secondary">Fixes common syntax mistakes automatically — even messy API responses and copy-pasted snippets.</p>
+          </div>
+          <div class="col-md-4">
+            <p class="fw-medium mb-1"><i class="bi bi-universal-access"></i> <strong>Free forever</strong></p>
+            <p class="small text-secondary">No sign-up, no watermarks, no limits. Perfect for developers, testers, and data engineers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3 class="mb-3"><i class="bi bi-patch-question-fill"></i> Frequently Asked Questions</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="faq-item">
+              <div class="faq-question">🔧 Can it fix corrupted JSON?</div>
+              <div class="faq-answer">Yes. It auto-repairs the most common mistakes including single quotes, trailing commas, unquoted keys, and JS-style comments.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">🔒 Is my data safe?</div>
+              <div class="faq-answer">Absolutely. Everything runs in your browser. Your JSON is never sent to any server. You can even use the tool offline once the page is loaded.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📐 Which indent styles are supported?</div>
+              <div class="faq-answer">You can choose 2-space, 4-space, or tab indentation before formatting.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-item">
+              <div class="faq-question">📦 Can I upload a .json file?</div>
+              <div class="faq-answer">Yes — drag-and-drop or click the upload zone below the input to load any <code>.json</code> file directly.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📉 What does "Minify" do?</div>
+              <div class="faq-answer">Minify removes all whitespace and newlines, producing the most compact valid JSON — useful for APIs and storage.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📱 Does it work on mobile?</div>
+              <div class="faq-answer">Yes — the dual-panel layout stacks vertically on small screens, keeping the tool fully usable on phones and tablets.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Tools -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3 class="mb-3"><i class="bi bi-grid-3x3-gap-fill"></i> Related Tools</h3>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="tools_wordcounter.html" class="related-tool-badge"><i class="bi bi-textarea-t me-1"></i>Word Counter</a>
+          <a href="tools_qrcode.html" class="related-tool-badge"><i class="bi bi-qr-code me-1"></i>QR Code Generator</a>
+          <a href="tools_pdfcompress.html" class="related-tool-badge"><i class="bi bi-file-earmark-zip me-1"></i>PDF Compressor</a>
+          <a href="tools_margepdf.html" class="related-tool-badge"><i class="bi bi-files me-1"></i>Merge PDF</a>
+          <a href="tools_imagecompress.html" class="related-tool-badge"><i class="bi bi-image me-1"></i>Image Compressor</a>
+          <a href="tools_filesharing.html" class="related-tool-badge"><i class="bi bi-share me-1"></i>Secure File Sharing</a>
+        </div>
+        <p class="small text-secondary mt-3 mb-0"><i class="bi bi-arrow-up-short"></i> More free tools available on the <a href="tools.html" class="text-decoration-none">Tools page</a>.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer-section pt-5 pb-4">
+  <div class="container-lg">
+    <div class="row g-4">
+
+      <!-- Brand -->
+      <div class="col-md-4">
+        <h3 class="fw-bold text-white">DocFixer</h3>
+        <p class="mt-3 text-light small">
+          Free &amp; unlimited tools for PDF, images and office documents.
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Products</h6>
+        <ul class="list-unstyled">
+          <li><a href="tools_margepdf.html" class="footer-link">PDF Merge</a></li>
+          <li><a href="tools_splitpdf.html" class="footer-link">Split</a></li>
+          <li><a href="tools_imagtopdf.html" class="footer-link">Convert</a></li>
+          <li><a href="tools_pdfcompress.html" class="footer-link">PDF Compress</a></li>
+          <li><a href="tools_wordcounter.html" class="footer-link">Word Counter</a></li>
+          <li><a href="tools_jsonformatter.html" class="footer-link">JSON Formatter</a></li>
+          <li><a href="tools_qrcode.html" class="footer-link">QR Code Generate</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Company</h6>
+        <ul class="list-unstyled">
+          <li><a href="about.html" class="footer-link">About</a></li>
+          <li><a href="tools.html" class="footer-link">Tools</a></li>
+          <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+          <li><a href="terms.html" class="footer-link">Terms &amp; Conditions</a></li>
+          <li><a href="disclaimer.html" class="footer-link">Disclaimer</a></li>
+          <li><a href="contact.html" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div class="col-md-4 text-md-end text-start">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Follow Us</h6>
+        <a href="https://x.com/codefy001" target="_blank" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://www.instagram.com/codefy_03" target="_blank" class="social-icon"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61579636438080" target="_blank" class="social-icon"><i class="bi bi-facebook"></i></a>
+      </div>
+
+    </div>
+
+    <hr class="border-light opacity-25 my-4">
+
+    <!-- Bottom -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small">
+      <p class="mb-2 mb-md-0">© 2026 DocFixer — like your favourite PDF suite, but cooler.</p>
+      <p class="mb-0">
+        Designed &amp; Developed by
+        <a href="https://codefy.in" target="_blank" class="fw-bold text-white text-decoration-none">Codefy</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<script>
+(function () {
+  'use strict';
+
+  /* ── DOM refs ──────────────────────────────── */
+  const inputEl    = document.getElementById('jfInput');
+  const outputEl   = document.getElementById('jfOutput');
+  const statusEl   = document.getElementById('jfStatus');
+  const errorPanel = document.getElementById('jfErrorPanel');
+  const errorMsg   = document.getElementById('jfErrorMsg');
+  const fixPanel   = document.getElementById('jfFixPanel');
+  const fixList    = document.getElementById('jfFixList');
+  const statRow    = document.getElementById('jfStatRow');
+  const diffPanel  = document.getElementById('jfDiffPanel');
+  const diffTable  = document.getElementById('jfDiffTable');
+  const diffCount  = document.getElementById('jfDiffCount');
+
+  const formatBtn   = document.getElementById('jfFormatBtn');
+  const minifyBtn   = document.getElementById('jfMinifyBtn');
+  const clearBtn    = document.getElementById('jfClearBtn');
+  const downloadBtn = document.getElementById('jfDownloadBtn');
+  const copyBtn     = document.getElementById('jfCopyBtn');
+  const sampleBtn   = document.getElementById('jfSampleBtn');
+  const dropzone    = document.getElementById('jfDropzone');
+  const fileInput   = document.getElementById('jfFileInput');
+  const indentSel   = document.getElementById('indentSelector');
+  const toast       = document.getElementById('jfToast');
+
+  let currentIndent = 2;
+  let autoFixTimer  = null;
+
+  /* ── Sample JSON ────────────────────────────── */
+  const SAMPLE_JSON = `{
+  "store": {
+    "name": "DocFixer Sample Store",
+    "established": 2024,
+    "open": true,
+    "location": {
+      "city": "Bengaluru",
+      "country": "India",
+      "coordinates": [12.9716, 77.5946]
+    },
+    "products": [
+      { "id": 1, "name": "PDF Toolkit", "price": 0, "tags": ["pdf", "free"] },
+      { "id": 2, "name": "Image Suite", "price": 0, "tags": ["images", "free"] },
+      { "id": 3, "name": "JSON Formatter", "price": 0, "tags": ["developer", "free"] }
+    ],
+    "contact": {
+      "email": "hello@docfixer.online",
+      "social": ["twitter", "instagram", "facebook"]
+    }
+  }
+}`;
+
+  /* ── Indent helper ──────────────────────────── */
+  function getIndent() {
+    return currentIndent === 'tab' ? '\t' : currentIndent;
+  }
+
+  /* ── Auto-repair engine (with detailed diffs) ── */
+  function tryFix(raw) {
+    let s = raw.trim();
+    const fixes = [];   // { label, from, to }
+
+    // 1. Strip BOM
+    if (s.charCodeAt(0) === 0xFEFF) {
+      s = s.slice(1);
+      fixes.push({ label: 'Removed BOM', from: '\\uFEFF (byte-order mark)', to: '(removed)' });
+    }
+
+    // 2. Single-line comments // ...
+    const before2 = s;
+    const comments2 = [];
+    s = s.replace(/\/\/[^\n\r]*/g, m => { comments2.push(m.trim().slice(0, 40)); return ''; });
+    if (s !== before2) fixes.push({
+      label: 'Removed // comments',
+      from: comments2.slice(0, 3).map(c => c + (c.length === 40 ? '...' : '')).join(' | '),
+      to: '(removed)'
+    });
+
+    // 3. Block comments /* ... */
+    const before3 = s;
+    const comments3 = [];
+    s = s.replace(/\/\*[\s\S]*?\*\//g, m => { comments3.push(m.trim().slice(0, 40)); return ''; });
+    if (s !== before3) fixes.push({
+      label: 'Removed /* */ comments',
+      from: comments3.slice(0, 2).map(c => c + (c.length === 40 ? '...' : '')).join(' | '),
+      to: '(removed)'
+    });
+
+    // 4. Single quotes to double quotes
+    const before4 = s;
+    let sqCount = 0;
+    s = s.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, (_, inner) => {
+      sqCount++;
+      return '"' + inner.replace(/"/g, '\\"') + '"';
+    });
+    if (s !== before4) fixes.push({
+      label: 'Single to double quotes (' + sqCount + 'x)',
+      from: "'value'  or  'key'",
+      to: '"value"  or  "key"'
+    });
+
+    // 5. Trailing commas
+    const before5 = s;
+    let tcCount = 0;
+    s = s.replace(/,\s*([\}\]])/g, (_, c) => { tcCount++; return c; });
+    if (s !== before5) fixes.push({
+      label: 'Removed trailing commas (' + tcCount + 'x)',
+      from: '{ "a": 1, }',
+      to: '{ "a": 1 }'
+    });
+
+    // 6. Unquoted keys
+    const before6 = s;
+    let ukCount = 0;
+    s = s.replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, (_, pre, key) => {
+      ukCount++;
+      return pre + '"' + key + '":';
+    });
+    if (s !== before6) fixes.push({
+      label: 'Quoted unquoted keys (' + ukCount + 'x)',
+      from: '{ name: "Alice" }',
+      to: '{ "name": "Alice" }'
+    });
+
+    // 7. Missing commas
+    const before7 = s;
+    let mcCount = 0;
+    s = s.replace(/([\}\]])\s*([{\[])/g, (_, a, b) => { mcCount++; return a + ',' + b; });
+    s = s.replace(/(["\d}])\s*\n\s*(")/g, (_, a, b) => { mcCount++; return a + ',\n' + b; });
+    if (s !== before7) fixes.push({
+      label: 'Added missing commas (' + mcCount + 'x)',
+      from: '} {  or  "a" "b"',
+      to: '}, {  or  "a", "b"'
+    });
+
+    return { fixed: s, fixes };
+  }
+
+  /* ── JSON stats ─────────────────────────────── */
+  function getStats(obj) {
+    let keys = 0, depth = 0, arrays = 0;
+    function walk(node, d) {
+      if (d > depth) depth = d;
+      if (Array.isArray(node)) {
+        arrays++;
+        node.forEach(v => walk(v, d + 1));
+      } else if (node !== null && typeof node === 'object') {
+        const ks = Object.keys(node);
+        keys += ks.length;
+        ks.forEach(k => walk(node[k], d + 1));
+      }
+    }
+    walk(obj, 0);
+    return { keys, depth, arrays };
+  }
+
+  /* ── Render stats chips ─────────────────────── */
+  function renderStats(jsonStr, obj) {
+    const s = getStats(obj);
+    const sizeBytes = new TextEncoder().encode(jsonStr).length;
+    const sizeStr = sizeBytes < 1024 ? sizeBytes + ' B' : (sizeBytes / 1024).toFixed(1) + ' KB';
+    statRow.innerHTML =
+      '<span class="jf-stat-chip"><i class="bi bi-key"></i> ' + s.keys + ' keys</span>' +
+      '<span class="jf-stat-chip"><i class="bi bi-layers"></i> ' + s.depth + ' levels deep</span>' +
+      '<span class="jf-stat-chip"><i class="bi bi-list-ul"></i> ' + s.arrays + ' arrays</span>' +
+      '<span class="jf-stat-chip"><i class="bi bi-file-binary"></i> ' + sizeStr + '</span>';
+  }
+
+  /* ── Render diff table ──────────────────────── */
+  function escHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderDiff(fixes) {
+    diffTable.innerHTML = '';
+    diffPanel.classList.remove('visible');
+    if (!fixes || fixes.length === 0) return;
+    diffCount.textContent = fixes.length + ' fix' + (fixes.length > 1 ? 'es' : '');
+    fixes.forEach(function(f) {
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="diff-label"><i class="bi bi-wrench-adjustable me-1"></i>' + escHtml(f.label) + '</td>' +
+        '<td>' +
+          '<span class="diff-removed">' + escHtml(f.from) + '</span>' +
+          '<i class="bi bi-arrow-right mx-2" style="color:#6b8fa8;font-size:0.75rem;"></i>' +
+          '<span class="diff-added">' + escHtml(f.to) + '</span>' +
+        '</td>';
+      diffTable.appendChild(tr);
+    });
+    diffPanel.classList.add('visible');
+  }
+
+  /* ── Clear all panels ───────────────────────── */
+  function clearPanels() {
+    errorPanel.classList.remove('visible');
+    fixPanel.classList.remove('visible');
+    diffPanel.classList.remove('visible');
+    statRow.innerHTML = '';
+    outputEl.classList.remove('success', 'error');
+    inputEl.classList.remove('auto-fixed', 'scanning');
+  }
+
+  /* ── Set status badge ───────────────────────── */
+  function setStatus(state, text) {
+    statusEl.className = 'jf-status ' + state;
+    const icons = { idle:'bi-circle-fill', ok:'bi-check-circle-fill', fixed:'bi-wrench-adjustable-circle-fill', err:'bi-x-circle-fill', scanning:'bi-arrow-repeat' };
+    statusEl.innerHTML = '<i class="bi ' + (icons[state] || 'bi-circle-fill') + '" style="font-size:0.75rem;"></i> ' + text;
+  }
+
+  /* ── Show toast ─────────────────────────────── */
+  let toastTimer;
+  function showToast(msg, emoji) {
+    emoji = emoji || '✅';
+    toast.innerHTML = emoji + ' ' + msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 2500);
+  }
+
+  /* ── Core format function ───────────────────── */
+  function formatJSON(triggeredByUser) {
+    triggeredByUser = !!triggeredByUser;
+    clearPanels();
+    const raw = inputEl.value.trim();
+    if (!raw) { setStatus('idle', 'Ready'); return; }
+
+    inputEl.classList.add('scanning');
+    setStatus('scanning', 'Analysing...');
+
+    if (triggeredByUser) {
+      formatBtn.classList.remove('pulse');
+      void formatBtn.offsetWidth;
+      formatBtn.classList.add('pulse');
+    }
+
+    setTimeout(function() {
+      inputEl.classList.remove('scanning');
+      let parsed, fixesApplied = [], wasFixed = false;
+
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e1) {
+        var result = tryFix(raw);
+        try {
+          parsed = JSON.parse(result.fixed);
+          wasFixed = true;
+          fixesApplied = result.fixes;
+        } catch (e2) {
+          outputEl.value = '';
+          outputEl.classList.add('error');
+          errorMsg.textContent = e2.message;
+          errorPanel.classList.add('visible');
+          setStatus('err', 'Invalid JSON');
+          return;
+        }
+      }
+
+      var indent = getIndent();
+      var pretty = JSON.stringify(parsed, null, indent);
+      outputEl.value = pretty;
+      outputEl.classList.add('success');
+      renderStats(pretty, parsed);
+
+      if (wasFixed && fixesApplied.length > 0) {
+        inputEl.classList.add('auto-fixed');
+        setTimeout(function() { inputEl.classList.remove('auto-fixed'); }, 2200);
+
+        fixList.innerHTML = fixesApplied.map(function(f) { return '<li>' + escHtml(f.label) + '</li>'; }).join('');
+        fixPanel.classList.add('visible');
+        renderDiff(fixesApplied);
+        setStatus('fixed', 'Auto-fixed ' + fixesApplied.length + ' issue' + (fixesApplied.length > 1 ? 's' : '') + ' & formatted');
+
+        if (!triggeredByUser) {
+          showToast(fixesApplied.length + ' issue' + (fixesApplied.length > 1 ? 's' : '') + ' auto-fixed!', '🛠️');
+        }
+      } else {
+        setStatus('ok', 'Valid JSON — formatted');
+      }
+    }, triggeredByUser ? 0 : 140);
+  }
+
+  /* ── Minify ─────────────────────────────────── */
+  function minifyJSON() {
+    clearPanels();
+    var raw = inputEl.value.trim();
+    if (!raw) return;
+    try {
+      var parsed = JSON.parse(raw);
+      outputEl.value = JSON.stringify(parsed);
+      outputEl.classList.add('success');
+      renderStats(outputEl.value, parsed);
+      setStatus('ok', 'Minified');
+    } catch (e) {
+      var result = tryFix(raw);
+      try {
+        var parsed2 = JSON.parse(result.fixed);
+        outputEl.value = JSON.stringify(parsed2);
+        outputEl.classList.add('success');
+        renderDiff(result.fixes);
+        setStatus('fixed', 'Fixed & minified');
+      } catch (_) {
+        errorMsg.textContent = e.message;
+        errorPanel.classList.add('visible');
+        setStatus('err', 'Invalid JSON');
+      }
+    }
+  }
+
+  /* ── Indent selector ────────────────────────── */
+  indentSel.querySelectorAll('.indent-opt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      indentSel.querySelectorAll('.indent-opt').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      currentIndent = this.dataset.indent === 'tab' ? 'tab' : parseInt(this.dataset.indent);
+      if (outputEl.value) formatJSON(true);
+    });
+  });
+
+  /* ── File upload ────────────────────────────── */
+  function readFile(file) {
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) { inputEl.value = e.target.result; formatJSON(false); };
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  dropzone.addEventListener('click', function() { fileInput.click(); });
+  dropzone.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+  fileInput.addEventListener('change', function() { readFile(fileInput.files[0]); });
+  dropzone.addEventListener('dragover', function(e) { e.preventDefault(); dropzone.classList.add('dragover'); });
+  dropzone.addEventListener('dragleave', function() { dropzone.classList.remove('dragover'); });
+  dropzone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    readFile(e.dataTransfer.files[0]);
+  });
+
+  /* ── Auto-fix on paste ──────────────────────── */
+  inputEl.addEventListener('paste', function() {
+    clearTimeout(autoFixTimer);
+    autoFixTimer = setTimeout(function() {
+      if (inputEl.value.trim()) formatJSON(false);
+    }, 150);
+  });
+
+  /* ── Auto-fix on type (debounced 800ms) ─────── */
+  inputEl.addEventListener('input', function() {
+    clearTimeout(autoFixTimer);
+    var raw = inputEl.value.trim();
+    if (!raw) { clearPanels(); setStatus('idle', 'Ready'); return; }
+    setStatus('scanning', 'Waiting...');
+    autoFixTimer = setTimeout(function() {
+      if (inputEl.value.trim()) formatJSON(false);
+    }, 800);
+  });
+
+  /* ── Copy button ────────────────────────────── */
+  copyBtn.addEventListener('click', function() {
+    var text = outputEl.value;
+    if (!text) return;
+    navigator.clipboard.writeText(text)
+      .then(function() { showToast('Copied to clipboard!', '✅'); })
+      .catch(function() { outputEl.select(); document.execCommand('copy'); showToast('Copied!', '✅'); });
+  });
+
+  /* ── Download ───────────────────────────────── */
+  downloadBtn.addEventListener('click', function() {
+    var text = outputEl.value;
+    if (!text) { showToast('Nothing to download yet.', '⚠️'); return; }
+    var blob = new Blob([text], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'formatted.json'; a.click();
+    URL.revokeObjectURL(url);
+    showToast('Downloaded formatted.json', '✅');
+  });
+
+  /* ── Clear ──────────────────────────────────── */
+  clearBtn.addEventListener('click', () => {
+    inputEl.value = '';
+    outputEl.value = '';
+    clearPanels();
+    setStatus('idle', 'Ready');
+    inputEl.focus();
+  });
+
+  /* ── Sample ─────────────────────────────────── */
+  sampleBtn.addEventListener('click', () => {
+    inputEl.value = SAMPLE_JSON;
+    formatJSON(false);
+    showToast('Sample JSON loaded!', '🎉');
+  });
+
+  /* ── Format & Fix button ────────────────────── */
+  formatBtn.addEventListener('click', () => formatJSON(true));
+  minifyBtn.addEventListener('click', minifyJSON);
+
+  /* ── Ctrl+Enter shortcut ────────────────────── */
+  inputEl.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      formatJSON(true);
+    }
+  });
+
+})();
+</script>
+
+<!-- Toast notification -->
+<div class="jf-toast" id="jfToast" role="status" aria-live="polite"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

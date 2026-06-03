@@ -870,25 +870,8 @@
 <script>
 (function() {
 
-    // --- State Mock Database ---
-    // Since backend is API, we mock an in-memory db that ties 6-digit tokens to active uploads.
-    // This allows active retrieve testing by typing the exact generated token.
-    const mockStorage = {
-        "123456": {
-            type: "file",
-            name: "DocFixer_UserGuide.pdf",
-            size: "1.8 MB",
-            sizeBytes: 1887436,
-            contentType: "application/pdf",
-            expiresAt: Date.now() + 15 * 60 * 1000,
-            content: "Dummy PDF file content. Imagine a rich document here."
-        },
-        "654321": {
-            type: "text",
-            content: "Welcome to DocFixer's File Sharing Tool! This text snippet was retrieved using token 654321. You can copy it instantly.",
-            expiresAt: Date.now() + 15 * 60 * 1000
-        }
-    };
+    // --- API Configuration ---
+    const API_BASE = "http://docfixerapi2.runasp.net/api";
 
     // --- DOM Elements ---
     const panelSelect       = document.getElementById('panelSelect');
@@ -1099,41 +1082,41 @@
         btnModeFile.click();
     }
 
-    // --- Simulated Uploading / Generating Token ---
-    btnUploadSubmit.addEventListener('click', () => {
+    // --- Real API Upload ---
+    btnUploadSubmit.addEventListener('click', async () => {
         const isFileMode = btnModeFile.classList.contains('active');
-        
+
         if (isFileMode && !selectedFileObject) {
             showToast("Please drag-and-drop or select a file first.", "bi-exclamation-circle");
             return;
         }
-        
         if (!isFileMode && !shareTextarea.value.trim()) {
             showToast("Please type some text to share.", "bi-exclamation-circle");
             shareTextarea.focus();
             return;
         }
 
-        // Initialize uploading view
+        // Show uploading panel and reset UI
         showPanel(panelUploading);
         uploadProgressBar.style.width = "0%";
         uploadProgressPct.textContent = "0%";
         uploadLogs.innerHTML = "";
-        
+
         const logs = [
-            "Encrypting file stream locally using AES-256...",
-            "Preparing segmented buffer payloads...",
-            "Establishing tunnel connection to secure DocFixer staging API...",
-            "Piping payload bytes to container (Chunk 1/2)...",
-            "Piping payload bytes to container (Chunk 2/2)...",
-            "Awaiting authorization handshake from central token indexer...",
-            "Mapping generated token payload index...",
-            "Finalizing self-destruct timers and encryption logs..."
+            "Encrypting payload locally...",
+            "Preparing multipart form data...",
+            "Establishing secure tunnel to DocFixer API...",
+            "Sending payload to server (Chunk 1/2)...",
+            "Sending payload to server (Chunk 2/2)...",
+            "Awaiting token generation from server...",
+            "Mapping token to payload index...",
+            "Finalizing self-destruct timer settings..."
         ];
 
         let logIdx = 0;
         let progress = 0;
-        
+        let uploadDone = false;
+
         function addLog(text) {
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
             const div = document.createElement('div');
@@ -1143,66 +1126,88 @@
             uploadLogs.parentElement.scrollTop = uploadLogs.parentElement.scrollHeight;
         }
 
-        addLog("Initializing secure handshake worker...");
+        addLog("Initializing secure upload handshake...");
 
-        // Progress ticking timer
+        // Animate progress bar while upload is in-flight
         const progressInterval = setInterval(() => {
-            progress += Math.floor(Math.random() * 8) + 4;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(progressInterval);
-                completeUpload();
+            if (uploadDone) return;
+            // Ease up to ~90% and wait for real completion
+            if (progress < 88) {
+                progress += Math.floor(Math.random() * 6) + 3;
+                if (progress > 88) progress = 88;
             }
-            
             uploadProgressBar.style.width = `${progress}%`;
             uploadProgressPct.textContent = `${progress}%`;
 
-            // Randomly trigger logs based on progress thresholds
-            const triggerIdx = Math.floor(progress / 13);
+            const triggerIdx = Math.floor(progress / 12);
             if (triggerIdx > logIdx && logIdx < logs.length) {
                 addLog(logs[logIdx]);
                 logIdx++;
             }
-        }, 150);
+        }, 200);
 
-        function completeUpload() {
-            addLog("✅ Secure upload handshake finalized successfully!");
-            
+        try {
+            let response, data;
+
+            if (isFileMode) {
+                // --- File upload via multipart/form-data ---
+                const formData = new FormData();
+                formData.append("file", selectedFileObject);
+
+                response = await fetch(`${API_BASE}/Transfer/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+            } else {
+                // --- Text upload via JSON ---
+                response = await fetch(`${API_BASE}/Transfer/upload`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text: shareTextarea.value })
+                });
+            }
+
+            data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data?.message || `Server error: ${response.status}`);
+            }
+
+            // Complete the progress bar
+            clearInterval(progressInterval);
+            uploadDone = true;
+            progress = 100;
+            uploadProgressBar.style.width = "100%";
+            uploadProgressPct.textContent = "100%";
+
+            addLog("✅ Upload complete! Token received from server.");
+
             setTimeout(() => {
-                // Generate secure random 6-digit number token
-                const codeNum = Math.floor(100000 + Math.random() * 900000).toString();
-                activeToken = codeNum;
-                txtGeneratedToken.textContent = `${codeNum.substring(0,3)} ${codeNum.substring(3,6)}`;
-                
-                // Store in our in-memory mock db so recipient can actually fetch it!
-                if (isFileMode) {
-                    mockStorage[codeNum] = {
-                        type: "file",
-                        name: selectedFileObject.name,
-                        size: formatBytes(selectedFileObject.size),
-                        sizeBytes: selectedFileObject.size,
-                        contentType: selectedFileObject.type || "application/octet-stream",
-                        content: selectedFileObject,
-                        expiresAt: Date.now() + 15 * 60 * 1000
-                    };
-                } else {
-                    mockStorage[codeNum] = {
-                        type: "text",
-                        content: shareTextarea.value,
-                        expiresAt: Date.now() + 15 * 60 * 1000
-                    };
-                }
-                
+                // Token returned from API (field: token or code)
+                const token = (data.token || data.code || data.Token || data.Code || "").toString().replace(/\s/g, "");
+                activeToken = token;
+
+                const display = token.length === 6
+                    ? `${token.substring(0,3)} ${token.substring(3,6)}`
+                    : token;
+                txtGeneratedToken.textContent = display;
+
                 showPanel(panelComplete);
+
+                // Start 15-minute expiry countdown
                 startExpirationTimer(15 * 60, tokenTimer, () => {
-                    // callback on timer complete
                     showToast("Token has expired!", "bi-exclamation-triangle-fill");
-                    delete mockStorage[codeNum];
                     showPanel(panelSelect);
                 });
-                
+
                 showToast("Secure token generated successfully!", "bi-check-circle");
             }, 600);
+
+        } catch (err) {
+            clearInterval(progressInterval);
+            addLog(`❌ Upload failed: ${err.message}`);
+            showToast("Upload failed: " + err.message, "bi-exclamation-triangle-fill");
+            setTimeout(() => showPanel(panelSend), 2000);
         }
     });
 
@@ -1241,105 +1246,155 @@
         });
     });
 
-    // --- Delete Share Immediately ---
-    btnDeleteUpload.addEventListener('click', () => {
-        if (activeToken && mockStorage[activeToken]) {
-            delete mockStorage[activeToken];
-            activeToken = "";
-            if (uploadTimerInterval) clearInterval(uploadTimerInterval);
-            showToast("Share deleted and token invalidated instantly.", "bi-trash3-fill");
-            showPanel(panelSelect);
+    // --- Delete Share Immediately (Real API) ---
+    btnDeleteUpload.addEventListener('click', async () => {
+        if (!activeToken) return;
+        try {
+            btnDeleteUpload.disabled = true;
+            btnDeleteUpload.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Deleting...';
+
+            const res = await fetch(`${API_BASE}/Transfer/delete/${activeToken}`, { method: "DELETE" });
+
+            if (res.ok) {
+                activeToken = "";
+                if (uploadTimerInterval) clearInterval(uploadTimerInterval);
+                showToast("Share deleted and token invalidated instantly.", "bi-trash3-fill");
+                showPanel(panelSelect);
+            } else {
+                const err = await res.json().catch(() => ({}));
+                showToast("Delete failed: " + (err?.message || res.status), "bi-exclamation-triangle-fill");
+            }
+        } catch (e) {
+            showToast("Network error while deleting: " + e.message, "bi-exclamation-triangle-fill");
+        } finally {
+            btnDeleteUpload.disabled = false;
+            btnDeleteUpload.innerHTML = '<i class="bi bi-trash3-fill me-2"></i>Delete Share Immediately';
         }
     });
 
-    // --- Simulated Retrieve Flow ---
-    btnRetrieveSubmit.addEventListener('click', () => {
+    // --- Real Retrieve Flow ---
+    btnRetrieveSubmit.addEventListener('click', async () => {
         const inputVal = tokenCodeInput.value.replace(/\s+/g, '').trim();
-        
+
         if (inputVal.length !== 6 || isNaN(inputVal)) {
             showToast("Please enter a valid 6-digit numeric token.", "bi-exclamation-circle");
             tokenCodeInput.focus();
             return;
         }
 
-        // Show retrieving simulator panel
+        // Show retrieving animation panel
         showPanel(panelRetrieving);
         retrieveProgress.style.width = "0%";
-        
+
+        // Animate progress bar during fetch
         let p = 0;
         const rInterval = setInterval(() => {
-            p += 20;
+            p = Math.min(p + 15, 85);
             retrieveProgress.style.width = `${p}%`;
-            if (p >= 100) {
-                clearInterval(rInterval);
-                finishRetrieval(inputVal);
-            }
-        }, 150);
+        }, 120);
 
-        function finishRetrieval(token) {
-            const data = mockStorage[token];
-            
-            if (!data || Date.now() > data.expiresAt) {
-                // Token not found or expired
+        try {
+            // Step 1: GET metadata from /receive/{token}
+            const metaRes = await fetch(`${API_BASE}/Transfer/receive/${inputVal}`);
+
+            if (!metaRes.ok) {
+                clearInterval(rInterval);
+                retrieveProgress.style.width = "100%";
+                const err = await metaRes.json().catch(() => ({}));
                 setTimeout(() => {
-                    showToast("Token invalid, expired, or deleted by sender.", "bi-x-circle-fill");
+                    showToast(err?.message || "Token invalid, expired, or deleted by sender.", "bi-x-circle-fill");
                     showPanel(panelReceive);
                 }, 400);
                 return;
             }
 
-            // Populate retrieved data
-            const secondsLeft = Math.round((data.expiresAt - Date.now()) / 1000);
+            const data = await metaRes.json();
+
+            // Complete progress bar
+            clearInterval(rInterval);
+            retrieveProgress.style.width = "100%";
+
+            // Parse expiry
+            let secondsLeft = 15 * 60;
+            if (data.expiresAt || data.ExpiresAt) {
+                const expiry = new Date(data.expiresAt || data.ExpiresAt).getTime();
+                secondsLeft = Math.max(0, Math.round((expiry - Date.now()) / 1000));
+            }
+
             startExpirationTimer(secondsLeft, retrievedExpiry, () => {
                 showToast("This token has just expired.", "bi-exclamation-triangle-fill");
                 showPanel(panelSelect);
             });
 
-            if (data.type === "file") {
-                retrievedFileSec.classList.remove('d-none');
-                retrievedTextSec.classList.add('d-none');
-                
-                retrievedFileName.textContent = data.name;
-                retrievedFileSize.textContent = data.size;
-                
-                const iconClass = getBootstrapIconForType(data.contentType, data.name);
-                retrievedFileIcon.className = `bi ${iconClass}`;
-                
-                // Configure Download Button to pull mock or real buffer
-                btnDownloadRetr.onclick = () => {
-                    let blob;
-                    if (data.content instanceof File) {
-                        blob = data.content;
-                    } else {
-                        // Dummy blob
-                        blob = new Blob([data.content], { type: data.contentType });
-                    }
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = data.name;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    showToast("Downloading shared file...", "bi-download");
-                };
-            } else {
+            // Determine content type: file or text
+            const contentType = (data.type || data.Type || data.contentType || data.ContentType || "").toLowerCase();
+            const isTextPayload = contentType === "text" || (data.text !== undefined || data.Text !== undefined);
+
+            if (isTextPayload) {
+                // --- Text content ---
                 retrievedTextSec.classList.remove('d-none');
                 retrievedFileSec.classList.add('d-none');
-                
-                retrievedTextarea.value = data.content;
-                
-                // Copy Text Control
+
+                const textContent = data.text || data.Text || data.content || data.Content || "";
+                retrievedTextarea.value = textContent;
+
                 btnCopyRetrText.onclick = () => {
-                    navigator.clipboard.writeText(data.content).then(() => {
+                    navigator.clipboard.writeText(textContent).then(() => {
                         showToast("Text content copied to clipboard!", "bi-clipboard-check");
                     });
+                };
+            } else {
+                // --- File content ---
+                retrievedFileSec.classList.remove('d-none');
+                retrievedTextSec.classList.add('d-none');
+
+                const fileName = data.fileName || data.FileName || data.name || data.Name || "downloaded_file";
+                const fileSize = data.fileSize || data.FileSize || data.size || data.Size || "";
+
+                retrievedFileName.textContent = fileName;
+                retrievedFileSize.textContent = typeof fileSize === "number"
+                    ? formatBytes(fileSize)
+                    : fileSize;
+
+                const iconClass = getBootstrapIconForType(contentType, fileName);
+                retrievedFileIcon.className = `bi ${iconClass}`;
+
+                // Wire Download button to /download/{token}
+                btnDownloadRetr.onclick = async () => {
+                    try {
+                        btnDownloadRetr.disabled = true;
+                        btnDownloadRetr.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Downloading...';
+
+                        const dlRes = await fetch(`${API_BASE}/Transfer/download/${inputVal}`);
+                        if (!dlRes.ok) throw new Error(`Server error: ${dlRes.status}`);
+
+                        const blob = await dlRes.blob();
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+
+                        showToast("Downloading shared file...", "bi-download");
+                    } catch (dlErr) {
+                        showToast("Download failed: " + dlErr.message, "bi-exclamation-triangle-fill");
+                    } finally {
+                        btnDownloadRetr.disabled = false;
+                        btnDownloadRetr.innerHTML = '<i class="bi bi-download me-2"></i>Download File';
+                    }
                 };
             }
 
             showPanel(panelRetrieved);
-            showToast("Payload retrieved and decrypted successfully!", "bi-unlock-fill");
+            showToast("Payload retrieved successfully!", "bi-unlock-fill");
+
+        } catch (e) {
+            clearInterval(rInterval);
+            showToast("Network error: " + e.message, "bi-exclamation-triangle-fill");
+            setTimeout(() => showPanel(panelReceive), 1200);
         }
     });
 
@@ -1351,6 +1406,11 @@
         }
         e.target.value = value;
     });
+
+    // --- Periodic Cleanup (every 10 min) ---
+    setInterval(() => {
+        fetch(`${API_BASE}/Transfer/cleanup`, { method: "POST" }).catch(() => {});
+    }, 10 * 60 * 1000);
 
 })();
 </script>

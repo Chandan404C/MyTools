@@ -538,13 +538,20 @@
             </div>
 
             <!-- Token display box -->
-            <div class="my-4 mx-auto" style="max-width: 400px;">
-                <label class="fw-bold text-secondary small mb-2 d-block text-uppercase tracking-wider">Unique 6-Digit Share Code</label>
-                <div class="token-display-box">
-                    <span id="txtGeneratedToken">------</span>
+            <div class="my-4 mx-auto" style="max-width: 500px;">
+                <label class="fw-bold text-secondary small mb-2 d-block text-uppercase tracking-wider">Your Unique Share Token</label>
+                <div class="token-display-box" style="font-size:1.6rem; word-break:break-all; flex-wrap:wrap;">
+                    <span id="txtGeneratedToken" style="max-width:380px;">------</span>
                     <button class="btn btn-outline-secondary btn-sm border-0 ms-2" id="btnCopyToken" title="Copy Token" style="padding: 0.35rem 0.6rem;">
                         <i class="bi bi-clipboard fs-5"></i>
                     </button>
+                </div>
+                <!-- Debug info: shows raw API response to help identify token field name -->
+                <div id="debugApiInfo" class="mt-3 d-none">
+                    <details>
+                        <summary class="text-secondary small" style="cursor:pointer;">🔍 View raw API response (for debugging)</summary>
+                        <pre id="debugApiRaw" class="bg-light border rounded-3 p-3 mt-2 text-start small" style="font-size:0.75rem; overflow-x:auto; max-height:150px;"></pre>
+                    </details>
                 </div>
             </div>
 
@@ -577,10 +584,11 @@
                         type="text" 
                         id="tokenCodeInput" 
                         class="token-input" 
-                        placeholder="000 000" 
-                        maxlength="6"
+                        placeholder="Enter token" 
+                        maxlength="40"
                         autocomplete="off"
                         spellcheck="false"
+                        style="letter-spacing: 0.15rem;"
                     >
                 </div>
                 <p class="text-secondary small mb-4 mx-auto" style="max-width: 420px;">
@@ -871,7 +879,41 @@
 (function() {
 
     // --- API Configuration ---
-    const API_BASE = "http://docfixerapi2.runasp.net/api";
+    // API has AllowAnyOrigin CORS + UseHttpsRedirection removed → call directly.
+    // NOTE: Browser mixed-content policy still blocks HTTP calls from HTTPS pages.
+    // Solution: call via HTTP (browser will allow since CORS headers are present).
+    // Primary API: try HTTPS first (avoids mixed-content block on https pages),
+    // then fall back to HTTP if HTTPS isn't configured on the server.
+    const API_ORIGIN_HTTPS = "https://docfixerapi2.runasp.net/api";
+    const API_ORIGIN_HTTP  = "http://docfixerapi2.runasp.net/api";
+    // We'll detect which works at first use.
+    let API_ORIGIN = API_ORIGIN_HTTPS;
+
+    // Helper: build API URL for a given path
+    function apiUrl(path, forceHttp = false) {
+        return (forceHttp ? API_ORIGIN_HTTP : API_ORIGIN) + path;
+    }
+
+    // Helper: try a fetch with HTTPS first, then HTTP fallback
+    // Always returns the response (or throws if both fail)
+    async function apiFetch(path, options = {}) {
+        // Try HTTPS first (avoids mixed-content block on https:// pages)
+        try {
+            const res = await fetch(API_ORIGIN_HTTPS + path, options);
+            API_ORIGIN = API_ORIGIN_HTTPS;
+            return res;   // return for ALL status codes — caller checks res.ok / res.status
+        } catch (e) {
+            console.warn('[DocFixer] HTTPS fetch failed, trying HTTP:', e.message);
+        }
+        // Fallback to HTTP
+        try {
+            const res = await fetch(API_ORIGIN_HTTP + path, options);
+            API_ORIGIN = API_ORIGIN_HTTP;
+            return res;
+        } catch (e) {
+            throw new Error('Server unreachable. Check your connection and try again.');
+        }
+    }
 
     // --- DOM Elements ---
     const panelSelect       = document.getElementById('panelSelect');
@@ -949,10 +991,38 @@
     function showToast(message, icon = 'bi-check2-circle') {
         const toast = document.createElement('div');
         toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 px-5 py-3 text-white rounded-5 shadow-lg';
-        toast.style.cssText = 'z-index:9999;background:#1b4a6e;font-weight:500;';
+        toast.style.cssText = 'z-index:9999;background:#1b4a6e;font-weight:500;max-width:90vw;text-align:center;';
         toast.innerHTML = `<i class="bi ${icon} me-2"></i>${message}`;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 2500);
+    }
+
+    // Shows a persistent red error box for server errors (auto-removes after 10s)
+    function showErrorDetail(message) {
+        // Remove any existing error box
+        const existing = document.getElementById('errorDetailBox');
+        if (existing) existing.remove();
+
+        const box = document.createElement('div');
+        box.id = 'errorDetailBox';
+        box.style.cssText = [
+            'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
+            'background:#fff0f0', 'border:1.5px solid #dc3545', 'border-radius:16px',
+            'padding:16px 22px', 'max-width:600px', 'width:92vw', 'z-index:10000',
+            'box-shadow:0 8px 32px rgba(220,53,69,0.18)', 'font-size:0.85rem'
+        ].join(';');
+        box.innerHTML = `
+            <div class="d-flex align-items-start gap-2">
+                <i class="bi bi-exclamation-triangle-fill text-danger mt-1" style="font-size:1.1rem;flex-shrink:0;"></i>
+                <div>
+                    <div class="fw-bold text-danger mb-1">Server Error Detail</div>
+                    <div class="text-dark" style="word-break:break-word;font-family:monospace;">${message}</div>
+                    <div class="text-secondary mt-2" style="font-size:0.78rem;">Copy this message and share with your developer. Auto-closes in 10s.</div>
+                </div>
+                <button onclick="this.closest('#errorDetailBox').remove()" class="btn btn-sm border-0 ms-auto" style="color:#dc3545;padding:0 4px;"><i class="bi bi-x-lg"></i></button>
+            </div>`;
+        document.body.appendChild(box);
+        setTimeout(() => box && box.remove(), 10000);
     }
 
     function formatBytes(bytes, decimals = 1) {
@@ -1082,6 +1152,49 @@
         btnModeFile.click();
     }
 
+    // --- Smart Field Reader (handles any API casing: camelCase, PascalCase, lowercase) ---
+    function getField(obj, ...keys) {
+        if (!obj) return undefined;
+        for (const key of keys) {
+            // Try exact key, then lowercase first letter, then uppercase first letter
+            const variants = [key, key.charAt(0).toLowerCase() + key.slice(1), key.charAt(0).toUpperCase() + key.slice(1)];
+            for (const v of variants) {
+                if (obj[v] !== undefined && obj[v] !== null && obj[v] !== "") return obj[v];
+            }
+        }
+        return undefined;
+    }
+
+    // --- MIME type guesser from filename extension ---
+    function guessMime(filename) {
+        const ext = (filename || "").split('.').pop().toLowerCase();
+        const map = {
+            // Images
+            jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+            gif: 'image/gif',  webp: 'image/webp', svg: 'image/svg+xml',
+            bmp: 'image/bmp',  ico:  'image/x-icon',
+            // Documents
+            pdf:  'application/pdf',
+            doc:  'application/msword',
+            docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            xls:  'application/vnd.ms-excel',
+            xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ppt:  'application/vnd.ms-powerpoint',
+            pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            txt:  'text/plain', csv: 'text/csv', html: 'text/html',
+            // Archives
+            zip: 'application/zip', rar: 'application/x-rar-compressed',
+            '7z': 'application/x-7z-compressed', tar: 'application/x-tar',
+            gz:  'application/gzip',
+            // Audio / Video
+            mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg',
+            mp4: 'video/mp4',  avi: 'video/x-msvideo', mov: 'video/quicktime',
+            // Code
+            json: 'application/json', xml: 'application/xml', js: 'text/javascript',
+        };
+        return map[ext] || 'application/octet-stream';
+    }
+
     // --- Real API Upload ---
     btnUploadSubmit.addEventListener('click', async () => {
         const isFileMode = btnModeFile.classList.contains('active');
@@ -1096,7 +1209,6 @@
             return;
         }
 
-        // Show uploading panel and reset UI
         showPanel(panelUploading);
         uploadProgressBar.style.width = "0%";
         uploadProgressPct.textContent = "0%";
@@ -1113,9 +1225,7 @@
             "Finalizing self-destruct timer settings..."
         ];
 
-        let logIdx = 0;
-        let progress = 0;
-        let uploadDone = false;
+        let logIdx = 0, progress = 0, uploadDone = false;
 
         function addLog(text) {
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
@@ -1128,86 +1238,107 @@
 
         addLog("Initializing secure upload handshake...");
 
-        // Animate progress bar while upload is in-flight
         const progressInterval = setInterval(() => {
             if (uploadDone) return;
-            // Ease up to ~90% and wait for real completion
-            if (progress < 88) {
-                progress += Math.floor(Math.random() * 6) + 3;
-                if (progress > 88) progress = 88;
-            }
+            if (progress < 88) { progress += Math.floor(Math.random() * 6) + 3; if (progress > 88) progress = 88; }
             uploadProgressBar.style.width = `${progress}%`;
             uploadProgressPct.textContent = `${progress}%`;
-
             const triggerIdx = Math.floor(progress / 12);
-            if (triggerIdx > logIdx && logIdx < logs.length) {
-                addLog(logs[logIdx]);
-                logIdx++;
-            }
+            if (triggerIdx > logIdx && logIdx < logs.length) { addLog(logs[logIdx]); logIdx++; }
         }, 200);
 
         try {
             let response, data;
 
             if (isFileMode) {
-                // --- File upload via multipart/form-data ---
+                // File upload — multipart/form-data with 'file' field
                 const formData = new FormData();
                 formData.append("file", selectedFileObject);
-
-                response = await fetch(`${API_BASE}/Transfer/upload`, {
-                    method: "POST",
-                    body: formData
-                });
+                response = await apiFetch("/Transfer/upload", { method: "POST", body: formData });
             } else {
-                // --- Text upload via JSON ---
-                response = await fetch(`${API_BASE}/Transfer/upload`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: shareTextarea.value })
-                });
+                // Text upload — multipart/form-data with 'text' field (as per swagger spec)
+                const formData = new FormData();
+                formData.append("text", shareTextarea.value);
+                response = await apiFetch("/Transfer/upload", { method: "POST", body: formData });
             }
 
-            data = await response.json();
+            // Try to parse JSON; if it fails read as text
+            const rawText = await response.text();
+            console.debug("[DocFixer] Upload raw response:", rawText);
+            try { data = JSON.parse(rawText); } catch { data = { token: rawText.trim() }; }
+            console.debug("[DocFixer] Upload parsed data:", data);
 
             if (!response.ok) {
-                throw new Error(data?.message || `Server error: ${response.status}`);
+                // rawText already read above — do NOT call response.text() again (stream consumed)
+                let errMsg = '';
+                try { errMsg = data?.message || data?.error || data?.detail || ''; } catch {}
+                if (!errMsg) errMsg = rawText || `Server error: ${response.status}`;
+                throw new Error(errMsg);
             }
 
-            // Complete the progress bar
             clearInterval(progressInterval);
             uploadDone = true;
-            progress = 100;
             uploadProgressBar.style.width = "100%";
             uploadProgressPct.textContent = "100%";
-
             addLog("✅ Upload complete! Token received from server.");
 
             setTimeout(() => {
-                // Token returned from API (field: token or code)
-                const token = (data.token || data.code || data.Token || data.Code || "").toString().replace(/\s/g, "");
-                activeToken = token;
+                // Read token — covers every possible field name ASP.NET might return
+                const rawToken = getField(data,
+                    'token', 'Token',
+                    'code', 'Code',
+                    'shareToken', 'ShareToken',
+                    'shareCode', 'ShareCode',
+                    'accessToken', 'AccessToken',
+                    'key', 'Key',
+                    'id', 'Id', 'ID'
+                );
+                const token = rawToken ? rawToken.toString().replace(/\s/g, "") : "";
 
+                if (!token) {
+                    addLog("⚠️ No token found in response. Check API Debug below.");
+                    // Show raw response in debug panel even on failure
+                    const debugInfo = document.getElementById('debugApiInfo');
+                    const debugRaw = document.getElementById('debugApiRaw');
+                    if (debugInfo && debugRaw) {
+                        debugRaw.textContent = rawText;
+                        debugInfo.classList.remove('d-none');
+                    }
+                    showToast("Upload OK but token not found. Check API Debug panel.", "bi-exclamation-triangle-fill");
+                    setTimeout(() => showPanel(panelSend), 2000);
+                    return;
+                }
+
+                activeToken = token;
                 const display = token.length === 6
                     ? `${token.substring(0,3)} ${token.substring(3,6)}`
                     : token;
                 txtGeneratedToken.textContent = display;
 
-                showPanel(panelComplete);
+                // Show debug raw API response (collapsible)
+                const debugInfo = document.getElementById('debugApiInfo');
+                const debugRaw = document.getElementById('debugApiRaw');
+                if (debugInfo && debugRaw) {
+                    debugRaw.textContent = rawText;
+                    debugInfo.classList.remove('d-none');
+                }
 
-                // Start 15-minute expiry countdown
+                showPanel(panelComplete);
                 startExpirationTimer(15 * 60, tokenTimer, () => {
                     showToast("Token has expired!", "bi-exclamation-triangle-fill");
                     showPanel(panelSelect);
                 });
-
                 showToast("Secure token generated successfully!", "bi-check-circle");
             }, 600);
 
         } catch (err) {
             clearInterval(progressInterval);
+            console.error("[DocFixer] Upload error:", err);
             addLog(`❌ Upload failed: ${err.message}`);
-            showToast("Upload failed: " + err.message, "bi-exclamation-triangle-fill");
-            setTimeout(() => showPanel(panelSend), 2000);
+            // Show a persistent error panel with the full message
+            showErrorDetail(err.message);
+            showToast("Upload failed. See error details below.", "bi-exclamation-triangle-fill");
+            setTimeout(() => showPanel(panelSend), 3500);
         }
     });
 
@@ -1248,23 +1379,33 @@
 
     // --- Delete Share Immediately (Real API) ---
     btnDeleteUpload.addEventListener('click', async () => {
-        if (!activeToken) return;
+        if (!activeToken) {
+            showToast("No active token to delete.", "bi-exclamation-circle");
+            return;
+        }
         try {
             btnDeleteUpload.disabled = true;
             btnDeleteUpload.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Deleting...';
 
-            const res = await fetch(`${API_BASE}/Transfer/delete/${activeToken}`, { method: "DELETE" });
+            console.debug("[DocFixer] Deleting token:", activeToken);
+            // Use apiFetch so HTTPS is tried first
+            const res = await apiFetch(`/Transfer/delete/${activeToken}`, { method: "DELETE" });
+            const rawText = await res.text();
+            console.debug("[DocFixer] Delete response:", res.status, rawText);
 
-            if (res.ok) {
+            // Treat 200, 204, 404 all as success (token gone either way)
+            if (res.ok || res.status === 404) {
                 activeToken = "";
                 if (uploadTimerInterval) clearInterval(uploadTimerInterval);
                 showToast("Share deleted and token invalidated instantly.", "bi-trash3-fill");
                 showPanel(panelSelect);
             } else {
-                const err = await res.json().catch(() => ({}));
-                showToast("Delete failed: " + (err?.message || res.status), "bi-exclamation-triangle-fill");
+                let errMsg = rawText;
+                try { errMsg = JSON.parse(rawText)?.message || rawText; } catch {}
+                showToast("Delete failed: " + errMsg, "bi-exclamation-triangle-fill");
             }
         } catch (e) {
+            console.error("[DocFixer] Delete error:", e);
             showToast("Network error while deleting: " + e.message, "bi-exclamation-triangle-fill");
         } finally {
             btnDeleteUpload.disabled = false;
@@ -1274,19 +1415,18 @@
 
     // --- Real Retrieve Flow ---
     btnRetrieveSubmit.addEventListener('click', async () => {
+        // Accept 6-char token (numeric or alphanumeric)
         const inputVal = tokenCodeInput.value.replace(/\s+/g, '').trim();
 
-        if (inputVal.length !== 6 || isNaN(inputVal)) {
-            showToast("Please enter a valid 6-digit numeric token.", "bi-exclamation-circle");
+        if (inputVal.length < 4) {
+            showToast("Please enter a valid share token.", "bi-exclamation-circle");
             tokenCodeInput.focus();
             return;
         }
 
-        // Show retrieving animation panel
         showPanel(panelRetrieving);
         retrieveProgress.style.width = "0%";
 
-        // Animate progress bar during fetch
         let p = 0;
         const rInterval = setInterval(() => {
             p = Math.min(p + 15, 85);
@@ -1294,123 +1434,176 @@
         }, 120);
 
         try {
-            // Step 1: GET metadata from /receive/{token}
-            const metaRes = await fetch(`${API_BASE}/Transfer/receive/${inputVal}`);
+            console.debug("[DocFixer] Retrieving token:", inputVal);
 
-            if (!metaRes.ok) {
+            // Single clean call — apiFetch tries HTTPS first, HTTP fallback, throws if both fail
+            let dlRes;
+            try {
+                dlRes = await apiFetch(`/Transfer/download/${inputVal}`);
+            } catch (networkErr) {
+                // Both HTTPS and HTTP unreachable
                 clearInterval(rInterval);
                 retrieveProgress.style.width = "100%";
-                const err = await metaRes.json().catch(() => ({}));
                 setTimeout(() => {
-                    showToast(err?.message || "Token invalid, expired, or deleted by sender.", "bi-x-circle-fill");
+                    showToast(networkErr.message, "bi-wifi-off");
                     showPanel(panelReceive);
                 }, 400);
                 return;
             }
 
-            const data = await metaRes.json();
-
-            // Complete progress bar
+            // Always stop progress animation here — server responded
             clearInterval(rInterval);
             retrieveProgress.style.width = "100%";
 
-            // Parse expiry
-            let secondsLeft = 15 * 60;
-            if (data.expiresAt || data.ExpiresAt) {
-                const expiry = new Date(data.expiresAt || data.ExpiresAt).getTime();
-                secondsLeft = Math.max(0, Math.round((expiry - Date.now()) / 1000));
+            console.debug("[DocFixer] Download status:", dlRes.status);
+
+            // Handle server-side errors
+            if (!dlRes.ok) {
+                let serverMsg;
+                if (dlRes.status === 404) {
+                    serverMsg = "Token not found. It may be invalid or has already been used.";
+                } else if (dlRes.status === 400) {
+                    serverMsg = "Token has expired. Please ask the sender for a new share code.";
+                } else {
+                    const errBody = await dlRes.text().catch(() => '');
+                    serverMsg = errBody || `Server error (${dlRes.status}). Please try again later.`;
+                    console.warn("[DocFixer] Server error body:", errBody);
+                    // Show persistent error detail for 500s
+                    showErrorDetail(serverMsg);
+                }
+                setTimeout(() => {
+                    showToast(serverMsg.length > 80 ? serverMsg.substring(0, 80) + '...' : serverMsg, "bi-x-circle-fill");
+                    showPanel(panelReceive);
+                }, 400);
+                return;
             }
 
-            startExpirationTimer(secondsLeft, retrievedExpiry, () => {
-                showToast("This token has just expired.", "bi-exclamation-triangle-fill");
+            // Read blob & detect type
+            const rawBlob    = await dlRes.blob();
+            // Content-type from headers (proxy may send 'text/html' incorrectly for binary)
+            const ctHeader   = dlRes.headers.get('content-type') || '';
+            const blobType   = rawBlob.type || '';
+            // Pick the most specific type — prefer header over blob.type when proxy is involved
+            let mimeType     = (ctHeader && !ctHeader.includes('text/html') && !ctHeader.includes('text/xml'))
+                                ? ctHeader.split(';')[0].trim()
+                                : (blobType || 'application/octet-stream');
+            const isText     = mimeType.startsWith('text/plain') ||
+                               mimeType === 'application/json'   ||
+                               mimeType.includes('plain');
+
+            console.debug("[DocFixer] Blob size:", rawBlob.size, "MIME:", mimeType, "ctHeader:", ctHeader, "isText:", isText);
+
+            if (rawBlob.size === 0) {
+                setTimeout(() => {
+                    showToast("Token not found or file is empty. It may have already been downloaded.", "bi-x-circle-fill");
+                    showPanel(panelReceive);
+                }, 400);
+                return;
+            }
+
+            // Start default 15-min timer (no expiryTime from /download response)
+            startExpirationTimer(15 * 60, retrievedExpiry, () => {
+                showToast("Session expired.", "bi-exclamation-triangle-fill");
                 showPanel(panelSelect);
             });
 
-            // Determine content type: file or text
-            const contentType = (data.type || data.Type || data.contentType || data.ContentType || "").toLowerCase();
-            const isTextPayload = contentType === "text" || (data.text !== undefined || data.Text !== undefined);
-
-            if (isTextPayload) {
-                // --- Text content ---
+            if (isText) {
+                // ── TEXT content ──────────────────────────────────────────────────
                 retrievedTextSec.classList.remove('d-none');
                 retrievedFileSec.classList.add('d-none');
 
-                const textContent = data.text || data.Text || data.content || data.Content || "";
+                const textContent = await rawBlob.text();
                 retrievedTextarea.value = textContent;
 
                 btnCopyRetrText.onclick = () => {
                     navigator.clipboard.writeText(textContent).then(() => {
-                        showToast("Text content copied to clipboard!", "bi-clipboard-check");
+                        showToast("Text copied to clipboard!", "bi-clipboard-check");
                     });
                 };
+
             } else {
-                // --- File content ---
+                // ── FILE content ──────────────────────────────────────────────────
                 retrievedFileSec.classList.remove('d-none');
                 retrievedTextSec.classList.add('d-none');
 
-                const fileName = data.fileName || data.FileName || data.name || data.Name || "downloaded_file";
-                const fileSize = data.fileSize || data.FileSize || data.size || data.Size || "";
+                // Get filename from Content-Disposition, or use token as fallback
+                const disposition = dlRes.headers.get("content-disposition") || "";
+                const cdMatch     = disposition.match(/filename\*?=(?:UTF-8''|["']?)([^"';\r\n]+)/i);
+                const fileName    = cdMatch ? decodeURIComponent(cdMatch[1].trim()) : `file_${inputVal}`;
+
+                // Assign correct MIME — guess from extension if proxy stripped it
+                const finalMime = mimeType !== 'application/octet-stream'
+                    ? mimeType : guessMime(fileName);
+                const finalBlob = new Blob([rawBlob], { type: finalMime });
 
                 retrievedFileName.textContent = fileName;
-                retrievedFileSize.textContent = typeof fileSize === "number"
-                    ? formatBytes(fileSize)
-                    : fileSize;
+                retrievedFileSize.textContent  = formatBytes(rawBlob.size);
 
-                const iconClass = getBootstrapIconForType(contentType, fileName);
+                const iconClass = getBootstrapIconForType("", fileName);
                 retrievedFileIcon.className = `bi ${iconClass}`;
 
-                // Wire Download button to /download/{token}
-                btnDownloadRetr.onclick = async () => {
+                // Blob is already fetched — clicking download just triggers save dialog
+                btnDownloadRetr.onclick = () => {
                     try {
-                        btnDownloadRetr.disabled = true;
-                        btnDownloadRetr.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Downloading...';
-
-                        const dlRes = await fetch(`${API_BASE}/Transfer/download/${inputVal}`);
-                        if (!dlRes.ok) throw new Error(`Server error: ${dlRes.status}`);
-
-                        const blob = await dlRes.blob();
-                        const url = URL.createObjectURL(blob);
+                        const blobUrl = URL.createObjectURL(finalBlob);
                         const a = document.createElement('a');
-                        a.href = url;
+                        a.style.display = 'none';
+                        a.href     = blobUrl;
                         a.download = fileName;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-
-                        showToast("Downloading shared file...", "bi-download");
-                    } catch (dlErr) {
-                        showToast("Download failed: " + dlErr.message, "bi-exclamation-triangle-fill");
-                    } finally {
-                        btnDownloadRetr.disabled = false;
-                        btnDownloadRetr.innerHTML = '<i class="bi bi-download me-2"></i>Download File';
+                        setTimeout(() => URL.revokeObjectURL(blobUrl), 15000);
+                        showToast("File downloaded successfully!", "bi-download");
+                    } catch (e) {
+                        showToast("Save failed: " + e.message, "bi-exclamation-triangle-fill");
                     }
                 };
             }
 
             showPanel(panelRetrieved);
-            showToast("Payload retrieved successfully!", "bi-unlock-fill");
+            showToast("Content retrieved successfully!", "bi-unlock-fill");
 
         } catch (e) {
             clearInterval(rInterval);
+            console.error("[DocFixer] Retrieve error:", e);
             showToast("Network error: " + e.message, "bi-exclamation-triangle-fill");
             setTimeout(() => showPanel(panelReceive), 1200);
         }
     });
 
     // Formatting spaces dynamically inside the token input box for user elegance
+    // Token input: allow any character, auto-uppercase, format 6-digit with space
     tokenCodeInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 3) {
-            value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+        let value = e.target.value.toUpperCase().trim();
+        // Only apply 3+3 spacing for pure 6-digit numeric tokens
+        const digitsOnly = value.replace(/\s/g, '');
+        if (/^\d{1,6}$/.test(digitsOnly)) {
+            if (digitsOnly.length > 3) {
+                value = digitsOnly.substring(0, 3) + ' ' + digitsOnly.substring(3, 6);
+            } else {
+                value = digitsOnly;
+            }
         }
         e.target.value = value;
     });
 
-    // --- Periodic Cleanup (every 10 min) ---
-    setInterval(() => {
-        fetch(`${API_BASE}/Transfer/cleanup`, { method: "POST" }).catch(() => {});
-    }, 10 * 60 * 1000);
+    // --- Periodic Cleanup: run on load + every 5 min ---
+    function triggerCleanup() {
+        // Try HTTPS first, then HTTP
+        fetch(API_ORIGIN_HTTPS + "/Transfer/cleanup", { method: "POST" })
+            .catch(() => fetch(API_ORIGIN_HTTP + "/Transfer/cleanup", { method: "POST" })
+                .catch(() => {}));
+    }
+    // Run immediately on page load to clean stale DB entries right away
+    triggerCleanup();
+    // Then every 5 minutes
+    setInterval(triggerCleanup, 5 * 60 * 1000);
+
+    // Also run cleanup when user navigates back to select panel (catches returning users)
+    btnBackToSelects.forEach(btn => {
+        btn.addEventListener('click', () => { triggerCleanup(); });
+    });
 
 })();
 </script>

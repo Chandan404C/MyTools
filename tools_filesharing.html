@@ -3,27 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Secure File Sharing Online | Temporary Encryption | DocFixer</title>
-  
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.">
-  <meta name="keywords" content="secure file sharing, temporary file transfer, anonymous file upload, send files free, 6-digit token share, local encrypted sharing">
+  <title>Free Secure File Sharing Online – Send Files with 6-Digit Token | DocFixer</title>
+
+  <!-- Primary SEO Meta Tags -->
+  <meta name="description" content="Share files and text securely online using a temporary 6-digit token. No sign-up needed. AES-encrypted, auto-expiring, and completely free. Powered by DocFixer.">
+  <meta name="keywords" content="secure file sharing, temporary file transfer, anonymous file upload, send files online free, 6-digit token file share, encrypted file sharing, no login file share, share files without account, temporary upload link, secure send file, online file transfer free, docfixer file share">
   <meta name="author" content="DocFixer">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://docfixer.online/tools_filesharing.html">
-  
-  <!-- Open Graph for Social Media -->
-  <meta property="og:title" content="Free Secure File Sharing Online | Temporary Encryption | DocFixer">
-  <meta property="og:description" content="Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.">
+
+  <!-- Open Graph (Facebook / LinkedIn) -->
+  <meta property="og:title" content="Free Secure File Sharing Online – Send Files with 6-Digit Token | DocFixer">
+  <meta property="og:description" content="Upload any file or text and get a secure 6-digit share code instantly. No sign-up. Auto-deletes after 15 minutes. 100% free and private.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://docfixer.online/tools_filesharing.html">
   <meta property="og:site_name" content="DocFixer">
-  
+  <meta property="og:image" content="https://docfixer.online/images/og-filesharing.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free Secure File Sharing Online | Temporary Encryption | DocFixer">
-  <meta name="twitter:description" content="Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.">
+  <meta name="twitter:site" content="@codefy001">
+  <meta name="twitter:title" content="Free Secure File Sharing – 6-Digit Token | DocFixer">
+  <meta name="twitter:description" content="Share files or text securely with a temporary 6-digit code. No account needed. Auto-expires. Completely free.">
+  <meta name="twitter:image" content="https://docfixer.online/images/og-filesharing.png">
 
-  <!-- JSON-LD Structured Data for Application -->
+  <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -31,8 +38,35 @@
     "name": "DocFixer Secure File Sharing",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
-    "description": "Share files and text securely with temporary 6-digit tokens. Complete privacy, fast, and free browser-based file transfer by DocFixer.",
-    "url": "https://docfixer.online/tools_filesharing.html"
+    "url": "https://docfixer.online/tools_filesharing.html",
+    "description": "Share files and text securely online using a temporary 6-digit token. No sign-up needed. AES-encrypted, auto-expiring transfers. Completely free.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Secure 6-digit token file sharing",
+      "AES-256 client-side encryption",
+      "No account or sign-up required",
+      "Auto-expires after 15 minutes",
+      "File and text sharing support",
+      "Up to 100 MB file size",
+      "Instant delete option"
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "DocFixer",
+      "url": "https://docfixer.online"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://docfixer.online/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://docfixer.online/tools.html" },
+        { "@type": "ListItem", "position": 3, "name": "Secure File Sharing", "item": "https://docfixer.online/tools_filesharing.html" }
+      ]
+    }
   }
   </script>
   
@@ -546,7 +580,7 @@
                         <i class="bi bi-clipboard fs-5"></i>
                     </button>
                 </div>
-                <!-- Debug info: shows raw API response to help identify token field name -->
+                <!-- Debug info: only shown when token is not found in response -->
                 <div id="debugApiInfo" class="mt-3 d-none">
                     <details>
                         <summary class="text-secondary small" style="cursor:pointer;">🔍 View raw API response (for debugging)</summary>
@@ -1315,16 +1349,39 @@
                     : token;
                 txtGeneratedToken.textContent = display;
 
-                // Show debug raw API response (collapsible)
+                // Hide debug panel on successful upload (only shown on error)
                 const debugInfo = document.getElementById('debugApiInfo');
-                const debugRaw = document.getElementById('debugApiRaw');
-                if (debugInfo && debugRaw) {
-                    debugRaw.textContent = rawText;
-                    debugInfo.classList.remove('d-none');
+                if (debugInfo) debugInfo.classList.add('d-none');
+
+                // Determine expiry duration from API response
+                // API may return: expiresAt (ISO datetime), expirySeconds, expiryMinutes, ttl, expiresIn
+                let expirySeconds = 15 * 60; // fallback: 15 minutes
+                const expiresAt = getField(data,
+                    'expiresAt', 'ExpiresAt', 'expiry', 'Expiry',
+                    'expiresOn', 'ExpiresOn', 'expireAt', 'ExpireAt'
+                );
+                const expirySecondsField = getField(data,
+                    'expirySeconds', 'ExpirySeconds', 'ttlSeconds', 'TtlSeconds',
+                    'expiresIn', 'ExpiresIn', 'ttl', 'Ttl'
+                );
+                const expiryMinutesField = getField(data,
+                    'expiryMinutes', 'ExpiryMinutes', 'ttlMinutes', 'TtlMinutes'
+                );
+
+                if (expiresAt) {
+                    // ISO datetime from API (UTC) — append Z if missing so JS parses as UTC not local time
+                    const utcStr = expiresAt.toString().endsWith('Z') ? expiresAt : expiresAt + 'Z';
+                    const expDate = new Date(utcStr);
+                    const remaining = Math.floor((expDate.getTime() - Date.now()) / 1000);
+                    if (remaining > 0) expirySeconds = remaining;
+                } else if (expirySecondsField !== undefined && !isNaN(Number(expirySecondsField))) {
+                    expirySeconds = Number(expirySecondsField);
+                } else if (expiryMinutesField !== undefined && !isNaN(Number(expiryMinutesField))) {
+                    expirySeconds = Number(expiryMinutesField) * 60;
                 }
 
                 showPanel(panelComplete);
-                startExpirationTimer(15 * 60, tokenTimer, () => {
+                startExpirationTimer(expirySeconds, tokenTimer, () => {
                     showToast("Token has expired!", "bi-exclamation-triangle-fill");
                     showPanel(panelSelect);
                 });

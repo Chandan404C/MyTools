@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -867,6 +867,76 @@ const POSTS = {
         <a href="tools_wordcounter.html" class="btn">Open Word Counter →</a>
       </div>
     `
+  },
+
+  'file-sharing': {
+    title:    'How to Share Files Securely with a 6-Digit Token — Free Guide',
+    shortTitle:'Share Files Securely with a 6-Digit Token',
+    emoji:    '🔗',
+    tag:      'File Sharing Guide',
+    tagStyle: 'background:#e8f0ff;color:#0a4eb0;',
+    readTime: '5 min read',
+    toolUrl:  'tools_filesharing.html',
+    toolName: 'Secure File Sharing Tool',
+    toolDesc: 'Upload any file or text and get a secure, self-destructing 6-digit token instantly.',
+    section:  'File Sharing Guides',
+    keywords: 'secure file sharing, temporary file transfer, anonymous file upload, send files online free, 6-digit token file share, encrypted file sharing, no login file share, share files without account, auto-expiring file share, docfixer file share',
+    desc:     "Step-by-step guide to sharing files and text securely online using DocFixer's free 6-digit token tool. No signup, AES-encrypted, auto-expires in 15 minutes.",
+    faqs: [
+      { q: 'Is the file actually encrypted before being shared?',   a: 'Yes. The payload is encrypted client-side in your browser using industry-grade algorithms before it reaches the server. Encryption keys are never stored or logged.' },
+      { q: 'How long does the 6-digit token remain valid?',         a: 'Tokens automatically expire after 15 minutes of inactivity. You can also click "Delete Share Immediately" to invalidate the token instantly at any time.' },
+      { q: 'Does the recipient need an account to download?',       a: 'No account or signup is needed on either side. The recipient simply enters the 6-digit code on the Receive screen to download the file or copy the text.' },
+      { q: 'What file types and sizes are supported?',              a: 'Any file type (PDF, Word, images, ZIP, video, etc.) up to 100 MB per upload. Text shares support up to 15,000 characters.' },
+      { q: 'Can I share text snippets, not just files?',            a: 'Yes. Switch to the "Share Text" mode to paste passwords, code snippets, notes or any plain text content and generate a token for it instantly.' }
+    ],
+    content: `
+      <p>Emailing large attachments that get rejected, uploading to cloud drives that require accounts, or messaging sensitive passwords in plain text — these are everyday frustrations. DocFixer's <strong>Secure File Sharing</strong> tool solves all three: just upload a file or paste text, get a 6-digit token, and let the recipient enter it to download. Everything auto-expires in 15 minutes.</p>
+
+      <h2>Why Use a 6-Digit Token Instead of Email or Cloud Links?</h2>
+      <ul>
+        <li>Email services enforce 25 MB limits and create permanent server copies of your attachments</li>
+        <li>Cloud drive links never expire unless you manually revoke them</li>
+        <li>Messaging apps store unencrypted copies of text snippets on their servers indefinitely</li>
+        <li>DocFixer tokens <strong>self-destruct after 15 minutes</strong> — zero permanent footprint</li>
+        <li>No account means <strong>no personal data collected</strong> — truly anonymous transfers</li>
+      </ul>
+
+      <h2>How to Share Files with DocFixer — Step by Step</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><p>Click <strong>"Send Content"</strong> and choose File or Text mode.</p></div>
+        <div class="step-card"><div class="step-num">2</div><p>Drag your file into the dropzone or paste your text snippet.</p></div>
+        <div class="step-card"><div class="step-num">3</div><p>Click <strong>"Upload & Generate Token"</strong> — encryption happens instantly in-browser.</p></div>
+        <div class="step-card"><div class="step-num">4</div><p>Share the <strong>6-digit token</strong> with your recipient via any channel.</p></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip:</strong> Send the 6-digit token via a <em>different channel</em> from the file itself — e.g., share over WhatsApp while mentioning the DocFixer URL by email. This two-channel approach means an intercepted token alone is useless without context.
+      </div>
+
+      <h2>How the Recipient Downloads the File</h2>
+      <ul>
+        <li>The recipient opens <a href="tools_filesharing.html">DocFixer Secure File Sharing</a> and clicks <strong>"Receive Content"</strong></li>
+        <li>They enter the 6-digit code and click <strong>"Retrieve Content"</strong></li>
+        <li>The file or text is decrypted locally and available for download or copy — no account required</li>
+        <li>If the token has expired, a clear message is shown and no data is accessible</li>
+      </ul>
+
+      <h2>Privacy & Security — What Happens to Your Files?</h2>
+      <p>DocFixer encrypts your payload <strong>inside your browser</strong> before transmitting it. The server receives only encrypted blobs — it cannot read your file contents or text. After 15 minutes, the encrypted payload is purged from storage automatically. Clicking <strong>"Delete Share Immediately"</strong> triggers an instant purge ahead of the timer.</p>
+
+      <h2>What Can You Share?</h2>
+      <ul>
+        <li><strong>Files:</strong> PDF, Word documents, images, ZIP archives, videos, source code — any format up to 100 MB</li>
+        <li><strong>Text:</strong> Passwords, code snippets, meeting notes, API keys, address details — up to 15,000 characters</li>
+        <li><strong>Sensitive documents:</strong> Contracts, ID scans, medical records — knowing the token expires in 15 minutes gives peace of mind</li>
+      </ul>
+
+      <div class="cta-block">
+        <h3>Share your first file — free &amp; private</h3>
+        <p>No signup. No server logs. Auto-expires in 15 minutes.</p>
+        <a href="tools_filesharing.html" class="btn">Share a File Now — Free →</a>
+      </div>
+    `
   }
 };
 
@@ -882,8 +952,10 @@ const ALL_META = [
   { id:'pdf-to-jpg',     emoji:'📷', title:'Convert PDF Pages to JPG Images' },
   { id:'qr-code',        emoji:'🔳', title:'Create Custom QR Codes for Free' },
   { id:'watermark',      emoji:'🔏', title:'How to Watermark Images & PDFs' },
-  { id:'word-counter',   emoji:'📝', title:'Word Counter: Count Words & More' }
+  { id:'word-counter',   emoji:'📝', title:'Word Counter: Count Words & More' },
+  { id:'file-sharing',   emoji:'🔗', title:'Share Files Securely with a 6-Digit Token' }
 ];
+
 
 // ─────────────────────────────────────────────────
 // Utilities

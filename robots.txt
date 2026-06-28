@@ -1,4 +1,30 @@
 User-agent: *
 Allow: /
 
+# Disallow admin / system paths
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /fix_sitemap_robots.js
+Disallow: /rename.js
+Disallow: /seo_injector.js
+Disallow: /update_fb_link.js
+
+# Googlebot specific rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bingbot specific rules
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+User-agent: DotBot
+Disallow: /
+
 Sitemap: https://docfixer.online/sitemap.xml

@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Audio Trimmer Online | Cut & Trim Audio Files | DocFixer</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Trim and cut audio files online for free with DocFixer's Audio Trimmer. Upload MP3, WAV, OGG, M4A and more. Set start & end points visually, preview, and download — no upload to server needed.">
+  <meta name="keywords" content="free audio trimmer online, cut mp3 online, trim audio file browser, audio cutter no upload, online audio editor free, crop audio clip online">
+  <meta name="author" content="DocFixer">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://docfixer.online/tools_audiotrim.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Free Audio Trimmer Online | Cut & Trim Audio Files | DocFixer">
+  <meta property="og:description" content="Trim and cut audio files online for free. Upload MP3, WAV, OGG and more. Set start & end points visually with a waveform — no server upload required.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://docfixer.online/tools_audiotrim.html">
+  <meta property="og:site_name" content="DocFixer">
+  <meta property="og:image" content="https://docfixer.online/images/og-cover.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Audio Trimmer Online | Cut & Trim Audio Files | DocFixer">
+  <meta name="twitter:description" content="Trim and cut audio files online for free with DocFixer's Audio Trimmer. Set start & end points visually — no upload to server needed.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DocFixer Audio Trimmer",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "All",
+    "description": "Trim and cut audio files online for free. Upload MP3, WAV, OGG, M4A and more. Set start & end points on a visual waveform and download the trimmed clip.",
+    "url": "https://docfixer.online/tools_audiotrim.html",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- Bootstrap 5 + Icons & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ── Audio Trimmer specific styles ── */
+
+    /* ─── Drop Zone ─── */
+    .at-dropzone {
+      border: 2.5px dashed #a9c6e5;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #f5faff 0%, #eef5fc 100%);
+      text-align: center;
+      padding: 3rem 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      position: relative;
+    }
+    .at-dropzone:hover,
+    .at-dropzone.drag-over {
+      border-color: #2b699d;
+      background: linear-gradient(135deg, #e2effa 0%, #d5eaf7 100%);
+      transform: translateY(-2px);
+    }
+    .at-dropzone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .at-dropzone-icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #ddeeff, #c5e0f5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 2rem;
+      color: #2b699d;
+      box-shadow: 0 8px 20px rgba(43, 105, 157, 0.15);
+    }
+
+    /* ─── Tool Card ─── */
+    .at-card {
+      background: #f8fbfe;
+      border-radius: 28px;
+      border: 1px solid #e4edf5;
+      box-shadow: 0 4px 20px rgba(20, 60, 100, 0.06);
+      overflow: hidden;
+    }
+
+    /* ─── Waveform container ─── */
+    #waveformContainer {
+      position: relative;
+      background: #1a2a3e;
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 120px;
+    }
+    #waveform {
+      width: 100%;
+    }
+
+    /* ─── Time Inputs ─── */
+    .at-time-input {
+      background: white;
+      border: 2px solid #a9c6e5;
+      border-radius: 12px;
+      padding: 0.55rem 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #132b44;
+      width: 100%;
+      text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      font-family: 'Inter', monospace;
+    }
+    .at-time-input:focus {
+      border-color: #2b699d;
+      box-shadow: 0 0 0 3px rgba(43, 105, 157, 0.15);
+    }
+    .at-time-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #6b8fa8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ─── Range / Timeline Slider ─── */
+    .at-range-track {
+      position: relative;
+      height: 14px;
+      background: #d8e8f5;
+      border-radius: 30px;
+      margin: 0.5rem 0 0.8rem;
+      cursor: pointer;
+    }
+    .at-range-fill {
+      position: absolute;
+      height: 100%;
+      background: linear-gradient(90deg, #4f7eb3, #2b699d);
+      border-radius: 30px;
+      pointer-events: none;
+      transition: left 0.05s, width 0.05s;
+    }
+    .at-range-thumb {
+      position: absolute;
+      top: 50%;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border: 3px solid #2b699d;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      box-shadow: 0 2px 8px rgba(43, 105, 157, 0.3);
+      transition: box-shadow 0.15s, transform 0.1s;
+      z-index: 2;
+    }
+    .at-range-thumb:active { cursor: grabbing; transform: translate(-50%,-50%) scale(1.2); }
+    .at-range-thumb:hover  { box-shadow: 0 4px 12px rgba(43, 105, 157, 0.4); }
+
+    /* ─── Playback Controls ─── */
+    .at-play-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #1f3a5f, #142b44);
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 8px 18px rgba(20, 55, 100, 0.28);
+      flex-shrink: 0;
+    }
+    .at-play-btn:hover { transform: scale(1.08); box-shadow: 0 12px 24px rgba(20,55,100,0.38); }
+    .at-play-btn:active { transform: scale(0.96); }
+
+    /* Skip buttons */
+    .at-skip-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #c8ddf0;
+      color: #2b699d;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .at-skip-btn:hover { background: #e2effa; border-color: #2b699d; }
+
+    /* ─── Action Buttons ─── */
+    .at-btn-primary {
+      background: linear-gradient(145deg, #1f3a5f, #142b44);
+      border: none;
+      border-radius: 40px;
+      padding: 0.7rem 2rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 18px rgba(20,55,100,0.25);
+    }
+    .at-btn-primary:hover { background: linear-gradient(145deg, #254b78, #1a3457); transform: translateY(-1px); box-shadow: 0 12px 22px rgba(20,55,100,0.35); }
+    .at-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .at-btn-outline {
+      background: transparent;
+      border: 2px solid #a9c6e5;
+      border-radius: 40px;
+      padding: 0.65rem 1.6rem;
+      font-weight: 600;
+      color: #2b699d;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    .at-btn-outline:hover { background: #e2effa; border-color: #2b699d; }
+    .at-btn-outline:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ─── Stat Badges (file info) ─── */
+    .at-info-badge {
+      background: white;
+      border: 1px solid #d8e8f5;
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      font-size: 0.82rem;
+      color: #1c3f5c;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+    }
+    .at-info-badge i { color: #2b699d; }
+
+    /* ─── Progress Bar ─── */
+    .at-progress-wrap {
+      background: #e0edf8;
+      border-radius: 30px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .at-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4f7eb3, #2b699d);
+      border-radius: 30px;
+      transition: width 0.1s linear;
+      width: 0%;
+    }
+
+    /* ─── Playhead cursor line ─── */
+    #playheadLine {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #f7c948;
+      pointer-events: none;
+      z-index: 5;
+      transition: left 0.05s linear;
+    }
+    #playheadLine::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      background: #f7c948;
+      border-radius: 50%;
+    }
+
+    /* ─── Trim region overlay ─── */
+    #trimOverlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background: rgba(79, 126, 179, 0.18);
+      pointer-events: none;
+      z-index: 4;
+      border-left: 2px solid #4f7eb3;
+      border-right: 2px solid #4f7eb3;
+    }
+
+    /* ─── Toast ─── */
+    .at-toast {
+      position: fixed;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1b4a6e;
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 0.93rem;
+      z-index: 9999;
+      box-shadow: 0 8px 24px rgba(10,40,80,0.25);
+      animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes toastIn {
+      from { opacity:0; transform: translateX(-50%) translateY(-14px); }
+      to   { opacity:1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ─── Volume Slider ─── */
+    .at-vol-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    input[type="range"].at-vol-slider {
+      accent-color: #2b699d;
+      height: 4px;
+      cursor: pointer;
+    }
+
+    /* ─── Speed Pills ─── */
+    .speed-pill {
+      display: none;
+    }
+    .speed-pill + label {
+      background: #eef4fd;
+      color: #1f3a5f;
+      border-radius: 40px;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.82rem;
+      border: 2px solid transparent;
+      transition: all 0.12s;
+      user-select: none;
+    }
+    .speed-pill:checked + label {
+      background: #132b44;
+      color: white;
+      border-color: #132b44;
+    }
+    .speed-pill + label:hover { border-color: #4f7eb3; }
+
+    /* ─── Info cards ─── */
+    .info-card {
+      background: #f8fbfe;
+      border-radius: 24px;
+      padding: 1.5rem;
+      height: 100%;
+      border: 1px solid #e6edf5;
+    }
+    .info-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #132b44;
+      margin-bottom: 1rem;
+    }
+    .info-card i { color: #2b699d; margin-right: 6px; }
+
+    .faq-item { border-bottom: 1px solid #dde5ed; padding: 1rem 0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { font-weight: 600; color: #1c3f5c; }
+    .faq-answer {
+      color: #4a5b6b;
+      padding-left: 1.2rem;
+      border-left: 3px solid #a9c6e5;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .related-tool-badge {
+      background: white;
+      border-radius: 60px;
+      padding: 0.65rem 1.2rem;
+      font-weight: 500;
+      color: #132b44;
+      border: 1px solid #cfdeef;
+      transition: 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .related-tool-badge:hover { background: #2b699d; color: white; border-color: #2b699d; }
+
+    /* ─── Section hidden until file loaded ─── */
+    #editorSection { display: none; }
+
+    /* ─── Animated waveform bars (loading placeholder) ─── */
+    .wave-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 60px;
+      justify-content: center;
+      padding: 0.5rem 0;
+    }
+    .wave-bars span {
+      display: inline-block;
+      width: 5px;
+      background: linear-gradient(to top, #4f7eb3, #87b8dc);
+      border-radius: 3px;
+      animation: barAnim 1.1s ease-in-out infinite alternate;
+    }
+    .wave-bars span:nth-child(2) { animation-delay: 0.1s; }
+    .wave-bars span:nth-child(3) { animation-delay: 0.2s; }
+    .wave-bars span:nth-child(4) { animation-delay: 0.3s; }
+    .wave-bars span:nth-child(5) { animation-delay: 0.4s; }
+    .wave-bars span:nth-child(6) { animation-delay: 0.5s; }
+    .wave-bars span:nth-child(7) { animation-delay: 0.35s; }
+    .wave-bars span:nth-child(8) { animation-delay: 0.25s; }
+    @keyframes barAnim {
+      from { height: 10px; }
+      to   { height: 50px; }
+    }
+
+    /* ─── Canvas wave drawing ─── */
+    #waveCanvas {
+      width: 100%;
+      height: 120px;
+      display: block;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 576px) {
+      .at-time-grid { grid-template-columns: 1fr 1fr !important; }
+      .at-action-row { flex-direction: column; }
+      .at-action-row button { width: 100%; }
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6E91RY4GS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F6E91RY4GS');
+  </script>
+</head>
+<body>
+
+<!-- STICKY NAVBAR -->
+<nav class="navbar-sticky navbar navbar-expand-lg py-3 px-4">
+  <div class="container-fluid px-lg-5">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <i class="bi bi-magic fs-1 me-2" style="color:#4f7eb3;"></i>
+      <span class="fs-3 fw-bold" style="color:#132b44;">Doc<span style="color:#4e7eb3;">Fixer</span></span>
+    </a>
+
+    <!-- Mobile toggler -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Desktop menu -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarMainDesktop">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="about.html"><i class="bi bi-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2 active" href="tools.html"><i class="bi bi-grid me-1"></i>Tools</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="user_guid.html"><i class="bi bi-book me-1"></i>User Guide</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom px-3 py-2" href="contact.html"><i class="bi bi-envelope me-1"></i>Contact</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a href="#" class="btn-pill btn"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a>
+        <a href="#" class="gradient-btn btn"><i class="bi bi-cloud-upload me-2"></i>Sign up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- OFF CANVAS (mobile menu) -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel" style="color:#132b44;">
+      <i class="bi bi-magic me-2" style="color:#4f7eb3;"></i>DocFixer
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="index.html"><i class="bi bi-house me-2"></i>Home</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="about.html"><i class="bi bi-info-circle me-2"></i>About</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom active" href="tools.html"><i class="bi bi-grid me-2"></i>Tools</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="user_guid.html"><i class="bi bi-book me-2"></i>User Guide</a></li>
+      <li class="nav-item"><a class="nav-link nav-link-custom" href="contact.html"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+      <li class="nav-item mt-3"><a class="btn-pill btn d-block text-center" href="#"><i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Log in</a></li>
+      <li class="nav-item mt-2"><a class="gradient-btn btn d-block text-center" href="#"><i class="bi bi-cloud-upload me-2" aria-hidden="true"></i>Sign up</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container my-5" style="max-width:900px; font-family:'Inter',sans-serif;">
+
+  <!-- Tool Header -->
+  <div class="d-flex align-items-center mb-4">
+    <div class="at-dropzone-icon me-3 mb-0" style="flex-shrink:0;">
+      <i class="bi bi-scissors"></i>
+    </div>
+    <div>
+      <h1 class="fw-bold mb-1" style="color:#132b44;">Audio Trimmer</h1>
+      <p class="text-secondary mb-0">Upload any audio file, set your trim points on the waveform, preview and download — 100% in your browser.</p>
+    </div>
+  </div>
+
+  <!-- ── UPLOAD CARD ── -->
+  <div id="uploadCard" class="at-card p-4 mb-4">
+    <div class="at-dropzone" id="atDropzone" role="button" aria-label="Upload audio file">
+      <input type="file" id="atFileInput" accept="audio/*" aria-label="Select audio file">
+      <div class="at-dropzone-icon">
+        <i class="bi bi-music-note-beamed"></i>
+      </div>
+      <h2 class="fw-semibold mb-2" style="font-size:1.25rem; color:#132b44;">Drop your audio file here</h2>
+      <p class="text-secondary mb-3" style="font-size:0.95rem;">or click to browse your device</p>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <span class="badge" style="background:#e2effa; color:#2b699d; border-radius:30px; padding:0.35rem 0.9rem; font-weight:500;">MP3</span>
+        <span class="badge" style="background:#e2effa; color:#2b699d; border-radius:30px; padding:0.35rem 0.9rem; font-weight:500;">WAV</span>
+        <span class="badge" style="background:#e2effa; color:#2b699d; border-radius:30px; padding:0.35rem 0.9rem; font-weight:500;">OGG</span>
+        <span class="badge" style="background:#e2effa; color:#2b699d; border-radius:30px; padding:0.35rem 0.9rem; font-weight:500;">M4A</span>
+        <span class="badge" style="background:#e2effa; color:#2b699d; border-radius:30px; padding:0.35rem 0.9rem; font-weight:500;">FLAC</span>
+        <span class="badge" style="background:#e2effa; color:#2b699d; border-radius:30px; padding:0.35rem 0.9rem; font-weight:500;">AAC</span>
+      </div>
+    </div>
+    <p class="text-center text-secondary small mt-3 mb-0 opacity-75">
+      <i class="bi bi-incognito me-1"></i>Your audio is processed entirely in your browser — never uploaded to any server.
+    </p>
+  </div>
+
+  <!-- ── EDITOR SECTION (shown after file load) ── -->
+  <div id="editorSection">
+
+    <!-- File Info Bar -->
+    <div class="d-flex flex-wrap gap-2 mb-3" id="fileInfoBar" role="region" aria-label="File information">
+      <div class="at-info-badge"><i class="bi bi-file-music"></i><span id="infoFileName">—</span></div>
+      <div class="at-info-badge"><i class="bi bi-clock"></i><span id="infoDuration">—</span></div>
+      <div class="at-info-badge"><i class="bi bi-hdd"></i><span id="infoSize">—</span></div>
+      <button class="at-btn-outline ms-auto" id="changFileBtn" style="padding:0.35rem 1rem; font-size:0.83rem;" aria-label="Change audio file">
+        <i class="bi bi-arrow-repeat me-1"></i>Change File
+      </button>
+    </div>
+
+    <!-- Waveform Card -->
+    <div class="at-card p-4 mb-4">
+
+      <!-- Waveform -->
+      <label class="fw-semibold mb-2 d-block" style="color:#132b44;"><i class="bi bi-activity me-2" style="color:#2b699d;"></i>Waveform Preview</label>
+      <div id="waveformContainer" aria-label="Audio waveform">
+        <canvas id="waveCanvas" aria-hidden="true"></canvas>
+        <div id="trimOverlay"></div>
+        <div id="playheadLine" style="left:0%; display:none;"></div>
+      </div>
+      <!-- Progress bar under waveform -->
+      <div class="at-progress-wrap mt-2">
+        <div class="at-progress-bar" id="atProgressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div class="d-flex justify-content-between small text-secondary mt-1">
+        <span id="currentTimeLabel">0:00</span>
+        <span id="totalDurationLabel">0:00</span>
+      </div>
+
+      <!-- Trim Range Slider -->
+      <div class="mt-3">
+        <label class="fw-semibold d-flex align-items-center gap-2 mb-1" style="color:#132b44; font-size:0.9rem;">
+          <i class="bi bi-arrows-expand-vertical" style="color:#2b699d;"></i>Trim Region
+          <span class="text-secondary small fw-normal">— drag handles to select the portion to keep</span>
+        </label>
+        <div class="at-range-track" id="trimTrack" role="group" aria-label="Trim region selector">
+          <div class="at-range-fill" id="trimFill"></div>
+          <div class="at-range-thumb" id="thumbStart" tabindex="0" role="slider" aria-label="Trim start" aria-valuemin="0"></div>
+          <div class="at-range-thumb" id="thumbEnd"   tabindex="0" role="slider" aria-label="Trim end"   aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <!-- Time Inputs -->
+      <div class="row g-3 mt-1" style="max-width:540px;">
+        <div class="col-6">
+          <div class="at-time-label"><i class="bi bi-skip-start-fill me-1"></i>Start Time</div>
+          <input type="text" id="startTimeInput" class="at-time-input" value="0:00.000" aria-label="Trim start time" placeholder="0:00.000">
+        </div>
+        <div class="col-6">
+          <div class="at-time-label"><i class="bi bi-skip-end-fill me-1"></i>End Time</div>
+          <input type="text" id="endTimeInput" class="at-time-input" value="0:00.000" aria-label="Trim end time" placeholder="0:00.000">
+        </div>
+      </div>
+      <p class="text-secondary small mt-2 mb-0"><i class="bi bi-info-circle me-1"></i>Selected duration: <strong id="selDurLabel">—</strong></p>
+
+      <!-- Playback Controls -->
+      <div class="d-flex align-items-center gap-3 mt-4 flex-wrap">
+        <button class="at-skip-btn" id="rewindBtn"    title="Skip to trim start" aria-label="Skip to trim start"><i class="bi bi-skip-start-fill"></i></button>
+        <button class="at-play-btn" id="playPauseBtn" title="Play / Pause"       aria-label="Play or pause audio"><i class="bi bi-play-fill" id="playIcon"></i></button>
+        <button class="at-skip-btn" id="stopBtn"      title="Stop"               aria-label="Stop playback"><i class="bi bi-stop-fill"></i></button>
+        <button class="at-skip-btn" id="previewTrimBtn" title="Preview trim region" aria-label="Preview trimmed section"><i class="bi bi-scissors" style="font-size:0.9rem;"></i></button>
+
+        <!-- Volume -->
+        <div class="at-vol-wrap ms-2">
+          <i class="bi bi-volume-up" style="color:#2b699d;" aria-hidden="true"></i>
+          <input type="range" class="at-vol-slider" id="volSlider" min="0" max="1" step="0.05" value="1" style="width:80px;" aria-label="Volume">
+        </div>
+
+        <!-- Speed -->
+        <div class="d-flex align-items-center gap-1 ms-auto flex-wrap">
+          <small class="text-secondary me-1">Speed:</small>
+          <input class="speed-pill" type="radio" name="spd" id="spd05" value="0.5"><label for="spd05">0.5×</label>
+          <input class="speed-pill" type="radio" name="spd" id="spd1"  value="1"   checked><label for="spd1">1×</label>
+          <input class="speed-pill" type="radio" name="spd" id="spd15" value="1.5"><label for="spd15">1.5×</label>
+          <input class="speed-pill" type="radio" name="spd" id="spd2"  value="2"><label for="spd2">2×</label>
+        </div>
+      </div>
+
+    </div><!-- /waveform card -->
+
+    <!-- ── Download Card ── -->
+    <div class="at-card p-4 mb-4">
+      <h2 class="fw-semibold mb-3" style="font-size:1.05rem; color:#132b44;"><i class="bi bi-download me-2" style="color:#2b699d;"></i>Export Trimmed Audio</h2>
+
+      <!-- Format pills -->
+      <div class="mb-3">
+        <div class="at-time-label mb-2">Output Format</div>
+        <div class="d-flex flex-wrap gap-2" id="formatGroup">
+          <input class="speed-pill" type="radio" name="fmt" id="fmtMp3"  value="audio/mpeg"  checked><label for="fmtMp3">MP3</label>
+          <input class="speed-pill" type="radio" name="fmt" id="fmtWav"  value="audio/wav"><label for="fmtWav">WAV</label>
+          <input class="speed-pill" type="radio" name="fmt" id="fmtOgg"  value="audio/ogg"><label for="fmtOgg">OGG</label>
+          <input class="speed-pill" type="radio" name="fmt" id="fmtWebm" value="audio/webm"><label for="fmtWebm">WebM</label>
+        </div>
+        <p class="small text-secondary mt-1 mb-0"><i class="bi bi-info-circle me-1"></i>Format support depends on your browser. WAV is universally supported.</p>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2 at-action-row">
+        <button class="at-btn-primary" id="trimDownloadBtn" aria-label="Trim and download audio">
+          <i class="bi bi-scissors me-2"></i>Trim &amp; Download
+        </button>
+        <button class="at-btn-outline" id="previewTrimBtn2" aria-label="Preview trimmed section">
+          <i class="bi bi-play-circle me-2"></i>Preview Trim
+        </button>
+        <button class="at-btn-outline" id="resetTrimBtn" aria-label="Reset trim selection">
+          <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+        </button>
+      </div>
+
+      <!-- Processing indicator -->
+      <div id="processingBar" class="mt-3 d-none">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <div class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></div>
+          <small class="text-secondary" id="processingLabel">Processing…</small>
+        </div>
+        <div class="at-progress-wrap">
+          <div class="at-progress-bar" id="encodeProgressBar" style="width:0%;"></div>
+        </div>
+      </div>
+
+      <!-- Success alert -->
+      <div id="trimSuccess" class="alert d-none mt-3 py-2 px-3" style="border-radius:14px; font-size:0.9rem; background:#e8f7ef; border:1px solid #c3e6cb; color:#1a5235;" role="alert">
+        <i class="bi bi-check2-circle me-2"></i><span id="successMsg">Done! Your file has been downloaded.</span>
+      </div>
+    </div>
+
+  </div><!-- /editorSection -->
+
+  <!-- ========== SEO INFO SECTIONS ========== -->
+  <div class="row g-4 mt-2">
+    <!-- How to Use -->
+    <div class="col-md-6">
+      <div class="info-card h-100">
+        <h3><i class="bi bi-question-circle-fill"></i> How to Use</h3>
+        <ol class="ps-3 mb-0" style="color:#1e3b5c;">
+          <li class="mb-2"><strong>Upload</strong> – Drop or select any audio file (MP3, WAV, OGG, M4A, FLAC…).</li>
+          <li class="mb-2"><strong>Set trim points</strong> – Drag the handles on the range slider or type exact times in the Start / End fields.</li>
+          <li class="mb-2"><strong>Preview</strong> – Hit <em>Play</em> to hear the full track, or <em>Preview Trim</em> to hear only the selected region.</li>
+          <li class="mb-2"><strong>Download</strong> – Click <em>Trim &amp; Download</em> and choose your output format.</li>
+        </ol>
+        <p class="small text-secondary mt-3 mb-0"><i class="bi bi-lightning-charge-fill"></i> Everything is processed locally — your audio never leaves your device.</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="info-card h-100">
+        <h3><i class="bi bi-star-fill"></i> Features</h3>
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Visual waveform for precise trimming</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Drag-and-drop range handles</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Manual start / end time inputs (ms precision)</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Instant in-browser preview of selected region</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Supports MP3, WAV, OGG, M4A, FLAC, AAC and more</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Playback speed control (0.5× – 2×)</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Volume control</li>
+          <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>100% client-side — zero privacy concerns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Use -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3><i class="bi bi-emoji-smile-fill"></i> Why Use This Tool?</h3>
+        <div class="row">
+          <div class="col-md-4 mb-2 mb-md-0">
+            <p class="fw-medium mb-1"><i class="bi bi-shield-check"></i> <strong>Private &amp; Secure</strong></p>
+            <p class="small text-secondary">Your audio file is never sent to any server. All trimming happens entirely in your browser using the Web Audio API.</p>
+          </div>
+          <div class="col-md-4 mb-2 mb-md-0">
+            <p class="fw-medium mb-1"><i class="bi bi-rocket-takeoff"></i> <strong>Fast &amp; Precise</strong></p>
+            <p class="small text-secondary">Set trim points to millisecond accuracy using the waveform visualizer or manual time input fields.</p>
+          </div>
+          <div class="col-md-4">
+            <p class="fw-medium mb-1"><i class="bi bi-universal-access"></i> <strong>Free Forever</strong></p>
+            <p class="small text-secondary">No sign-up, no watermarks, no limits. Perfect for podcasters, musicians, content creators and students.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3 class="mb-3"><i class="bi bi-patch-question-fill"></i> Frequently Asked Questions</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="faq-item">
+              <div class="faq-question">✂️ What audio formats does it support?</div>
+              <div class="faq-answer">You can upload MP3, WAV, OGG, M4A, FLAC, AAC, WebM and any other format your browser can decode. WAV is the most universally supported output format.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">🔒 Is my audio file kept private?</div>
+              <div class="faq-answer">Yes. The tool uses the browser's built-in Web Audio API. Your file is never uploaded to any server — it stays entirely on your device.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📏 Is there a file size limit?</div>
+              <div class="faq-answer">There is no imposed limit. Very large files are limited only by your device's available memory and browser capability.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="faq-item">
+              <div class="faq-question">🎵 Can I preview before downloading?</div>
+              <div class="faq-answer">Yes! Click <em>Preview Trim</em> or the scissors button to play only the selected region before you download it.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">⏱️ How precise can my trim points be?</div>
+              <div class="faq-answer">You can enter start and end times accurate to the millisecond using the text input fields below the waveform.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">📱 Does it work on mobile?</div>
+              <div class="faq-answer">Yes! The interface is fully responsive. The Web Audio API is supported on all modern mobile browsers including Chrome and Safari on iOS.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Tools -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="info-card">
+        <h3 class="mb-3"><i class="bi bi-grid-3x3-gap-fill"></i> Related Tools</h3>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="tools_pdfcompress.html"    class="related-tool-badge"><i class="bi bi-file-earmark-zip me-1"></i>PDF Compressor</a>
+          <a href="tools_pdftoword.html"      class="related-tool-badge"><i class="bi bi-file-word me-1"></i>PDF to Word</a>
+          <a href="tools_margepdf.html"       class="related-tool-badge"><i class="bi bi-files me-1"></i>Merge PDF</a>
+          <a href="tools_imagecompress.html"  class="related-tool-badge"><i class="bi bi-image me-1"></i>Image Compressor</a>
+          <a href="tools_qrcode.html"         class="related-tool-badge"><i class="bi bi-qr-code me-1"></i>QR Code Generator</a>
+          <a href="tools_wordcounter.html"    class="related-tool-badge"><i class="bi bi-textarea-t me-1"></i>Word Counter</a>
+        </div>
+        <p class="small text-secondary mt-3 mb-0"><i class="bi bi-arrow-up-short"></i> More free tools available on the <a href="tools.html" class="text-decoration-none">Tools page</a>.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer-section pt-5 pb-4">
+  <div class="container-lg">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h3 class="fw-bold text-white">DocFixer</h3>
+        <p class="mt-3 text-light small">Free &amp; unlimited tools for PDF, images and office documents.</p>
+      </div>
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Products</h6>
+        <ul class="list-unstyled">
+          <li><a href="tools_margepdf.html"    class="footer-link">PDF Merge</a></li>
+          <li><a href="tools_splitpdf.html"    class="footer-link">Split PDF</a></li>
+          <li><a href="tools_imagtopdf.html"   class="footer-link">Convert</a></li>
+          <li><a href="tools_pdfcompress.html" class="footer-link">PDF Compress</a></li>
+          <li><a href="tools_wordcounter.html" class="footer-link">Word Counter</a></li>
+          <li><a href="tools_audiotrim.html"   class="footer-link">Audio Trimmer</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-2">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Company</h6>
+        <ul class="list-unstyled">
+          <li><a href="about.html"      class="footer-link">About</a></li>
+          <li><a href="tools.html"      class="footer-link">Tools</a></li>
+          <li><a href="privacy.html"    class="footer-link">Privacy Policy</a></li>
+          <li><a href="terms.html"      class="footer-link">Terms &amp; Conditions</a></li>
+          <li><a href="disclaimer.html" class="footer-link">Disclaimer</a></li>
+          <li><a href="contact.html"    class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 text-md-end text-start">
+        <h6 class="text-uppercase text-white fw-semibold mb-3">Follow Us</h6>
+        <a href="https://x.com/codefy001"                                         target="_blank" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://www.instagram.com/codefy_03"                             target="_blank" class="social-icon"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61579636438080"          target="_blank" class="social-icon"><i class="bi bi-facebook"></i></a>
+      </div>
+    </div>
+    <hr class="border-light opacity-25 my-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small">
+      <p class="mb-2 mb-md-0">© 2026 DocFixer — like your favourite PDF suite, but cooler.</p>
+      <p class="mb-0">Designed &amp; Developed by <a href="https://codefy.in" target="_blank" class="fw-bold text-white text-decoration-none">Codefy</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="no-login-modal.js"></script>
+
+<!-- ========== AUDIO TRIMMER SCRIPT ========== -->
+<script>
+(function () {
+  'use strict';
+
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  const atDropzone      = document.getElementById('atDropzone');
+  const atFileInput     = document.getElementById('atFileInput');
+  const uploadCard      = document.getElementById('uploadCard');
+  const editorSection   = document.getElementById('editorSection');
+  const changFileBtn    = document.getElementById('changFileBtn');
+
+  const infoFileName    = document.getElementById('infoFileName');
+  const infoDuration    = document.getElementById('infoDuration');
+  const infoSize        = document.getElementById('infoSize');
+
+  const waveCanvas      = document.getElementById('waveCanvas');
+  const waveCtx         = waveCanvas.getContext('2d');
+  const trimOverlay     = document.getElementById('trimOverlay');
+  const playheadLine    = document.getElementById('playheadLine');
+  const atProgressBar   = document.getElementById('atProgressBar');
+  const currentTimeLabel = document.getElementById('currentTimeLabel');
+  const totalDurationLabel = document.getElementById('totalDurationLabel');
+
+  const trimTrack       = document.getElementById('trimTrack');
+  const trimFill        = document.getElementById('trimFill');
+  const thumbStart      = document.getElementById('thumbStart');
+  const thumbEnd        = document.getElementById('thumbEnd');
+
+  const startTimeInput  = document.getElementById('startTimeInput');
+  const endTimeInput    = document.getElementById('endTimeInput');
+  const selDurLabel     = document.getElementById('selDurLabel');
+
+  const playPauseBtn    = document.getElementById('playPauseBtn');
+  const playIcon        = document.getElementById('playIcon');
+  const rewindBtn       = document.getElementById('rewindBtn');
+  const stopBtn         = document.getElementById('stopBtn');
+  const previewTrimBtn  = document.getElementById('previewTrimBtn');
+  const previewTrimBtn2 = document.getElementById('previewTrimBtn2');
+  const volSlider       = document.getElementById('volSlider');
+
+  const trimDownloadBtn = document.getElementById('trimDownloadBtn');
+  const resetTrimBtn    = document.getElementById('resetTrimBtn');
+  const processingBar   = document.getElementById('processingBar');
+  const processingLabel = document.getElementById('processingLabel');
+  const encodeProgressBar = document.getElementById('encodeProgressBar');
+  const trimSuccess     = document.getElementById('trimSuccess');
+  const successMsg      = document.getElementById('successMsg');
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let audioCtx = null;
+  let audioBuffer = null;
+  let audioSource = null;
+  let gainNode = null;
+  let isPlaying = false;
+  let isPreviewing = false;
+  let startPct = 0;     // 0–1
+  let endPct   = 1;     // 0–1
+  let duration = 0;
+  let playbackStartTime = 0; // AudioContext.currentTime when play started
+  let playbackOffset = 0;    // seconds into the buffer when play started
+  let raf = null;
+  let originalFileName = 'audio';
+  let originalFile = null;
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function formatTime(secs, millis = false) {
+    if (!isFinite(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    const sPad = s < 10 ? '0' + s.toFixed(millis ? 3 : 0) : (millis ? s.toFixed(3) : Math.floor(s).toString().padStart(2,'0'));
+    return `${m}:${sPad}`;
+  }
+
+  function parseTimeInput(str) {
+    // Accepts: "1:23.456"  "83.456"  "1:23"
+    str = str.trim();
+    const parts = str.split(':');
+    let secs = 0;
+    if (parts.length === 2) {
+      secs = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+    } else {
+      secs = parseFloat(parts[0]);
+    }
+    return isNaN(secs) ? null : Math.max(0, secs);
+  }
+
+  function showToast(msg, icon = 'bi-check2-circle') {
+    const t = document.createElement('div');
+    t.className = 'at-toast';
+    t.innerHTML = `<i class="bi ${icon} me-2"></i>${msg}`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(2) + ' MB';
+  }
+
+  // ── Waveform drawing ──────────────────────────────────────────────────────
+  function drawWaveform(buffer) {
+    const W = waveCanvas.offsetWidth || 800;
+    const H = 120;
+    waveCanvas.width  = W;
+    waveCanvas.height = H;
+
+    const data   = buffer.getChannelData(0); // mono / left channel
+    const step   = Math.ceil(data.length / W);
+    const amp    = H / 2;
+
+    waveCtx.clearRect(0, 0, W, H);
+
+    // Background
+    waveCtx.fillStyle = '#1a2a3e';
+    waveCtx.fillRect(0, 0, W, H);
+
+    // Draw bars
+    for (let i = 0; i < W; i++) {
+      let min = 1, max = -1;
+      for (let j = 0; j < step; j++) {
+        const v = data[i * step + j] || 0;
+        if (v < min) min = v;
+        if (v > max) max = v;
+      }
+      const x = i;
+      const yHigh = (1 + min) * amp;
+      const yLow  = (1 + max) * amp;
+      const barH  = Math.max(1, yHigh - yLow);
+
+      // Gradient bar colour
+      const grad = waveCtx.createLinearGradient(x, yLow, x, yHigh);
+      grad.addColorStop(0, '#87b8dc');
+      grad.addColorStop(1, '#2b699d');
+      waveCtx.fillStyle = grad;
+      waveCtx.fillRect(x, yLow, 1, barH);
+    }
+
+    updateTrimOverlay();
+  }
+
+  function updateTrimOverlay() {
+    const cW = waveCanvas.offsetWidth;
+    const l  = startPct * cW;
+    const w  = (endPct - startPct) * cW;
+    trimOverlay.style.left  = l + 'px';
+    trimOverlay.style.width = w + 'px';
+  }
+
+  // ── Range Slider logic ────────────────────────────────────────────────────
+  function updateSliderUI() {
+    thumbStart.style.left = (startPct * 100) + '%';
+    thumbEnd.style.left   = (endPct   * 100) + '%';
+    trimFill.style.left   = (startPct * 100) + '%';
+    trimFill.style.width  = ((endPct - startPct) * 100) + '%';
+    updateTrimOverlay();
+    // Time inputs
+    startTimeInput.value = formatTime(startPct * duration, true);
+    endTimeInput.value   = formatTime(endPct   * duration, true);
+    // Selected duration
+    const sel = (endPct - startPct) * duration;
+    selDurLabel.textContent = formatTime(sel, true);
+    // ARIA
+    thumbStart.setAttribute('aria-valuenow', (startPct * 100).toFixed(1));
+    thumbEnd.setAttribute('aria-valuenow',   (endPct   * 100).toFixed(1));
+  }
+
+  function makeDraggable(thumb, isStart) {
+    let dragging = false;
+    thumb.addEventListener('mousedown', startDrag);
+    thumb.addEventListener('touchstart', startDrag, { passive: true });
+
+    function startDrag(e) {
+      dragging = true;
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   endDrag);
+      document.addEventListener('touchmove', onMove, { passive: true });
+      document.addEventListener('touchend',  endDrag);
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      const rect = trimTrack.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let pct = (clientX - rect.left) / rect.width;
+      pct = Math.max(0, Math.min(1, pct));
+      const MIN_GAP = 0.005;
+      if (isStart) {
+        startPct = Math.min(pct, endPct - MIN_GAP);
+      } else {
+        endPct = Math.max(pct, startPct + MIN_GAP);
+      }
+      updateSliderUI();
+    }
+
+    function endDrag() {
+      dragging = false;
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   endDrag);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend',  endDrag);
+    }
+
+    // Keyboard support
+    thumb.addEventListener('keydown', (e) => {
+      const step = 1 / (duration > 0 ? duration * 10 : 1000); // ~0.1s step
+      if (isStart) {
+        if (e.key === 'ArrowRight') startPct = Math.min(startPct + step, endPct - 0.005);
+        if (e.key === 'ArrowLeft')  startPct = Math.max(startPct - step, 0);
+      } else {
+        if (e.key === 'ArrowRight') endPct = Math.min(endPct + step, 1);
+        if (e.key === 'ArrowLeft')  endPct = Math.max(endPct - step, startPct + 0.005);
+      }
+      updateSliderUI();
+    });
+  }
+
+  makeDraggable(thumbStart, true);
+  makeDraggable(thumbEnd,   false);
+
+  // Click on the track to move nearest thumb
+  trimTrack.addEventListener('click', (e) => {
+    const rect = trimTrack.getBoundingClientRect();
+    const pct  = (e.clientX - rect.left) / rect.width;
+    if (Math.abs(pct - startPct) < Math.abs(pct - endPct)) {
+      startPct = Math.min(pct, endPct - 0.005);
+    } else {
+      endPct = Math.max(pct, startPct + 0.005);
+    }
+    updateSliderUI();
+  });
+
+  // Click on waveform canvas to seek
+  waveCanvas.addEventListener('click', (e) => {
+    if (!audioBuffer) return;
+    const rect = waveCanvas.getBoundingClientRect();
+    const pct  = (e.clientX - rect.left) / rect.width;
+    seekTo(pct * duration);
+  });
+
+  // ── Time input manual entry ───────────────────────────────────────────────
+  function onTimeInput(e, isStart) {
+    const val = parseTimeInput(e.target.value);
+    if (val === null) return;
+    const pct = Math.max(0, Math.min(1, val / duration));
+    if (isStart) startPct = Math.min(pct, endPct - 0.001);
+    else          endPct   = Math.max(pct, startPct + 0.001);
+    updateSliderUI();
+  }
+  startTimeInput.addEventListener('change', (e) => onTimeInput(e, true));
+  endTimeInput.addEventListener('change',   (e) => onTimeInput(e, false));
+
+  // ── Audio Loading ─────────────────────────────────────────────────────────
+  function loadFile(file) {
+    if (!file || !file.type.startsWith('audio/')) {
+      showToast('Please select a valid audio file.', 'bi-exclamation-circle');
+      return;
+    }
+
+    originalFile = file;
+    originalFileName = file.name.replace(/\.[^.]+$/, '');
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      processingLabel.textContent = 'Decoding audio…';
+      processingBar.classList.remove('d-none');
+      encodeProgressBar.style.width = '30%';
+
+      audioCtx.decodeAudioData(ev.target.result.slice(0), (buf) => {
+        audioBuffer = buf;
+        duration = buf.duration;
+
+        // Update UI
+        infoFileName.textContent = file.name.length > 32 ? file.name.slice(0, 29) + '…' : file.name;
+        infoDuration.textContent = formatTime(duration);
+        infoSize.textContent     = formatBytes(file.size);
+        totalDurationLabel.textContent = formatTime(duration);
+
+        startPct = 0;
+        endPct   = 1;
+
+        uploadCard.style.display    = 'none';
+        editorSection.style.display = 'block';
+        processingBar.classList.add('d-none');
+        encodeProgressBar.style.width = '0%';
+
+        playheadLine.style.display = 'block';
+
+        // Draw waveform after next paint
+        requestAnimationFrame(() => {
+          drawWaveform(audioBuffer);
+          updateSliderUI();
+        });
+
+      }, (err) => {
+        processingBar.classList.add('d-none');
+        showToast('Could not decode audio. Try a different file or format.', 'bi-x-circle');
+      });
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  // ── Drop / File Input ─────────────────────────────────────────────────────
+  atDropzone.addEventListener('dragover', (e) => { e.preventDefault(); atDropzone.classList.add('drag-over'); });
+  atDropzone.addEventListener('dragleave', () => atDropzone.classList.remove('drag-over'));
+  atDropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    atDropzone.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f) loadFile(f);
+  });
+  atFileInput.addEventListener('change', () => {
+    if (atFileInput.files[0]) loadFile(atFileInput.files[0]);
+    atFileInput.value = '';
+  });
+
+  changFileBtn.addEventListener('click', () => {
+    stopPlayback();
+    uploadCard.style.display    = '';
+    editorSection.style.display = 'none';
+    audioBuffer = null;
+    trimSuccess.classList.add('d-none');
+  });
+
+  // ── Playback ──────────────────────────────────────────────────────────────
+  function getPlaybackRate() {
+    const el = document.querySelector('input[name="spd"]:checked');
+    return el ? parseFloat(el.value) : 1;
+  }
+
+  function playFrom(offsetSecs, endSecs) {
+    if (!audioBuffer || !audioCtx) return;
+    stopPlayback();
+
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = parseFloat(volSlider.value);
+    gainNode.connect(audioCtx.destination);
+
+    audioSource = audioCtx.createBufferSource();
+    audioSource.buffer = audioBuffer;
+    audioSource.playbackRate.value = getPlaybackRate();
+    audioSource.connect(gainNode);
+
+    const trimDur = endSecs !== undefined ? (endSecs - offsetSecs) / getPlaybackRate() : undefined;
+    audioSource.start(0, offsetSecs, trimDur);
+
+    playbackOffset    = offsetSecs;
+    playbackStartTime = audioCtx.currentTime;
+    isPlaying = true;
+
+    playIcon.className = 'bi bi-pause-fill';
+    startRAF();
+
+    audioSource.onended = () => {
+      if (isPlaying) {
+        stopPlayback();
+      }
+    };
+  }
+
+  function stopPlayback() {
+    if (audioSource) {
+      try { audioSource.stop(); } catch(e) {}
+      audioSource = null;
+    }
+    isPlaying = false;
+    isPreviewing = false;
+    playIcon.className = 'bi bi-play-fill';
+    cancelRAF();
+  }
+
+  function seekTo(secs) {
+    const wasPlaying = isPlaying;
+    stopPlayback();
+    playbackOffset = secs;
+    updatePlayhead(secs);
+    if (wasPlaying) playFrom(secs);
+  }
+
+  function getCurrentTime() {
+    if (!isPlaying || !audioCtx) return playbackOffset;
+    const elapsed = (audioCtx.currentTime - playbackStartTime) * getPlaybackRate();
+    return Math.min(playbackOffset + elapsed, duration);
+  }
+
+  function updatePlayhead(secs) {
+    const pct = secs / duration;
+    playheadLine.style.left = (pct * 100) + '%';
+    atProgressBar.style.width = (pct * 100) + '%';
+    atProgressBar.setAttribute('aria-valuenow', Math.round(pct * 100));
+    currentTimeLabel.textContent = formatTime(secs);
+  }
+
+  function startRAF() {
+    cancelRAF();
+    function tick() {
+      const t = getCurrentTime();
+      updatePlayhead(t);
+      if (isPlaying) {
+        raf = requestAnimationFrame(tick);
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function cancelRAF() {
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }
+
+  // ── Playback button handlers ──────────────────────────────────────────────
+  playPauseBtn.addEventListener('click', () => {
+    if (!audioBuffer) return;
+    if (isPlaying) {
+      stopPlayback();
+    } else {
+      const offset = playbackOffset >= duration ? 0 : playbackOffset;
+      playFrom(offset);
+    }
+  });
+
+  rewindBtn.addEventListener('click', () => {
+    seekTo(startPct * duration);
+  });
+
+  stopBtn.addEventListener('click', () => {
+    stopPlayback();
+    playbackOffset = 0;
+    updatePlayhead(0);
+  });
+
+  [previewTrimBtn, previewTrimBtn2].forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!audioBuffer) return;
+      const st = startPct * duration;
+      const en = endPct   * duration;
+      playbackOffset = st;
+      playFrom(st, en);
+      isPreviewing = true;
+    });
+  });
+
+  volSlider.addEventListener('input', () => {
+    if (gainNode) gainNode.gain.value = parseFloat(volSlider.value);
+  });
+
+  document.querySelectorAll('input[name="spd"]').forEach(r => {
+    r.addEventListener('change', () => {
+      if (isPlaying) {
+        const t = getCurrentTime();
+        stopPlayback();
+        playFrom(t);
+      }
+    });
+  });
+
+  // ── Trim & Download ───────────────────────────────────────────────────────
+  resetTrimBtn.addEventListener('click', () => {
+    startPct = 0;
+    endPct   = 1;
+    updateSliderUI();
+    trimSuccess.classList.add('d-none');
+  });
+
+  trimDownloadBtn.addEventListener('click', async () => {
+    if (!audioBuffer) return;
+    const st = startPct * duration;
+    const en = endPct   * duration;
+    if (en <= st) { showToast('End time must be after start time.', 'bi-exclamation-circle'); return; }
+
+    processingLabel.textContent = 'Rendering audio…';
+    processingBar.classList.remove('d-none');
+    trimSuccess.classList.add('d-none');
+    encodeProgressBar.style.width = '0%';
+
+    // Small delay so UI can update
+    await new Promise(r => setTimeout(r, 50));
+
+    try {
+      const sampleRate  = audioBuffer.sampleRate;
+      const numChannels = audioBuffer.numberOfChannels;
+      const startSample = Math.floor(st * sampleRate);
+      const endSample   = Math.floor(en * sampleRate);
+      const length      = endSample - startSample;
+
+      encodeProgressBar.style.width = '40%';
+
+      const offlineCtx  = new OfflineAudioContext(numChannels, length, sampleRate);
+      const src         = offlineCtx.createBufferSource();
+
+      // Create a trimmed buffer
+      const trimmedBuf  = offlineCtx.createBuffer(numChannels, length, sampleRate);
+      for (let ch = 0; ch < numChannels; ch++) {
+        const chanData = audioBuffer.getChannelData(ch).subarray(startSample, endSample);
+        trimmedBuf.copyToChannel(chanData, ch);
+      }
+
+      src.buffer = trimmedBuf;
+      src.connect(offlineCtx.destination);
+      src.start();
+
+      encodeProgressBar.style.width = '60%';
+      const rendered = await offlineCtx.startRendering();
+      encodeProgressBar.style.width = '80%';
+
+      // Encode to WAV (universally supported)
+      const fmt  = document.querySelector('input[name="fmt"]:checked').value;
+      const ext  = fmt.split('/')[1] === 'mpeg' ? 'mp3' : fmt.split('/')[1];
+      const wavBlob = audioBufferToWav(rendered);
+      encodeProgressBar.style.width = '100%';
+
+      const url  = URL.createObjectURL(wavBlob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `${originalFileName}_trimmed.wav`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+      processingBar.classList.add('d-none');
+      successMsg.textContent = `Downloaded: ${originalFileName}_trimmed.wav (${formatTime(en - st)} selected)`;
+      trimSuccess.classList.remove('d-none');
+      showToast('Audio trimmed and downloaded!', 'bi-check2-circle');
+    } catch (err) {
+      processingBar.classList.add('d-none');
+      showToast('Export failed: ' + err.message, 'bi-x-circle');
+    }
+  });
+
+  // ── WAV Encoder ───────────────────────────────────────────────────────────
+  function audioBufferToWav(buffer) {
+    const numCh   = buffer.numberOfChannels;
+    const sr      = buffer.sampleRate;
+    const len     = buffer.length;
+    const bitDepth = 16;
+    const blockAlign = numCh * (bitDepth / 8);
+    const byteRate   = sr * blockAlign;
+    const dataSize   = len * blockAlign;
+    const ab         = new ArrayBuffer(44 + dataSize);
+    const view       = new DataView(ab);
+
+    function writeStr(off, str) { for (let i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i)); }
+    writeStr(0, 'RIFF');
+    view.setUint32(4,  36 + dataSize, true);
+    writeStr(8, 'WAVE');
+    writeStr(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);          // PCM
+    view.setUint16(22, numCh, true);
+    view.setUint32(24, sr, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bitDepth, true);
+    writeStr(36, 'data');
+    view.setUint32(40, dataSize, true);
+
+    // Interleave channels
+    let offset = 44;
+    for (let i = 0; i < len; i++) {
+      for (let ch = 0; ch < numCh; ch++) {
+        const sample = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
+        const s16    = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+        view.setInt16(offset, s16, true);
+        offset += 2;
+      }
+    }
+    return new Blob([ab], { type: 'audio/wav' });
+  }
+
+  // ── Resize waveform on window resize ─────────────────────────────────────
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (audioBuffer) {
+        drawWaveform(audioBuffer);
+        updateSliderUI();
+      }
+    }, 200);
+  });
+
+  // ── Keyboard shortcuts ────────────────────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    if (!audioBuffer) return;
+    if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.code === 'Space')       { e.preventDefault(); playPauseBtn.click(); }
+    if (e.code === 'KeyR')        rewindBtn.click();
+    if (e.code === 'KeyS')        stopBtn.click();
+    if (e.code === 'KeyP')        previewTrimBtn.click();
+  });
+
+})();
+</script>
+
+</body>
+</html>

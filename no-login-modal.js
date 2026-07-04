@@ -109,11 +109,11 @@
           
           <div class="mb-3">
             <label class="form-label text-secondary small fw-bold mb-1">Name</label>
-            <input type="text" class="form-control p-2" required placeholder="John Doe" style="border-radius: 8px; border: 1px solid #cde0f2;">
+            <input type="text" class="form-control p-2" required placeholder="Name" style="border-radius: 8px; border: 1px solid #cde0f2;">
           </div>
           <div class="mb-3">
             <label class="form-label text-secondary small fw-bold mb-1">Email (Optional)</label>
-            <input type="email" class="form-control p-2" placeholder="john@example.com" style="border-radius: 8px; border: 1px solid #cde0f2;">
+            <input type="email" class="form-control p-2" placeholder="name@example.com" style="border-radius: 8px; border: 1px solid #cde0f2;">
           </div>
           <div class="mb-3">
             <label class="form-label text-secondary small fw-bold mb-1">Comment</label>

@@ -453,12 +453,15 @@
   
   let drawingActions = [], redoStack = [];
   let currentPath = null;
-  let selectedIndex = -1;
+  let selectedIndices = [];
   let activeHandles = []; // Resizing handles positions
 
   let isDrawing = false, isPanning = false, isDragging = false, isErasing = false, isResizing = false;
+  let isBoxSelecting = false;
+  let boxSelectStart = null, boxSelectCurrent = null;
+  
   let dragOffset = { x: 0, y: 0 }, panStart = { x: 0, y: 0 }, lastEraserPos = null;
-  let resizeHandle = -1, resizeOrigAction = null, resizeOrigBounds = null;
+  let resizeHandle = -1, resizeOrigActions = null, resizeOrigBounds = null;
 
   // ── INIT ──
   function resizeCanvas() {
@@ -530,11 +533,46 @@
     ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
     ctx.scale(zoom, zoom);
     ctx.translate(panX * 2, panY * 2);
-    drawingActions.forEach((action, idx) => drawAction(action, idx === selectedIndex));
+    
+    drawingActions.forEach((action) => drawAction(action));
+    
+    if (selectedIndices.length > 0) {
+      const b = getCombinedBounds(selectedIndices);
+      if (b) {
+        ctx.strokeStyle = '#4f7eb3'; ctx.lineWidth = 3; ctx.setLineDash([6, 4]); ctx.globalAlpha = 1;
+        ctx.strokeRect(b.x - 10, b.y - 10, b.w + 20, b.h + 20); ctx.setLineDash([]);
+        
+        activeHandles = [
+          { x: b.x - 10, y: b.y - 10 }, { x: b.x + b.w + 10, y: b.y - 10 },
+          { x: b.x - 10, y: b.y + b.h + 10 }, { x: b.x + b.w + 10, y: b.y + b.h + 10 }
+        ];
+        const hs = 24 / zoom;
+        ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#4f7eb3'; ctx.lineWidth = 3 / zoom;
+        activeHandles.forEach(c => {
+          ctx.fillRect(c.x - hs/2, c.y - hs/2, hs, hs);
+          ctx.strokeRect(c.x - hs/2, c.y - hs/2, hs, hs);
+        });
+      }
+    }
+
+    if (isBoxSelecting && boxSelectStart && boxSelectCurrent) {
+      const bx = Math.min(boxSelectStart.x, boxSelectCurrent.x);
+      const by = Math.min(boxSelectStart.y, boxSelectCurrent.y);
+      const bw = Math.abs(boxSelectCurrent.x - boxSelectStart.x);
+      const bh = Math.abs(boxSelectCurrent.y - boxSelectStart.y);
+      ctx.fillStyle = 'rgba(79, 126, 179, 0.1)';
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = '#4f7eb3';
+      ctx.lineWidth = 2 / zoom;
+      ctx.setLineDash([6 / zoom, 6 / zoom]);
+      ctx.strokeRect(bx, by, bw, bh);
+      ctx.setLineDash([]);
+    }
+
     ctx.restore();
   }
 
-  function drawAction(action, highlight = false) {
+  function drawAction(action) {
     ctx.save();
     if (action.type === 'eraser') {
       ctx.globalCompositeOperation = 'destination-out';
@@ -581,25 +619,6 @@
       ctx.font = `${action.fontSize * 2}px Inter, sans-serif`; ctx.fillStyle = action.color; ctx.textBaseline = 'top';
       action.text.split('\n').forEach((line, i) => ctx.fillText(line, action.x, action.y + i*action.fontSize*2.4));
     }
-
-    if (highlight && action.type !== 'eraser') {
-      const b = getActionBounds(action);
-      if (b) {
-        ctx.strokeStyle = '#4f7eb3'; ctx.lineWidth = 3; ctx.setLineDash([6, 4]); ctx.globalAlpha = 1;
-        ctx.strokeRect(b.x - 10, b.y - 10, b.w + 20, b.h + 20); ctx.setLineDash([]);
-        
-        activeHandles = [
-          { x: b.x - 10, y: b.y - 10 }, { x: b.x + b.w + 10, y: b.y - 10 },
-          { x: b.x - 10, y: b.y + b.h + 10 }, { x: b.x + b.w + 10, y: b.y + b.h + 10 }
-        ];
-        const hs = 24 / zoom;
-        ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#4f7eb3'; ctx.lineWidth = 3 / zoom;
-        activeHandles.forEach(c => {
-          ctx.fillRect(c.x - hs/2, c.y - hs/2, hs, hs);
-          ctx.strokeRect(c.x - hs/2, c.y - hs/2, hs, hs);
-        });
-      }
-    }
     ctx.restore();
   }
 
@@ -621,12 +640,39 @@
     return null;
   }
 
+  function getCombinedBounds(indices) {
+    if (!indices || indices.length === 0) return null;
+    let mix = Infinity, miy = Infinity, max = -Infinity, may = -Infinity;
+    let found = false;
+    indices.forEach(idx => {
+      const b = getActionBounds(drawingActions[idx]);
+      if (b) {
+        found = true;
+        mix = Math.min(mix, b.x); miy = Math.min(miy, b.y);
+        max = Math.max(max, b.x + b.w); may = Math.max(may, b.y + b.h);
+      }
+    });
+    if (!found) return null;
+    return { x: mix, y: miy, w: max - mix, h: may - miy };
+  }
+
   function hitTest(pos) {
     for (let i = drawingActions.length - 1; i >= 0; i--) {
       const b = getActionBounds(drawingActions[i]);
       if (b && pos.x >= b.x - 16 && pos.x <= b.x + b.w + 16 && pos.y >= b.y - 16 && pos.y <= b.y + b.h + 16) return i;
     }
     return -1;
+  }
+
+  function hitTestBox(box) {
+    const hits = [];
+    for (let i = 0; i < drawingActions.length; i++) {
+      const b = getActionBounds(drawingActions[i]);
+      if (b) {
+        if (b.x < box.x + box.w && b.x + b.w > box.x && b.y < box.y + box.h && b.y + b.h > box.y) hits.push(i);
+      }
+    }
+    return hits;
   }
 
   function hitTestHandles(pos) {
@@ -639,14 +685,13 @@
 
   // ── FLOATING CONTEXT MENU ──
   function updateContextMenu() {
-    if (selectedIndex >= 0 && !isDragging && !isResizing) {
-      const b = getActionBounds(drawingActions[selectedIndex]);
+    if (selectedIndices.length > 0 && !isDragging && !isResizing && !isBoxSelecting) {
+      const b = getCombinedBounds(selectedIndices);
       if (b) {
         const r = canvasWrap.getBoundingClientRect();
         const screenX = ((b.x + b.w/2) / 2 + panX) * zoom + r.left;
         const screenY = (b.y / 2 + panY) * zoom + r.top - 50;
         contextMenu.style.display = 'flex';
-        // wait for render to get width
         setTimeout(() => {
           contextMenu.style.left = (screenX - contextMenu.offsetWidth / 2) + 'px';
           contextMenu.style.top = Math.max(r.top + 10, screenY) + 'px';
@@ -654,8 +699,12 @@
       }
     } else { contextMenu.style.display = 'none'; }
   }
+
   document.getElementById('btn-delete-selected').addEventListener('click', () => {
-    if (selectedIndex >= 0) { drawingActions.splice(selectedIndex, 1); selectedIndex = -1; updateUndoRedo(); redraw(); updateContextMenu(); }
+    if (selectedIndices.length > 0) {
+      selectedIndices.sort((a,b) => b - a).forEach(idx => drawingActions.splice(idx, 1));
+      selectedIndices = []; updateUndoRedo(); redraw(); updateContextMenu();
+    }
   });
 
   // ── POINTER EVENTS ──
@@ -667,16 +716,23 @@
       const handleHit = hitTestHandles(pos);
       if (handleHit >= 0) {
         isResizing = true; resizeHandle = handleHit;
-        resizeOrigAction = JSON.parse(JSON.stringify(drawingActions[selectedIndex]));
-        resizeOrigBounds = getActionBounds(resizeOrigAction);
+        resizeOrigActions = selectedIndices.map(idx => JSON.parse(JSON.stringify(drawingActions[idx])));
+        resizeOrigBounds = getCombinedBounds(selectedIndices);
         contextMenu.style.display = 'none'; return;
       }
       const hit = hitTest(pos);
       if (hit >= 0) {
-        selectedIndex = hit; isDragging = true;
-        const b = getActionBounds(drawingActions[hit]);
+        if (!selectedIndices.includes(hit)) selectedIndices = [hit];
+        isDragging = true;
+        const b = getCombinedBounds(selectedIndices);
         dragOffset = { x: pos.x - b.x, y: pos.y - b.y };
-      } else { selectedIndex = -1; isDragging = false; }
+      } else {
+        selectedIndices = [];
+        isDragging = false;
+        isBoxSelecting = true;
+        boxSelectStart = pos;
+        boxSelectCurrent = pos;
+      }
       redraw(); contextMenu.style.display = 'none'; return;
     }
 
@@ -720,8 +776,13 @@
       panX += (cx - panStart.x) / zoom; panY += (cy - panStart.y) / zoom; panStart = { x: cx, y: cy };
       redraw(); updateContextMenu(); return;
     }
+    
+    if (isBoxSelecting) {
+      boxSelectCurrent = getCanvasPos(e);
+      redraw(); return;
+    }
 
-    if (isResizing && resizeOrigAction) {
+    if (isResizing && resizeOrigActions && resizeOrigBounds) {
       const pos = getCanvasPos(e), ob = resizeOrigBounds;
       let fx, fy, nw, nh;
       if (resizeHandle===0) { fx = ob.x+ob.w; fy = ob.y+ob.h; nw = fx-pos.x; nh = fy-pos.y; }
@@ -731,21 +792,27 @@
       
       if(nw<20) nw=20; if(nh<20) nh=20;
       const sx = nw / ob.w, sy = nh / ob.h;
-      const a = drawingActions[selectedIndex];
       
-      if (a.type==='shape') { a.x1 = fx+(resizeOrigAction.x1-fx)*sx; a.y1 = fy+(resizeOrigAction.y1-fy)*sy; a.x2 = fx+(resizeOrigAction.x2-fx)*sx; a.y2 = fy+(resizeOrigAction.y2-fy)*sy; }
-      else if (a.type==='text') { a.x = fx+(resizeOrigAction.x-fx)*sx; a.y = fy+(resizeOrigAction.y-fy)*sy; a.fontSize = resizeOrigAction.fontSize * Math.min(sx,sy); }
-      else { a.points.forEach((p,i) => { p.x = fx+(resizeOrigAction.points[i].x-fx)*sx; p.y = fy+(resizeOrigAction.points[i].y-fy)*sy; }); }
+      selectedIndices.forEach((idx, i) => {
+        const a = drawingActions[idx], orig = resizeOrigActions[i];
+        if (a.type==='shape') { a.x1 = fx+(orig.x1-fx)*sx; a.y1 = fy+(orig.y1-fy)*sy; a.x2 = fx+(orig.x2-fx)*sx; a.y2 = fy+(orig.y2-fy)*sy; }
+        else if (a.type==='text') { a.x = fx+(orig.x-fx)*sx; a.y = fy+(orig.y-fy)*sy; a.fontSize = orig.fontSize * Math.min(sx,sy); }
+        else { a.points.forEach((p,j) => { p.x = fx+(orig.points[j].x-fx)*sx; p.y = fy+(orig.points[j].y-fy)*sy; }); }
+      });
       redraw(); return;
     }
 
-    if (isDragging && selectedIndex >= 0) {
-      const pos = getCanvasPos(e), a = drawingActions[selectedIndex], b = getActionBounds(a);
+    if (isDragging && selectedIndices.length > 0) {
+      const pos = getCanvasPos(e);
+      const b = getCombinedBounds(selectedIndices);
       if(!b) return;
       const dx = pos.x - dragOffset.x - b.x, dy = pos.y - dragOffset.y - b.y;
-      if (a.type==='shape') { a.x1+=dx; a.y1+=dy; a.x2+=dx; a.y2+=dy; }
-      else if (a.type==='text') { a.x+=dx; a.y+=dy; }
-      else { a.points.forEach(p => { p.x+=dx; p.y+=dy; }); }
+      selectedIndices.forEach(idx => {
+        const a = drawingActions[idx];
+        if (a.type==='shape') { a.x1+=dx; a.y1+=dy; a.x2+=dx; a.y2+=dy; }
+        else if (a.type==='text') { a.x+=dx; a.y+=dy; }
+        else { a.points.forEach(p => { p.x+=dx; p.y+=dy; }); }
+      });
       redraw(); return;
     }
 
@@ -773,6 +840,21 @@
   }
 
   function onPointerUp(e) {
+    if (isBoxSelecting) {
+      isBoxSelecting = false;
+      if (boxSelectStart && boxSelectCurrent) {
+        const bx = Math.min(boxSelectStart.x, boxSelectCurrent.x);
+        const by = Math.min(boxSelectStart.y, boxSelectCurrent.y);
+        const bw = Math.abs(boxSelectCurrent.x - boxSelectStart.x);
+        const bh = Math.abs(boxSelectCurrent.y - boxSelectStart.y);
+        // Only select if there was actual dragging, not just a tap
+        if (bw > 2 && bh > 2) {
+          selectedIndices = hitTestBox({ x: bx, y: by, w: bw, h: bh });
+        }
+      }
+      boxSelectStart = null; boxSelectCurrent = null;
+      redraw(); updateContextMenu(); return;
+    }
     if (isPanning) { isPanning = false; return; }
     if (isDragging || isResizing) { isDragging = false; isResizing = false; updateUndoRedo(); updateContextMenu(); return; }
     if (isErasing && currentPath) { isErasing = false; drawingActions.push(currentPath); currentPath=null; updateUndoRedo(); return; }
@@ -798,9 +880,9 @@
   canvasEl.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
   canvasEl.addEventListener('touchmove',  e => e.preventDefault(), { passive: false });
 
-  document.getElementById('btn-undo').addEventListener('click', () => { if(drawingActions.length) { redoStack.push(drawingActions.pop()); selectedIndex = -1; updateUndoRedo(); redraw(); updateContextMenu(); }});
+  document.getElementById('btn-undo').addEventListener('click', () => { if(drawingActions.length) { redoStack.push(drawingActions.pop()); selectedIndices = []; updateUndoRedo(); redraw(); updateContextMenu(); }});
   document.getElementById('btn-redo').addEventListener('click', () => { if(redoStack.length) { drawingActions.push(redoStack.pop()); updateUndoRedo(); redraw(); updateContextMenu(); }});
-  document.getElementById('btn-clear').addEventListener('click', () => { if(confirm('Clear whiteboard?')) { drawingActions=[]; redoStack=[]; selectedIndex=-1; updateUndoRedo(); redraw(); updateContextMenu(); }});
+  document.getElementById('btn-clear').addEventListener('click', () => { if(confirm('Clear whiteboard?')) { drawingActions=[]; redoStack=[]; selectedIndices=[]; updateUndoRedo(); redraw(); updateContextMenu(); }});
   
   document.addEventListener('keydown', e => {
     if(e.target === textInput) return;
@@ -812,6 +894,7 @@
       if(k==='p') document.getElementById('tool-pen').click();
       if(k==='e') document.getElementById('tool-eraser').click();
       if(k==='delete' || k==='backspace') document.getElementById('btn-delete-selected').click();
+      if(k==='escape') { selectedIndices = []; commitText(); document.getElementById('shapes-submenu').style.display='none'; document.getElementById('context-menu').style.display='none'; redraw(); }
     }
   });
 
